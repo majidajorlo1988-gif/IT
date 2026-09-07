@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>VLAN چیست؟ | AJORLOO•TECH</title>
+
+  <meta
+    name="description"
+    content="VLAN چیست، چه کاربردی دارد و تفاوت Access Port و Trunk Port چیست؟ راهنمای کاربردی VLAN برای شبکه‌های سازمانی."
+  />
+
+  <meta
+    name="keywords"
+    content="VLAN, شبکه, Cisco, Switching, Access Port, Trunk Port, Network+, AJORLOO TECH"
+  />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Vazirmatn:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  />
+
+  <link rel="stylesheet" href="../styles.css" />
+
+  <style>
+    /* =====================================================
+       ARTICLE PAGE
+       ===================================================== */
+
+    .article-page {
+      min-height: 100vh;
+      padding: 130px 20px 80px;
+    }
+
+    .article-container {
+      width: min(1050px, 100%);
+      margin: 0 auto;
+    }
+
+    .article-breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 25px;
+      font-size: 14px;
+      color: var(--text-muted, #8fa3bd);
+    }
+
+    .article-breadcrumb a {
+      color: var(--accent, #4dd9ff);
+      text-decoration: none;
+    }
+
+    .article-header {
+      padding: 45px;
+      margin-bottom: 30px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 28px;
+      background:
+        radial-gradient(
+          circle at top right,
+          rgba(0, 210, 255, 0.12),
+          transparent 35%
+        ),
+        rgba(8, 20, 38, 0.78);
+      box-shadow: 0 25px 70px rgba(0, 0, 0, 0.25);
+    }
+
+    .article-category-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 7px 14px;
+      margin-bottom: 18px;
+      border-radius: 999px;
+      background: rgba(77, 217, 255, 0.1);
+      border: 1px solid rgba(77, 217, 255, 0.2);
+      color: var(--accent, #4dd9ff);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .article-header h1 {
+      margin: 0 0 18px;
+      color: #ffffff;
+      font-size: clamp(32px, 5vw, 56px);
+      line-height: 1.2;
+      letter-spacing: -1px;
+    }
+
+    .article-header p {
+      max-width: 800px;
+      margin: 0;
+      color: #a9b9cc;
+      font-size: 18px;
+      line-height: 2;
+    }
+
+    .article-meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px;
+      margin-top: 28px;
+      padding-top: 22px;
+      border-top: 1px solid rgba(255, 255, 255, 0.07);
+      color: #7f93aa;
+      font-size: 14px;
+    }
+
+    .article-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 270px;
+      gap: 30px;
+      align-items: start;
+    }
+
+    .article-content {
+      padding: 40px;
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 25px;
+      background: rgba(8, 20, 38, 0.65);
+    }
+
+    .article-content h2 {
+      margin: 38px 0 18px;
+      color: #ffffff;
+      font-size: 27px;
+      line-height: 1.5;
+    }
+
+    .article-content h2:first-child {
+      margin-top: 0;
+    }
+
+    .article-content h3 {
+      margin: 30px 0 14px;
+      color: #ffffff;
+      font-size: 21px;
+    }
+
+    .article-content p {
+      margin: 0 0 20px;
+      color: #aab9ca;
+      font-size: 17px;
+      line-height: 2.15;
+    }
+
+    .article-content ul,
+    .article-content ol {
+      margin: 0 0 25px;
+      padding-right: 25px;
+      color: #aab9ca;
+    }
+
+    .article-content li {
+      margin-bottom: 10px;
+      line-height: 2;
+    }
+
+    .article-content strong {
+      color: #ffffff;
+    }
+
+    .article-note {
+      margin: 25px 0;
+      padding: 20px 22px;
+      border-right: 3px solid var(--accent, #4dd9ff);
+      border-radius: 12px;
+      background: rgba(77, 217, 255, 0.06);
+      color: #b7c6d7;
+      line-height: 2;
+    }
+
+    .article-diagram {
+      margin: 30px 0;
+      padding: 28px;
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 20px;
+      background: #071426;
+      overflow-x: auto;
+    }
+
+    .network-diagram {
+      min-width: 620px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 18px;
+    }
+
+    .network-box {
+      min-width: 145px;
+      padding: 18px;
+      text-align: center;
+      border: 1px solid rgba(77, 217, 255, 0.25);
+      border-radius: 15px;
+      background: rgba(77, 217, 255, 0.07);
+    }
+
+    .network-box strong {
+      display: block;
+      margin-bottom: 7px;
+      color: #ffffff;
+    }
+
+    .network-box span {
+      color: #8fa3b8;
+      font-size: 13px;
+    }
+
+    .network-arrow {
+      color: var(--accent, #4dd9ff);
+      font-size: 25px;
+    }
+
+    .code-block {
+      margin: 25px 0;
+      padding: 22px;
+      direction: ltr;
+      text-align: left;
+      overflow-x: auto;
+      border-radius: 15px;
+      background: #050d18;
+      border: 1px solid rgba(255, 255, 255, 0.07);
+    }
+
+    .code-block code {
+      color: #c9d7e7;
+      font-family: "DM Sans", monospace;
+      font-size: 14px;
+      line-height: 1.8;
+      white-space: pre;
+    }
+
+    .article-table-wrapper {
+      overflow-x: auto;
+      margin: 25px 0;
+    }
+
+    .article-table {
+      width: 100%;
+      min-width: 600px;
+      border-collapse: collapse;
+    }
+
+    .article-table th,
+    .article-table td {
+      padding: 15px;
+      text-align: right;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .article-table th {
+      color: #ffffff;
+      background: rgba(77, 217, 255, 0.08);
+    }
+
+    .article-table td {
+      color: #aab9ca;
+    }
+
+    .article-sidebar {
+      position: sticky;
+      top: 110px;
+      padding: 25px;
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 22px;
+      background: rgba(8, 20, 38, 0.65);
+    }
+
+    .article-sidebar h3 {
+      margin: 0 0 18px;
+      color: #ffffff;
+      font-size: 18px;
+    }
+
+    .article-sidebar a {
+      display: block;
+      padding: 10px 0;
+      color: #8fa3b8;
+      text-decoration: none;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      transition: 0.25s ease;
+    }
+
+    .article-sidebar a:hover {
+      color: var(--accent, #4dd9ff);
+      transform: translateX(-3px);
+    }
+
+    .article-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 35px;
+      padding: 12px 18px;
+      border: 1px solid rgba(77, 217, 255, 0.2);
+      border-radius: 12px;
+      color: var(--accent, #4dd9ff);
+      text-decoration: none;
+      background: rgba(77, 217, 255, 0.05);
+      transition: 0.25s ease;
+    }
+
+    .article-back:hover {
+      background: rgba(77, 217, 255, 0.1);
+      transform: translateY(-2px);
+    }
+
+    @media (max-width: 850px) {
+      .article-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .article-sidebar {
+        position: static;
+      }
+
+      .article-header,
+      .article-content {
+        padding: 28px;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .article-page {
+        padding: 105px 14px 50px;
+      }
+
+      .article-header,
+      .article-content {
+        padding: 22px;
+        border-radius: 20px;
+      }
+
+      .article-header h1 {
+        font-size: 32px;
+      }
+
+      .article-content p {
+        font-size: 16px;
+      }
+
+      .network-diagram {
+        min-width: 520px;
+      }
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- =====================================================
+       HEADER
+       ===================================================== -->
+
+  <header id="header" class="site-header">
+    <div class="container header-inner">
+
+      <a href="../index.html" class="brand">
+        <span class="brand-main">AJORLOO<span>•</span>TECH</span>
+        <small>Engineering Digital Trust</small>
+      </a>
+
+      <button
+        id="menuToggle"
+        class="menu-toggle"
+        type="button"
+        aria-label="Open menu"
+        aria-expanded="false"
+      >
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <nav id="mainNav" class="main-nav">
+
+        <a href="../index.html">Home</a>
+
+        <a href="../index.html#services">Services</a>
+
+        <a href="../index.html#projects">Projects</a>
+
+        <a href="../index.html#articles" class="active">
+          Articles
+        </a>
+
+        <a href="../index.html#about">About</a>
+
+        <a href="../index.html#contact">Contact</a>
+
+      </nav>
+
+    </div>
+  </header>
+
+
+  <!-- =====================================================
+       ARTICLE
+       ===================================================== -->
+
+  <main class="article-page">
+
+    <div class="article-container">
+
+      <div class="article-breadcrumb">
+        <a href="../index.html">AJORLOO•TECH</a>
+        <span>›</span>
+        <a href="../index.html#articles">Articles</a>
+        <span>›</span>
+        <span>VLAN</span>
+      </div>
+
+
+      <!-- ARTICLE HEADER -->
+
+      <header class="article-header">
+
+        <span class="article-category-badge">
+          Switching • Network+
+        </span>
+
+        <h1>
+          VLAN چیست و چرا در شبکه استفاده می‌شود؟
+        </h1>
+
+        <p>
+          VLAN یکی از مهم‌ترین مفاهیم در طراحی شبکه‌های سازمانی است.
+          در این مقاله با مفهوم VLAN، کاربرد آن، تفاوت Access و Trunk
+          و یک سناریوی واقعی از تقسیم‌بندی شبکه آشنا می‌شویم.
+        </p>
+
+        <div class="article-meta-row">
+          <span>📚 سطح: متوسط</span>
+          <span>⏱ زمان مطالعه: 8 دقیقه</span>
+          <span>🏷 دسته‌بندی: Switching</span>
+          <span>✦ AJORLOO•TECH</span>
+        </div>
+
+      </header>
+
+
+      <!-- ARTICLE LAYOUT -->
+
+      <div class="article-layout">
+
+
+        <!-- MAIN CONTENT -->
+
+        <article class="article-content">
+
+          <h2 id="what-is-vlan">
+            VLAN چیست؟
+          </h2>
+
+          <p>
+            VLAN مخفف
+            <strong>Virtual Local Area Network</strong>
+            است. VLAN به ما اجازه می‌دهد یک شبکه فیزیکی را به چند
+            شبکه منطقی مستقل تقسیم کنیم.
+          </p>
+
+          <p>
+            به زبان ساده، ممکن است شما فقط یک یا چند سوئیچ فیزیکی
+            داشته باشید، اما با استفاده از VLAN می‌توانید کاربران،
+            سرورها، دوربین‌ها، تلفن‌های VoIP و سایر تجهیزات را در
+            شبکه‌های منطقی جداگانه قرار دهید.
+          </p>
+
+          <div class="article-note">
+            نکته مهم: VLAN باعث ایجاد جداسازی منطقی در لایه 2 می‌شود.
+            برای برقراری ارتباط بین VLANهای مختلف معمولاً به
+            Routing یا یک دستگاه Layer 3 نیاز داریم.
+          </div>
+
+
+          <h2 id="why-vlan">
+            چرا از VLAN استفاده می‌کنیم؟
+          </h2>
+
+          <p>
+            یکی از دلایل اصلی استفاده از VLAN، کنترل بهتر ساختار
+            شبکه و جداسازی Broadcast Domainها است.
+          </p>
+
+          <p>
+            برای مثال فرض کنید در یک شرکت این تجهیزات را داریم:
+          </p>
+
+          <ul>
+            <li>کامپیوترهای کاربران</li>
+            <li>سرورهای سازمان</li>
+            <li>دوربین‌های IP</li>
+            <li>تلفن‌های VoIP</li>
+            <li>Guest Wi-Fi</li>
+          </ul>
+
+          <p>
+            به جای اینکه همه تجهیزات در یک شبکه قرار بگیرند،
+            می‌توانیم برای هر گروه یک VLAN جدا تعریف کنیم.
+          </p>
+
+
+          <h2 id="example">
+            یک سناریوی ساده
+          </h2>
+
+          <div class="article-table-wrapper">
+
+            <table class="article-table">
+
+              <thead>
+                <tr>
+                  <th>VLAN</th>
+                  <th>کاربرد</th>
+                  <th>Network</th>
+                </tr>
+              </thead>
+
+              <tbody>
+
+                <tr>
+                  <td>10</td>
+                  <td>Users</td>
+                  <td>192.168.10.0/24</td>
+                </tr>
+
+                <tr>
+                  <td>20</td>
+                  <td>Servers</td>
+                  <td>192.168.20.0/24</td>
+                </tr>
+
+                <tr>
+                  <td>30</td>
+                  <td>CCTV</td>
+                  <td>192.168.30.0/24</td>
+                </tr>
+
+                <tr>
+                  <td>40</td>
+                  <td>VoIP</td>
+                  <td>192.168.40.0/24</td>
+                </tr>
+
+                <tr>
+                  <td>50</td>
+                  <td>Guest Wi-Fi</td>
+                  <td>192.168.50.0/24</td>
+                </tr>
+
+              </tbody>
+
+            </table>
+
+          </div>
+
+
+          <h2 id="diagram">
+            ساختار منطقی شبکه
+          </h2>
+
+          <div class="article-diagram">
+
+            <div class="network-diagram">
+
+              <div class="network-box">
+                <strong>Users</strong>
+                <span>VLAN 10</span>
+              </div>
+
+              <div class="network-arrow">→</div>
+
+              <div class="network-box">
+                <strong>Core Switch</strong>
+                <span>Layer 3</span>
+              </div>
+
+              <div class="network-arrow">→</div>
+
+              <div class="network-box">
+                <strong>Servers</strong>
+                <span>VLAN 20</span>
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <h2 id="access-port">
+            Access Port چیست؟
+          </h2>
+
+          <p>
+            یک Access Port معمولاً برای اتصال End Deviceها استفاده
+            می‌شود؛ مانند کامپیوتر، پرینتر، دوربین یا برخی تجهیزات
+            دیگر.
+          </p>
+
+          <p>
+            در یک سناریوی ساده، اگر پورت شماره 10 روی VLAN 30 قرار
+            گرفته باشد، دوربین متصل به آن پورت عضو VLAN 30 خواهد بود.
+          </p>
+
+          <div class="code-block">
+            <code>
+interface GigabitEthernet0/10
+ switchport mode access
+ switchport access vlan 30
+            </code>
+          </div>
+
+
+          <h2 id="trunk-port">
+            Trunk Port چیست؟
+          </h2>
+
+          <p>
+            Trunk Port برای انتقال چند VLAN از یک لینک استفاده
+            می‌شود. این نوع پورت معمولاً در ارتباط بین سوئیچ‌ها،
+            سوئیچ و روتر یا سوئیچ و برخی تجهیزات زیرساختی استفاده
+            می‌شود.
+          </p>
+
+          <p>
+            در این حالت فریم‌ها معمولاً با VLAN Tag منتقل می‌شوند
+            تا دستگاه مقصد بتواند VLAN مربوط به هر فریم را تشخیص دهد.
+          </p>
+
+          <div class="code-block">
+            <code>
+interface GigabitEthernet0/24
+ switchport mode trunk
+ switchport trunk allowed vlan 10,20,30,40,50
+            </code>
+          </div>
+
+
+          <h2 id="access-vs-trunk">
+            تفاوت Access و Trunk
+          </h2>
+
+          <div class="article-table-wrapper">
+
+            <table class="article-table">
+
+              <thead>
+                <tr>
+                  <th>ویژگی</th>
+                  <th>Access</th>
+                  <th>Trunk</th>
+                </tr>
+              </thead>
+
+              <tbody>
+
+                <tr>
+                  <td>تعداد VLAN</td>
+                  <td>معمولاً یک VLAN</td>
+                  <td>چند VLAN</td>
+                </tr>
+
+                <tr>
+                  <td>کاربرد معمول</td>
+                  <td>End Device</td>
+                  <td>Switch-to-Switch</td>
+                </tr>
+
+                <tr>
+                  <td>VLAN Tagging</td>
+                  <td>معمولاً بدون Tag در سمت End Device</td>
+                  <td>برای VLANهای مختلف</td>
+                </tr>
+
+                <tr>
+                  <td>مثال</td>
+                  <td>PC / Printer / Camera</td>
+                  <td>Uplink / Switch</td>
+                </tr>
+
+              </tbody>
+
+            </table>
+
+          </div>
+
+
+          <h2 id="real-world">
+            یک نکته مهم در پروژه‌های واقعی
+          </h2>
+
+          <p>
+            در شبکه‌های واقعی، تعریف VLAN به تنهایی کافی نیست.
+            باید طراحی IP، Routing، DHCP، ACL و سیاست‌های امنیتی
+            نیز در کنار آن در نظر گرفته شوند.
+          </p>
+
+          <p>
+            برای مثال ممکن است VLAN دوربین‌ها اجازه دسترسی مستقیم
+            به VLAN کاربران را نداشته باشد، اما NVR بتواند به
+            دوربین‌ها دسترسی داشته باشد.
+          </p>
+
+          <p>
+            همین موضوع باعث می‌شود VLAN یکی از ابزارهای مهم برای
+            طراحی یک زیرساخت مرتب، قابل مدیریت و قابل توسعه باشد.
+          </p>
+
+
+          <h2 id="troubleshooting">
+            اشتباهات رایج هنگام کار با VLAN
+          </h2>
+
+          <ol>
+            <li>
+              قرار دادن پورت End Device در VLAN اشتباه
+            </li>
+
+            <li>
+              عدم تطابق VLANهای Allowed روی دو طرف Trunk
+            </li>
+
+            <li>
+              اشتباه در Native VLAN
+            </li>
+
+            <li>
+              تعریف نشدن Gateway مناسب برای VLAN
+            </li>
+
+            <li>
+              فراموش کردن DHCP Scope مربوط به VLAN جدید
+            </li>
+
+            <li>
+              وجود ACL یا Firewall Rule که ارتباط موردنظر را مسدود می‌کند
+            </li>
+          </ol>
+
+
+          <h2 id="troubleshooting-method">
+            روش پیشنهادی برای عیب‌یابی
+          </h2>
+
+          <p>
+            وقتی یک سیستم بعد از ایجاد VLAN ارتباط ندارد، بهتر است
+            مرحله‌به‌مرحله جلو برویم و فقط حدس نزنیم.
+          </p>
+
+          <ol>
+            <li>بررسی کنیم کابل و Link Up هستند.</li>
+            <li>VLAN پورت را بررسی کنیم.</li>
+            <li>در صورت استفاده از Trunk، VLANهای مجاز را بررسی کنیم.</li>
+            <li>IP و Subnet Mask را بررسی کنیم.</li>
+            <li>Gateway را بررسی کنیم.</li>
+            <li>DHCP را بررسی کنیم.</li>
+            <li>Routing بین VLANها را بررسی کنیم.</li>
+            <li>در نهایت ACL و Firewall را بررسی کنیم.</li>
+          </ol>
+
+
+          <h2 id="conclusion">
+            جمع‌بندی
+          </h2>
+
+          <p>
+            VLAN یکی از پایه‌های اصلی طراحی شبکه‌های مدرن است.
+            با استفاده صحیح از VLAN می‌توان شبکه را به بخش‌های
+            منطقی تقسیم کرد، Broadcast Domainها را کنترل کرد و
+            مدیریت زیرساخت را ساده‌تر کرد.
+          </p>
+
+          <p>
+            اما طراحی VLAN باید بخشی از یک معماری کامل شبکه باشد.
+            Routing، امنیت، IP Addressing، DHCP و مانیتورینگ همگی
+            در کنار VLAN اهمیت دارند.
+          </p>
+
+          <div class="article-note">
+            <strong>تجربه عملی:</strong>
+            در پروژه‌های سازمانی، قبل از ساخت VLANهای جدید بهتر است
+            ساختار IP Addressing، نیازهای Routing و مسیرهای ارتباطی
+            بین سرویس‌ها از ابتدا مشخص شوند. این کار از بسیاری از
+            مشکلات بعدی جلوگیری می‌کند.
+          </div>
+
+
+          <a
+            href="../index.html#articles"
+            class="article-back"
+          >
+            ← بازگشت به مقالات
+          </a>
+
+        </article>
+
+
+        <!-- SIDEBAR -->
+
+        <aside class="article-sidebar">
+
+          <h3>فهرست مقاله</h3>
+
+          <a href="#what-is-vlan">
+            VLAN چیست؟
+          </a>
+
+          <a href="#why-vlan">
+            چرا VLAN؟
+          </a>
+
+          <a href="#example">
+            سناریوی نمونه
+          </a>
+
+          <a href="#diagram">
+            ساختار شبکه
+          </a>
+
+          <a href="#access-port">
+            Access Port
+          </a>
+
+          <a href="#trunk-port">
+            Trunk Port
+          </a>
+
+          <a href="#access-vs-trunk">
+            مقایسه Access و Trunk
+          </a>
+
+          <a href="#real-world">
+            تجربه عملی
+          </a>
+
+          <a href="#troubleshooting">
+            خطاهای رایج
+          </a>
+
+          <a href="#conclusion">
+            جمع‌بندی
+          </a>
+
+        </aside>
+
+      </div>
+
+    </div>
+
+  </main>
+
+
+  <!-- =====================================================
+       FOOTER
+       ===================================================== -->
+
+  <footer class="site-footer">
+
+    <div class="container">
+
+      <div class="footer-inner">
+
+        <div>
+          <strong>AJORLOO<span>•</span>TECH</strong>
+          <p>Engineering Digital Trust</p>
+        </div>
+
+        <div>
+          © <span id="currentYear"></span>
+          AJORLOO•TECH
+        </div>
+
+      </div>
+
+    </div>
+
+  </footer>
+
+
+  <!-- =====================================================
+       SCRIPT
+       ===================================================== -->
+
+  <script src="../app.js"></script>
+
+</body>
+</html>

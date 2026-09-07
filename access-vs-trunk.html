@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Access Port vs Trunk Port | AJORLOO•TECH</title>
+
+  <meta
+    name="description"
+    content="راهنمای کامل تفاوت Access Port و Trunk Port در شبکه‌های Cisco، VLAN، 802.1Q، Native VLAN و سناریوهای واقعی شبکه."
+  />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Vazirmatn:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  />
+
+  <link rel="stylesheet" href="../styles.css" />
+
+  <style>
+    .article-page {
+      min-height: 100vh;
+      padding: 140px 20px 80px;
+      background:
+        radial-gradient(circle at 15% 10%, rgba(0, 190, 255, 0.08), transparent 30%),
+        radial-gradient(circle at 85% 20%, rgba(30, 90, 255, 0.08), transparent 30%);
+    }
+
+    .article-container {
+      width: min(1050px, 100%);
+      margin: 0 auto;
+    }
+
+    .article-header {
+      text-align: center;
+      margin-bottom: 55px;
+    }
+
+    .article-category-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 15px;
+      border: 1px solid rgba(0, 200, 255, 0.25);
+      border-radius: 999px;
+      background: rgba(0, 180, 255, 0.07);
+      color: #19cfff;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      margin-bottom: 20px;
+    }
+
+    .article-header h1 {
+      margin: 0 auto 20px;
+      max-width: 850px;
+      font-size: clamp(32px, 5vw, 58px);
+      line-height: 1.25;
+      font-weight: 800;
+    }
+
+    .article-header p {
+      max-width: 760px;
+      margin: 0 auto;
+      color: rgba(255,255,255,0.68);
+      line-height: 2;
+      font-size: 16px;
+    }
+
+    .article-meta-bar {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 25px;
+    }
+
+    .article-meta-item {
+      padding: 7px 13px;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: rgba(255,255,255,0.65);
+      font-size: 13px;
+    }
+
+    .article-content {
+      background: rgba(255,255,255,0.025);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 24px;
+      padding: clamp(25px, 5vw, 55px);
+      backdrop-filter: blur(14px);
+      box-shadow: 0 30px 80px rgba(0,0,0,0.18);
+    }
+
+    .article-content h2 {
+      margin: 50px 0 18px;
+      font-size: clamp(23px, 3vw, 32px);
+      line-height: 1.5;
+    }
+
+    .article-content h2:first-child {
+      margin-top: 0;
+    }
+
+    .article-content h3 {
+      margin: 32px 0 15px;
+      font-size: 21px;
+    }
+
+    .article-content p {
+      color: rgba(255,255,255,0.72);
+      line-height: 2.15;
+      font-size: 16px;
+      margin: 0 0 18px;
+    }
+
+    .article-content ul,
+    .article-content ol {
+      padding-right: 25px;
+      margin: 20px 0;
+    }
+
+    .article-content li {
+      color: rgba(255,255,255,0.72);
+      line-height: 2;
+      margin-bottom: 8px;
+    }
+
+    .highlight-box {
+      margin: 30px 0;
+      padding: 22px 24px;
+      border-radius: 16px;
+      background: rgba(0, 180, 255, 0.06);
+      border: 1px solid rgba(0, 200, 255, 0.18);
+    }
+
+    .highlight-box strong {
+      color: #20d4ff;
+    }
+
+    .comparison-table-wrapper {
+      overflow-x: auto;
+      margin: 30px 0;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .comparison-table {
+      width: 100%;
+      min-width: 650px;
+      border-collapse: collapse;
+    }
+
+    .comparison-table th,
+    .comparison-table td {
+      padding: 16px 18px;
+      text-align: right;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+
+    .comparison-table th {
+      background: rgba(255,255,255,0.05);
+      color: #fff;
+      font-weight: 700;
+    }
+
+    .comparison-table td {
+      color: rgba(255,255,255,0.68);
+    }
+
+    .comparison-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .code-block {
+      direction: ltr;
+      text-align: left;
+      margin: 25px 0;
+      padding: 22px;
+      border-radius: 14px;
+      background: #07111f;
+      border: 1px solid rgba(255,255,255,0.08);
+      overflow-x: auto;
+      font-family: "DM Sans", monospace;
+      font-size: 14px;
+      line-height: 1.8;
+      color: #dcecff;
+      white-space: pre;
+    }
+
+    .scenario-card {
+      margin: 28px 0;
+      padding: 25px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.035);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .scenario-card h3 {
+      margin-top: 0;
+    }
+
+    .flow {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin: 30px 0;
+    }
+
+    .flow-item {
+      padding: 14px 18px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .flow-arrow {
+      color: #1bd4ff;
+      font-size: 22px;
+    }
+
+    .article-footer {
+      margin-top: 50px;
+      padding-top: 30px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #1bd4ff;
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    .article-brand {
+      color: rgba(255,255,255,0.45);
+      font-size: 13px;
+    }
+
+    @media (max-width: 700px) {
+      .article-page {
+        padding-top: 110px;
+      }
+
+      .article-content {
+        border-radius: 18px;
+      }
+
+      .article-content p,
+      .article-content li {
+        font-size: 15px;
+      }
+
+      .article-footer {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="article-page">
+    <div class="article-container">
+
+      <!-- Article Header -->
+      <header class="article-header">
+
+        <div class="article-category-badge">
+          SWITCHING
+        </div>
+
+        <h1>
+          Access Port vs Trunk Port
+        </h1>
+
+        <p>
+          یکی از مهم‌ترین مفاهیم در طراحی و عیب‌یابی شبکه‌های مبتنی بر VLAN،
+          شناخت تفاوت بین Access Port و Trunk Port است. در این مقاله با
+          کاربرد، ساختار، 802.1Q، Native VLAN و سناریوهای واقعی این دو نوع
+          پورت آشنا می‌شویم.
+        </p>
+
+        <div class="article-meta-bar">
+          <span class="article-meta-item">Switching</span>
+          <span class="article-meta-item">Intermediate</span>
+          <span class="article-meta-item">10 دقیقه مطالعه</span>
+        </div>
+
+      </header>
+
+
+      <!-- Article Content -->
+      <article class="article-content">
+
+        <h2>Access Port چیست؟</h2>
+
+        <p>
+          Access Port پورتی از سوئیچ است که معمولاً برای اتصال تجهیزات نهایی
+          مانند کامپیوتر، پرینتر، دوربین IP، تلفن IP یا برخی تجهیزات شبکه
+          استفاده می‌شود.
+        </p>
+
+        <p>
+          در یک Access Port معمولاً یک VLAN مشخص تعریف می‌شود و فریم‌هایی که
+          از سمت دستگاه نهایی وارد سوئیچ می‌شوند، بدون نیاز به Tag شدن توسط
+          دستگاه کاربر، در همان VLAN قرار می‌گیرند.
+        </p>
+
+        <div class="highlight-box">
+          <strong>نکته مهم:</strong>
+          یک Access Port معمولاً برای حمل ترافیک یک VLAN استفاده می‌شود.
+        </div>
+
+
+        <h2>Trunk Port چیست؟</h2>
+
+        <p>
+          Trunk Port برای عبور هم‌زمان ترافیک چند VLAN از یک لینک استفاده
+          می‌شود. این نوع پورت بیشتر در ارتباط بین Switchها، Switch و
+          Router، Switch و Firewall، یا بعضی Access Pointها کاربرد دارد.
+        </p>
+
+        <p>
+          برای اینکه دستگاه مقصد بتواند VLANهای مختلف را از یک لینک تشخیص
+          دهد، فریم‌ها معمولاً با استاندارد IEEE 802.1Q تگ می‌شوند.
+        </p>
+
+
+        <h2>تفاوت Access و Trunk در یک نگاه</h2>
+
+        <div class="comparison-table-wrapper">
+
+          <table class="comparison-table">
+
+            <thead>
+              <tr>
+                <th>ویژگی</th>
+                <th>Access Port</th>
+                <th>Trunk Port</th>
+              </tr>
+            </thead>
+
+            <tbody>
+
+              <tr>
+                <td>تعداد VLAN</td>
+                <td>معمولاً یک VLAN</td>
+                <td>چند VLAN</td>
+              </tr>
+
+              <tr>
+                <td>کاربرد اصلی</td>
+                <td>اتصال End Device</td>
+                <td>اتصال تجهیزات شبکه</td>
+              </tr>
+
+              <tr>
+                <td>802.1Q Tag</td>
+                <td>معمولاً بدون Tag برای End Device</td>
+                <td>برای تفکیک VLANها</td>
+              </tr>
+
+              <tr>
+                <td>مثال</td>
+                <td>PC / Printer / Camera</td>
+                <td>Switch-to-Switch</td>
+              </tr>
+
+              <tr>
+                <td>تنظیم VLAN</td>
+                <td>Access VLAN</td>
+                <td>Allowed VLANs</td>
+              </tr>
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+
+        <h2>سناریوی ساده Access Port</h2>
+
+        <p>
+          فرض کنید در یک شبکه سازمانی VLAN شماره 10 برای کاربران طراحی شده
+          است. کامپیوتر کاربر به پورت شماره 10 سوئیچ متصل است.
+        </p>
+
+        <div class="flow">
+
+          <div class="flow-item">
+            PC
+          </div>
+
+          <div class="flow-arrow">
+            ←
+          </div>
+
+          <div class="flow-item">
+            Switch<br>
+            Fa0/10
+          </div>
+
+          <div class="flow-arrow">
+            ←
+          </div>
+
+          <div class="flow-item">
+            VLAN 10
+          </div>
+
+        </div>
+
+        <p>
+          در Cisco می‌توان این پورت را به شکل زیر تنظیم کرد:
+        </p>
+
+        <div class="code-block">interface GigabitEthernet0/10
+ switchport mode access
+ switchport access vlan 10</div>
+
+
+        <h2>سناریوی Trunk بین دو Switch</h2>
+
+        <p>
+          حالا فرض کنید دو سوئیچ داریم و VLANهای 10، 20 و 30 باید بین آن‌ها
+          عبور کنند.
+        </p>
+
+        <div class="flow">
+
+          <div class="flow-item">
+            Switch A
+          </div>
+
+          <div class="flow-arrow">
+            ↔
+          </div>
+
+          <div class="flow-item">
+            TRUNK<br>
+            VLAN 10 / 20 / 30
+          </div>
+
+          <div class="flow-arrow">
+            ↔
+          </div>
+
+          <div class="flow-item">
+            Switch B
+          </div>
+
+        </div>
+
+        <p>
+          در این حالت لینک بین دو سوئیچ باید به‌صورت Trunk تنظیم شود:
+        </p>
+
+        <div class="code-block">interface GigabitEthernet0/24
+ switchport mode trunk
+ switchport trunk allowed vlan 10,20,30</div>
+
+
+        <h2>802.1Q چه نقشی دارد؟</h2>
+
+        <p>
+          وقتی چند VLAN از طریق یک لینک Trunk عبور می‌کنند، گیرنده باید
+          بداند هر فریم متعلق به کدام VLAN است.
+        </p>
+
+        <p>
+          استاندارد IEEE 802.1Q با اضافه کردن اطلاعات VLAN به فریم Ethernet،
+          امکان انتقال چند VLAN روی یک لینک فیزیکی را فراهم می‌کند.
+        </p>
+
+        <div class="highlight-box">
+          <strong>به زبان ساده:</strong>
+          Trunk مثل یک بزرگراه مشترک است که چند مسیر VLAN روی آن حرکت می‌کنند؛
+          Tag به تجهیزات کمک می‌کند تشخیص دهند هر فریم متعلق به کدام VLAN است.
+        </div>
+
+
+        <h2>Native VLAN چیست؟</h2>
+
+        <p>
+          در یک Trunk، Native VLAN به VLANای گفته می‌شود که در طراحی
+          802.1Q به‌صورت Untagged روی Trunk منتقل می‌شود.
+        </p>
+
+        <p>
+          یکی از نکات مهم در طراحی شبکه این است که Native VLAN در دو طرف
+          Trunk هماهنگ باشد. عدم تطابق Native VLAN می‌تواند باعث مشکلات
+          ارتباطی و پیام‌های هشدار در سوئیچ شود.
+        </p>
+
+
+        <h2>Allowed VLAN چیست؟</h2>
+
+        <p>
+          روی یک Trunk لازم نیست تمام VLANهای موجود در شبکه اجازه عبور داشته
+          باشند. می‌توان فقط VLANهای موردنیاز را روی لینک مجاز کرد.
+        </p>
+
+        <div class="code-block">interface GigabitEthernet0/24
+ switchport mode trunk
+ switchport trunk allowed vlan 10,20,30</div>
+
+        <p>
+          این کار علاوه بر کاهش ترافیک غیرضروری، در طراحی و امنیت شبکه نیز
+          اهمیت دارد.
+        </p>
+
+
+        <h2>اشتباهات رایج در Access و Trunk</h2>
+
+        <h3>۱. قرار دادن PC روی Trunk</h3>
+
+        <p>
+          در اغلب سناریوهای معمول، اتصال مستقیم کامپیوتر کاربر به Trunk
+          انتخاب مناسبی نیست. End Device معمولاً باید روی Access Port قرار
+          بگیرد.
+        </p>
+
+
+        <h3>۲. اشتباه گرفتن Access VLAN با Allowed VLAN</h3>
+
+        <p>
+          در Access Port معمولاً مشخص می‌کنیم پورت عضو کدام VLAN باشد؛ اما در
+          Trunk مشخص می‌کنیم چه VLANهایی اجازه عبور از لینک را دارند.
+        </p>
+
+
+        <h3>۳. عدم تطابق Native VLAN</h3>
+
+        <p>
+          اگر Native VLAN دو طرف Trunk متفاوت باشد، ممکن است ترافیک به VLAN
+          اشتباه منتقل شود یا مشکلاتی در شبکه ایجاد شود.
+        </p>
+
+
+        <h3>۴. عبور دادن همه VLANها بدون نیاز</h3>
+
+        <p>
+          در شبکه‌های واقعی بهتر است فقط VLANهایی که واقعاً نیاز به عبور از
+          یک Trunk دارند مجاز شوند.
+        </p>
+
+
+        <h2>Access یا Trunk؟</h2>
+
+        <div class="scenario-card">
+
+          <h3>اگر به این تجهیزات وصل می‌شوید:</h3>
+
+          <ul>
+            <li>کامپیوتر کاربر</li>
+            <li>پرینتر</li>
+            <li>دوربین IP</li>
+            <li>برخی تجهیزات End User</li>
+          </ul>
+
+          <p>
+            در اغلب سناریوها <strong>Access Port</strong> انتخاب مناسب‌تری است.
+          </p>
+
+        </div>
+
+
+        <div class="scenario-card">
+
+          <h3>اگر این ارتباط را دارید:</h3>
+
+          <ul>
+            <li>Switch به Switch</li>
+            <li>Switch به Router</li>
+            <li>Switch به Firewall</li>
+            <li>Switch به Access Point با چند SSID/VLAN</li>
+          </ul>
+
+          <p>
+            معمولاً به <strong>Trunk Port</strong> نیاز خواهید داشت.
+          </p>
+
+        </div>
+
+
+        <h2>چند دستور مفید Cisco برای عیب‌یابی</h2>
+
+        <p>
+          در زمان Troubleshooting بهتر است ابتدا وضعیت پورت و VLAN را بررسی
+          کنیم.
+        </p>
+
+        <div class="code-block">show interfaces switchport</div>
+
+        <p>
+          برای مشاهده وضعیت Trunkها:
+        </p>
+
+        <div class="code-block">show interfaces trunk</div>
+
+        <p>
+          و برای مشاهده VLANهای موجود روی سوئیچ:
+        </p>
+
+        <div class="code-block">show vlan brief</div>
+
+
+        <h2>جمع‌بندی</h2>
+
+        <p>
+          تفاوت Access و Trunk یکی از پایه‌ای‌ترین مفاهیم Switching است.
+          Access Port معمولاً برای اتصال تجهیزات نهایی و قرار دادن آن‌ها در
+          یک VLAN مشخص استفاده می‌شود، در حالی که Trunk برای انتقال چند VLAN
+          روی یک لینک مشترک کاربرد دارد.
+        </p>
+
+        <p>
+          در شبکه‌های سازمانی، طراحی صحیح Access و Trunk می‌تواند تأثیر
+          مستقیمی روی عملکرد، قابلیت مدیریت و عیب‌یابی شبکه داشته باشد.
+        </p>
+
+        <div class="highlight-box">
+          <strong>قاعده ساده برای به خاطر سپردن:</strong>
+          <br>
+          Access = یک VLAN برای End Device
+          <br>
+          Trunk = چند VLAN بین تجهیزات شبکه
+        </div>
+
+
+        <!-- Article Footer -->
+        <div class="article-footer">
+
+          <a
+            href="../index.html#articles"
+            class="back-link"
+          >
+            ← بازگشت به مقالات
+          </a>
+
+          <span class="article-brand">
+            AJORLOO•TECH — Engineering Digital Trust
+          </span>
+
+        </div>
+
+      </article>
+
+    </div>
+  </main>
+
+</body>
+</html>

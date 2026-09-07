@@ -1,0 +1,1426 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Veeam 3-2-1-1-0 چیست؟ راهنمای حرفه‌ای Backup | AJORLOO•TECH</title>
+
+  <meta
+    name="description"
+    content="راهنمای حرفه‌ای Veeam 3-2-1-1-0 Backup Strategy، شامل Immutable Backup، Offline Backup، Air-Gapped، Ransomware Protection و Zero Errors."
+  />
+
+  <link rel="stylesheet" href="../styles.css" />
+
+  <style>
+    .article-page {
+      min-height: 100vh;
+      padding: 120px 20px 60px;
+      background:
+        radial-gradient(circle at 10% 10%, rgba(0, 170, 255, 0.08), transparent 30%),
+        radial-gradient(circle at 90% 20%, rgba(0, 255, 200, 0.06), transparent 30%);
+    }
+
+    .article-container {
+      width: min(1050px, 100%);
+      margin: 0 auto;
+    }
+
+    .article-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .article-category-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 8px 16px;
+      border: 1px solid rgba(0, 200, 255, 0.25);
+      border-radius: 999px;
+      background: rgba(0, 180, 255, 0.08);
+      color: #59d8ff;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      margin-bottom: 20px;
+    }
+
+    .article-header h1 {
+      font-size: clamp(2rem, 4vw, 3.4rem);
+      line-height: 1.35;
+      margin: 0 auto 18px;
+      max-width: 900px;
+    }
+
+    .article-header p {
+      max-width: 820px;
+      margin: 0 auto;
+      color: #9baabd;
+      font-size: 1.05rem;
+      line-height: 2;
+    }
+
+    .article-meta-bar {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 28px;
+    }
+
+    .article-meta-item {
+      padding: 8px 14px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: #b9c6d6;
+      font-size: 0.85rem;
+    }
+
+    .article-content {
+      background: rgba(10, 20, 35, 0.72);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 24px;
+      padding: clamp(22px, 5vw, 52px);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.18);
+    }
+
+    .article-content h2 {
+      font-size: 1.65rem;
+      margin: 42px 0 18px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .article-content h2:first-child {
+      margin-top: 0;
+    }
+
+    .article-content h3 {
+      font-size: 1.2rem;
+      margin: 30px 0 12px;
+    }
+
+    .article-content p {
+      color: #b8c5d5;
+      line-height: 2.05;
+      margin: 12px 0;
+    }
+
+    .article-content ul,
+    .article-content ol {
+      padding-right: 24px;
+      color: #b8c5d5;
+      line-height: 2.1;
+    }
+
+    .article-content li {
+      margin-bottom: 7px;
+    }
+
+    .highlight-box,
+    .warning-box,
+    .success-box,
+    .danger-box {
+      margin: 24px 0;
+      padding: 20px 22px;
+      border-radius: 16px;
+      line-height: 2;
+    }
+
+    .highlight-box {
+      background: rgba(0, 170, 255, 0.08);
+      border-right: 4px solid #31c7ff;
+    }
+
+    .warning-box {
+      background: rgba(255, 170, 0, 0.08);
+      border-right: 4px solid #ffb52e;
+    }
+
+    .success-box {
+      background: rgba(0, 220, 160, 0.08);
+      border-right: 4px solid #27d9a2;
+    }
+
+    .danger-box {
+      background: rgba(255, 70, 100, 0.07);
+      border-right: 4px solid #ff5d7a;
+    }
+
+    .highlight-box strong,
+    .warning-box strong,
+    .success-box strong,
+    .danger-box strong {
+      color: #ffffff;
+    }
+
+    .number-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 14px;
+      margin: 28px 0;
+    }
+
+    .number-card {
+      padding: 24px 18px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.035);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      text-align: center;
+    }
+
+    .number-card .big-number {
+      font-size: 2.3rem;
+      font-weight: 800;
+      color: #ffffff;
+      margin-bottom: 8px;
+    }
+
+    .number-card strong {
+      display: block;
+      color: #dff7ff;
+      margin-bottom: 7px;
+    }
+
+    .number-card span {
+      color: #8799ad;
+      font-size: 0.84rem;
+      line-height: 1.8;
+    }
+
+    .comparison-table-wrapper {
+      width: 100%;
+      overflow-x: auto;
+      margin: 25px 0;
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .comparison-table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 680px;
+    }
+
+    .comparison-table th,
+    .comparison-table td {
+      padding: 14px 16px;
+      text-align: right;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    }
+
+    .comparison-table th {
+      background: rgba(0, 170, 255, 0.08);
+      color: #e8f5ff;
+      font-weight: 700;
+    }
+
+    .comparison-table td {
+      color: #b8c5d5;
+    }
+
+    .comparison-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .code-block {
+      direction: ltr;
+      text-align: left;
+      overflow-x: auto;
+      background: #07101d;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 14px;
+      padding: 18px;
+      margin: 20px 0;
+      color: #c8e9ff;
+      font-family: Consolas, Monaco, monospace;
+      font-size: 0.9rem;
+      line-height: 1.8;
+      white-space: pre;
+    }
+
+    .scenario-card {
+      margin: 24px 0;
+      padding: 24px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.035);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .scenario-card h3 {
+      margin-top: 0;
+      color: #ffffff;
+    }
+
+    .flow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 28px 0;
+    }
+
+    .flow-item {
+      padding: 15px 20px;
+      border-radius: 14px;
+      background: rgba(0, 170, 255, 0.08);
+      border: 1px solid rgba(0, 200, 255, 0.18);
+      color: #d9f4ff;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .flow-item small {
+      display: block;
+      color: #8194a9;
+      font-size: 0.75rem;
+      margin-top: 5px;
+      font-weight: 400;
+    }
+
+    .flow-arrow {
+      color: #51d8ff;
+      font-size: 1.3rem;
+    }
+
+    .check-list {
+      list-style: none;
+      padding-right: 0 !important;
+    }
+
+    .check-list li {
+      position: relative;
+      padding-right: 30px;
+      margin-bottom: 12px;
+    }
+
+    .check-list li::before {
+      content: "✓";
+      position: absolute;
+      right: 0;
+      top: 0;
+      color: #36d8a4;
+      font-weight: 800;
+    }
+
+    .article-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-top: 30px;
+      padding-top: 25px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #54d8ff;
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    .back-link:hover {
+      opacity: 0.8;
+    }
+
+    .article-brand {
+      color: #738399;
+      font-size: 0.85rem;
+    }
+
+    @media (max-width: 700px) {
+
+      .article-page {
+        padding: 95px 14px 40px;
+      }
+
+      .article-content {
+        padding: 22px 17px;
+        border-radius: 18px;
+      }
+
+      .article-header h1 {
+        font-size: 1.9rem;
+      }
+
+      .article-content h2 {
+        font-size: 1.4rem;
+      }
+
+      .flow {
+        flex-direction: column;
+      }
+
+      .flow-arrow {
+        transform: rotate(90deg);
+      }
+    }
+  </style>
+</head>
+
+
+<body>
+
+  <main class="article-page">
+
+    <div class="article-container">
+
+      <header class="article-header">
+
+        <div class="article-category-badge">
+          VEEAM / BACKUP / SECURITY
+        </div>
+
+        <h1>
+          Veeam 3-2-1-1-0 چیست؟
+          راهنمای حرفه‌ای طراحی Backup
+        </h1>
+
+        <p>
+          از قانون کلاسیک 3-2-1 تا Immutable، Offline و Air-Gapped Backup؛
+          چطور یک معماری Backup مقاوم در برابر Ransomware طراحی کنیم
+          و مطمئن شویم Backup واقعاً قابل بازیابی است؟
+        </p>
+
+        <div class="article-meta-bar">
+
+          <span class="article-meta-item">
+            Advanced
+          </span>
+
+          <span class="article-meta-item">
+            حدود 16 دقیقه مطالعه
+          </span>
+
+          <span class="article-meta-item">
+            Veeam
+          </span>
+
+          <span class="article-meta-item">
+            Backup Security
+          </span>
+
+          <span class="article-meta-item">
+            AJORLOO•TECH
+          </span>
+
+        </div>
+
+      </header>
+
+
+      <article class="article-content">
+
+
+        <h2>
+          چرا 3-2-1 به‌تنهایی کافی نیست؟
+        </h2>
+
+        <p>
+          قانون 3-2-1 سال‌ها به‌عنوان یکی از اصول مهم Backup مورد استفاده
+          قرار گرفته است. این قانون می‌گوید باید سه کپی از داده داشته باشیم،
+          روی دو نوع Media مختلف نگهداری کنیم و حداقل یک کپی خارج از
+          محل اصلی باشد.
+        </p>
+
+        <p>
+          اما تهدیدهای امروزی، مخصوصاً Ransomware و حملات هدفمند به
+          Infrastructure، نشان داده‌اند که حتی داشتن چند نسخه Backup
+          نیز در صورتی که همه آن‌ها از طریق Network یا Credentialهای
+          مشترک قابل دسترسی باشند، می‌تواند ریسک بالایی داشته باشد.
+        </p>
+
+        <div class="danger-box">
+
+          <strong>
+            مسئله فقط تعداد Backupها نیست.
+          </strong>
+
+          <br />
+
+          باید مطمئن شویم مهاجم نمی‌تواند همه نسخه‌های Backup را
+          هم‌زمان حذف، رمزگذاری یا دستکاری کند.
+
+        </div>
+
+
+        <h2>
+          قانون 3-2-1-1-0 چیست؟
+        </h2>
+
+        <p>
+          3-2-1-1-0 را می‌توان یک مدل تکامل‌یافته‌تر برای طراحی
+          Data Protection دانست.
+        </p>
+
+        <div class="number-grid">
+
+          <div class="number-card">
+
+            <div class="big-number">
+              3
+            </div>
+
+            <strong>
+              سه کپی
+            </strong>
+
+            <span>
+              Production + حداقل دو نسخه Backup
+            </span>
+
+          </div>
+
+
+          <div class="number-card">
+
+            <div class="big-number">
+              2
+            </div>
+
+            <strong>
+              دو Media
+            </strong>
+
+            <span>
+              استفاده از دو نوع Storage / Media
+            </span>
+
+          </div>
+
+
+          <div class="number-card">
+
+            <div class="big-number">
+              1
+            </div>
+
+            <strong>
+              یک Offsite
+            </strong>
+
+            <span>
+              حداقل یک نسخه در محل دیگری
+            </span>
+
+          </div>
+
+
+          <div class="number-card">
+
+            <div class="big-number">
+              1
+            </div>
+
+            <strong>
+              یک Offline / Immutable
+            </strong>
+
+            <span>
+              حداقل یک نسخه مقاوم در برابر تغییر یا حذف
+            </span>
+
+          </div>
+
+
+          <div class="number-card">
+
+            <div class="big-number">
+              0
+            </div>
+
+            <strong>
+              Zero Errors
+            </strong>
+
+            <span>
+              Backupها باید به‌صورت منظم Verify و تست شوند
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <div class="highlight-box">
+
+          <strong>
+            نکته مهم:
+          </strong>
+
+          <br />
+
+          عبارت 3-2-1-1-0 بیشتر از یک عدد ساده است؛
+          یک رویکرد برای ساختن چندین لایه دفاعی در برابر
+          Data Loss و Cyber Threat محسوب می‌شود.
+
+        </div>
+
+
+        <h2>
+          معماری کلی 3-2-1-1-0
+        </h2>
+
+        <div class="flow">
+
+          <div class="flow-item">
+            Production
+            <small>Primary Data</small>
+          </div>
+
+          <div class="flow-arrow">
+            →
+          </div>
+
+          <div class="flow-item">
+            Backup Repository
+            <small>Primary Backup</small>
+          </div>
+
+          <div class="flow-arrow">
+            →
+          </div>
+
+          <div class="flow-item">
+            Offsite Copy
+            <small>Secondary Location</small>
+          </div>
+
+          <div class="flow-arrow">
+            →
+          </div>
+
+          <div class="flow-item">
+            Immutable / Offline
+            <small>Protected Copy</small>
+          </div>
+
+        </div>
+
+
+        <h2>
+          بخش اول: سه کپی از داده
+        </h2>
+
+        <p>
+          اولین عدد، 3 است.
+        </p>
+
+        <p>
+          منظور از سه کپی این نیست که سه Backup جدا از Production داشته باشیم.
+          در ساده‌ترین برداشت، یک نسخه Production و حداقل دو نسخه دیگر
+          برای حفاظت و Recovery در نظر گرفته می‌شود.
+        </p>
+
+        <div class="scenario-card">
+
+          <h3>
+            مثال
+          </h3>
+
+          <div class="code-block">COPY #1
+Production VM
+        │
+        ├── SQL Server
+        ├── File Server
+        └── Application Server
+
+
+COPY #2
+Primary Backup Repository
+
+
+COPY #3
+Secondary / Offsite Backup</div>
+
+        </div>
+
+
+        <h2>
+          بخش دوم: دو Media
+        </h2>
+
+        <p>
+          عدد 2 به استفاده از دو نوع Media یا Storage اشاره دارد.
+        </p>
+
+        <p>
+          دلیل این موضوع کاهش وابستگی به یک نوع Storage است.
+          اگر یک Technology یا Storage Type دچار مشکل شود،
+          نسخه دیگری همچنان می‌تواند قابل استفاده باشد.
+        </p>
+
+        <p>
+          بسته به طراحی سازمان، Mediaهای مختلفی می‌توانند در
+          معماری Backup مورد استفاده قرار گیرند.
+        </p>
+
+        <ul>
+
+          <li>
+            Disk Repository
+          </li>
+
+          <li>
+            Object Storage
+          </li>
+
+          <li>
+            Tape
+          </li>
+
+          <li>
+            Cloud Storage
+          </li>
+
+          <li>
+            سایر Storageهای مناسب با Policy سازمان
+          </li>
+
+        </ul>
+
+
+        <h2>
+          بخش سوم: یک نسخه Offsite
+        </h2>
+
+        <p>
+          Offsite یعنی یک نسخه Backup در محیطی جدا از محل اصلی نگهداری شود.
+        </p>
+
+        <p>
+          فرض کنید Production و Repository اصلی هر دو در Server Room
+          یک ساختمان هستند.
+        </p>
+
+        <p>
+          در صورت وقوع حادثه‌ای که کل Site را تحت تأثیر قرار دهد،
+          ممکن است هر دو نسخه از بین بروند.
+        </p>
+
+        <div class="warning-box">
+
+          <strong>
+            Offsite فقط به معنی «اتاق دیگر» نیست.
+          </strong>
+
+          <br />
+
+          هرچه Failure Domain دو Location بیشتر از هم جدا باشد،
+          حفاظت در برابر Disaster بهتر خواهد بود.
+
+        </div>
+
+
+        <h2>
+          بخش چهارم: Offline یا Immutable
+        </h2>
+
+        <p>
+          این قسمت یکی از مهم‌ترین تفاوت‌های معماری مدرن Backup
+          با Backup سنتی است.
+        </p>
+
+        <p>
+          هدف این است که حداقل یک نسخه از Backup به شکلی محافظت شود
+          که مهاجم نتواند به‌سادگی آن را حذف یا تغییر دهد.
+        </p>
+
+        <h3>
+          Immutable Backup
+        </h3>
+
+        <p>
+          در یک Storage یا Repository با قابلیت Immutability،
+          Backup برای مدت مشخصی در برابر تغییر یا حذف محافظت می‌شود.
+        </p>
+
+        <h3>
+          Offline Backup
+        </h3>
+
+        <p>
+          Offline Backup به نسخه‌ای اشاره دارد که در زمان موردنظر
+          از دسترس معمول Network خارج است.
+        </p>
+
+        <h3>
+          Air-Gapped Backup
+        </h3>
+
+        <p>
+          Air Gap به جداسازی منطقی یا فیزیکی Backup از شبکه و مسیرهای
+          دسترسی معمول اشاره دارد.
+        </p>
+
+        <div class="success-box">
+
+          <strong>
+            هدف اصلی:
+          </strong>
+
+          <br />
+
+          اگر Attacker به Domain، Server و حتی Backup Infrastructure
+          دسترسی پیدا کرد، نباید بتواند تمام نسخه‌های Recovery را
+          به‌سادگی نابود کند.
+
+        </div>
+
+
+        <h2>
+          Immutable با Read-Only ساده فرق دارد
+        </h2>
+
+        <p>
+          یکی از اشتباهات رایج این است که هر Storage با Permission
+          محدود را Immutable تصور کنیم.
+        </p>
+
+        <p>
+          Read-Only Permission در یک File Share با Immutability
+          یکسان نیست.
+        </p>
+
+        <p>
+          در طراحی واقعی باید مشخص شود که مکانیزم Immutability دقیقاً
+          در کدام لایه اجرا می‌شود و چه مدت Backup را محافظت می‌کند.
+        </p>
+
+
+        <h2>
+          چرا Ransomware برای Backup خطرناک است؟
+        </h2>
+
+        <p>
+          Ransomware فقط فایل‌های کاربران را هدف قرار نمی‌دهد.
+          در حملات پیشرفته، Backup Infrastructure نیز می‌تواند
+          هدف قرار گیرد.
+        </p>
+
+        <p>
+          اگر مهاجم Credentialهای کافی داشته باشد، ممکن است تلاش کند:
+        </p>
+
+        <ul>
+
+          <li>
+            Backupها را Delete کند.
+          </li>
+
+          <li>
+            Repository را Encrypt کند.
+          </li>
+
+          <li>
+            Backup Configuration را دستکاری کند.
+          </li>
+
+          <li>
+            Credentialهای مرتبط با Backup را هدف قرار دهد.
+          </li>
+
+          <li>
+            مسیرهای Recovery را از بین ببرد.
+          </li>
+
+        </ul>
+
+
+        <div class="danger-box">
+
+          <strong>
+            سناریوی خطرناک:
+          </strong>
+
+          <br />
+
+          Production + Backup Repository + Backup Management
+          همگی با یک Credential یا در یک Security Domain قابل دسترسی باشند.
+
+        </div>
+
+
+        <h2>
+          Zero Errors یعنی چه؟
+        </h2>
+
+        <p>
+          عدد صفر در 3-2-1-1-0 به این مفهوم اشاره دارد که نباید
+          صرفاً به موفق بودن Job اکتفا کنیم؛ باید فرآیند Backup
+          و Recovery را Verify کنیم.
+        </p>
+
+        <p>
+          یک Backup Job ممکن است با وضعیت Success تمام شود،
+          اما این موضوع به‌تنهایی اثبات نمی‌کند که تمام سناریوهای
+          Recovery به‌درستی کار خواهند کرد.
+        </p>
+
+        <h3>
+          چه چیزهایی باید بررسی شوند؟
+        </h3>
+
+        <ul class="check-list">
+
+          <li>
+            وضعیت Backup Job
+          </li>
+
+          <li>
+            سلامت Repository
+          </li>
+
+          <li>
+            وجود Restore Point
+          </li>
+
+          <li>
+            Integrity داده
+          </li>
+
+          <li>
+            Backup Verification
+          </li>
+
+          <li>
+            تست Restore
+          </li>
+
+          <li>
+            بررسی Application Recovery در Workloadهای حساس
+          </li>
+
+        </ul>
+
+
+        <h2>
+          Backup Verification با Restore Test
+        </h2>
+
+        <p>
+          Verification و Restore Test دو مفهوم نزدیک اما یکسان نیستند.
+        </p>
+
+        <div class="comparison-table-wrapper">
+
+          <table class="comparison-table">
+
+            <thead>
+
+              <tr>
+                <th>
+                  Verification
+                </th>
+
+                <th>
+                  Restore Test
+                </th>
+              </tr>
+
+            </thead>
+
+            <tbody>
+
+              <tr>
+
+                <td>
+                  بررسی صحت Backup
+                </td>
+
+                <td>
+                  آزمایش واقعی Recovery
+                </td>
+
+              </tr>
+
+              <tr>
+
+                <td>
+                  سریع‌تر و قابل تکرارتر
+                </td>
+
+                <td>
+                  شبیه‌سازی سناریوی واقعی‌تر
+                </td>
+
+              </tr>
+
+              <tr>
+
+                <td>
+                  بررسی Integrity
+                </td>
+
+                <td>
+                  بررسی فرآیند کامل Recovery
+                </td>
+
+              </tr>
+
+              <tr>
+
+                <td>
+                  جایگزین کامل Restore Test نیست
+                </td>
+
+                <td>
+                  برای Disaster Recovery بسیار ارزشمند است
+                </td>
+
+              </tr>
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+
+        <h2>
+          طراحی Backup برای محیط VMware
+        </h2>
+
+        <div class="scenario-card">
+
+          <h3>
+            سناریوی نمونه
+          </h3>
+
+          <div class="code-block">VMware Cluster
+       │
+       ├── DC01
+       ├── SQL01
+       ├── APP01
+       └── FILE01
+       │
+       ▼
+Veeam Backup & Replication
+       │
+       ├──────────────► Repository 01
+       │
+       └──────────────► Backup Copy
+                              │
+                              ▼
+                       Repository 02
+                              │
+                              ▼
+                       Immutable / Offsite</div>
+
+        </div>
+
+
+        <h2>
+          Security در Veeam فقط به Backup محدود نیست
+        </h2>
+
+        <p>
+          امنیت Backup Infrastructure باید چندلایه باشد.
+        </p>
+
+        <h3>
+          Credential Security
+        </h3>
+
+        <p>
+          حساب‌های مورد استفاده برای Backup باید حداقل سطح دسترسی
+          موردنیاز را داشته باشند.
+        </p>
+
+        <h3>
+          Network Segmentation
+        </h3>
+
+        <p>
+          بهتر است Backup Infrastructure بدون نیاز در دسترس تمام
+          سیستم‌های سازمان نباشد.
+        </p>
+
+        <h3>
+          MFA
+        </h3>
+
+        <p>
+          در محیط‌هایی که محصول و معماری مورد استفاده پشتیبانی می‌کنند،
+          MFA می‌تواند یک لایه امنیتی مهم برای دسترسی مدیریتی باشد.
+        </p>
+
+        <h3>
+          Monitoring
+        </h3>
+
+        <p>
+          Failed Job، Repository Capacity، Unusual Activity و سایر
+          Eventهای مهم باید Monitoring شوند.
+        </p>
+
+
+        <h2>
+          نمونه معماری حرفه‌ای
+        </h2>
+
+        <div class="flow">
+
+          <div class="flow-item">
+            Production
+            <small>Site A</small>
+          </div>
+
+          <div class="flow-arrow">
+            →
+          </div>
+
+          <div class="flow-item">
+            Primary Repository
+            <small>Fast Recovery</small>
+          </div>
+
+          <div class="flow-arrow">
+            →
+          </div>
+
+          <div class="flow-item">
+            Offsite Repository
+            <small>DR Location</small>
+          </div>
+
+          <div class="flow-arrow">
+            →
+          </div>
+
+          <div class="flow-item">
+            Immutable Copy
+            <small>Ransomware Protection</small>
+          </div>
+
+        </div>
+
+
+        <h2>
+          Backup Copy چرا مهم است؟
+        </h2>
+
+        <p>
+          Backup Copy کمک می‌کند یک نسخه دیگر از Backup در محیطی
+          جدا از Repository اصلی داشته باشیم.
+        </p>
+
+        <p>
+          این موضوع در طراحی 3-2-1 و معماری‌های چندلایه می‌تواند
+          نقش مهمی داشته باشد.
+        </p>
+
+        <div class="scenario-card">
+
+          <h3>
+            مثال سازمانی
+          </h3>
+
+          <div class="code-block">SITE A
+Production
+   │
+   ▼
+Veeam
+   │
+   ▼
+Repository A
+
+
+        BACKUP COPY
+             │
+             ▼
+
+
+SITE B
+Repository B
+   │
+   ▼
+Immutable Storage</div>
+
+        </div>
+
+
+        <h2>
+          اگر Repository اصلی از بین برود چه می‌شود؟
+        </h2>
+
+        <p>
+          این سؤال باید قبل از Disaster پاسخ داده شود، نه بعد از آن.
+        </p>
+
+        <p>
+          اگر Repository اصلی از بین برود، باید بتوانیم از Copy دوم
+          یا Offsite/Immutable Copy برای Recovery استفاده کنیم.
+        </p>
+
+        <div class="highlight-box">
+
+          <strong>
+            سؤال طلایی برای هر Backup Administrator:
+          </strong>
+
+          <br />
+
+          «اگر همین الان Repository اصلی کاملاً Destroy شود،
+          از کجا Recovery خواهم کرد؟»
+
+        </div>
+
+
+        <h2>
+          یک سناریوی Ransomware
+        </h2>
+
+        <div class="scenario-card">
+
+          <h3>
+            مرحله 1
+          </h3>
+
+          <p>
+            Ransomware وارد یکی از سیستم‌های سازمان می‌شود.
+          </p>
+
+          <h3>
+            مرحله 2
+          </h3>
+
+          <p>
+            چند Server و VM تحت تأثیر قرار می‌گیرند.
+          </p>
+
+          <h3>
+            مرحله 3
+          </h3>
+
+          <p>
+            تیم IT متوجه Incident می‌شود.
+          </p>
+
+          <h3>
+            مرحله 4
+          </h3>
+
+          <p>
+            Production از شبکه آلوده جدا می‌شود.
+          </p>
+
+          <h3>
+            مرحله 5
+          </h3>
+
+          <p>
+            Backupهای قابل اعتماد بررسی می‌شوند.
+          </p>
+
+          <h3>
+            مرحله 6
+          </h3>
+
+          <p>
+            از یک Restore Point سالم Recovery انجام می‌شود.
+          </p>
+
+        </div>
+
+
+        <h2>
+          چرا RAID Backup نیست؟
+        </h2>
+
+        <p>
+          RAID می‌تواند Availability و تحمل خرابی Disk را افزایش دهد،
+          اما جای Backup را نمی‌گیرد.
+        </p>
+
+        <p>
+          اگر فایل توسط کاربر Delete شود، اگر داده توسط Malware خراب شود
+          یا اگر یک Incident کل Storage را تحت تأثیر قرار دهد،
+          RAID به‌تنهایی راهکار Backup نیست.
+        </p>
+
+        <div class="warning-box">
+
+          <strong>
+            RAID = Availability / Storage Resilience
+          </strong>
+
+          <br />
+
+          <strong>
+            Backup = Data Protection / Recovery
+          </strong>
+
+        </div>
+
+
+        <h2>
+          Backup و Disaster Recovery
+        </h2>
+
+        <p>
+          Backup بخشی از Disaster Recovery Strategy است، اما تمام آن نیست.
+        </p>
+
+        <p>
+          یک DR Plan حرفه‌ای باید مشخص کند:
+        </p>
+
+        <ul>
+
+          <li>
+            چه سرویس‌هایی Critical هستند؟
+          </li>
+
+          <li>
+            RPO هر سرویس چقدر است؟
+          </li>
+
+          <li>
+            RTO هر سرویس چقدر است؟
+          </li>
+
+          <li>
+            Backup از کجا بازیابی می‌شود؟
+          </li>
+
+          <li>
+            ترتیب Recovery سرویس‌ها چیست؟
+          </li>
+
+          <li>
+            چه کسی مسئول Recovery است؟
+          </li>
+
+          <li>
+            چه زمانی آخرین Restore Test انجام شده است؟
+          </li>
+
+        </ul>
+
+
+        <h2>
+          چک‌لیست حرفه‌ای 3-2-1-1-0
+        </h2>
+
+        <ul class="check-list">
+
+          <li>
+            حداقل سه کپی از داده‌های مهم وجود دارد.
+          </li>
+
+          <li>
+            Backupها فقط روی یک Storage Type نیستند.
+          </li>
+
+          <li>
+            حداقل یک نسخه Offsite وجود دارد.
+          </li>
+
+          <li>
+            حداقل یک نسخه Offline یا Immutable در نظر گرفته شده است.
+          </li>
+
+          <li>
+            Backupها به‌صورت منظم Verify می‌شوند.
+          </li>
+
+          <li>
+            Restore Test دوره‌ای انجام می‌شود.
+          </li>
+
+          <li>
+            Repositoryها Monitoring می‌شوند.
+          </li>
+
+          <li>
+            فضای Storage مرتب بررسی می‌شود.
+          </li>
+
+          <li>
+            Credentialهای Backup محدود و محافظت‌شده هستند.
+          </li>
+
+          <li>
+            دسترسی Network به Backup Infrastructure کنترل شده است.
+          </li>
+
+          <li>
+            Recovery Procedure مستند شده است.
+          </li>
+
+          <li>
+            سناریوی Ransomware در Recovery Plan دیده شده است.
+          </li>
+
+        </ul>
+
+
+        <h2>
+          جمع‌بندی
+        </h2>
+
+        <p>
+          3-2-1 پایه بسیار خوبی برای طراحی Backup است، اما برای
+          محیط‌های امروزی باید به موضوعاتی مانند Immutability،
+          Isolation، Offsite Storage و Recovery Verification نیز
+          توجه کرد.
+        </p>
+
+        <p>
+          مفهوم 3-2-1-1-0 کمک می‌کند نگاه ما از «Backup Job موفق»
+          به سمت یک <strong>Recovery Architecture</strong> واقعی تغییر کند.
+        </p>
+
+        <p>
+          در نهایت، ارزش Backup زمانی مشخص می‌شود که Production
+          دیگر در دسترس نیست و سازمان باید بتواند سرویس‌های حیاتی
+          خود را دوباره راه‌اندازی کند.
+        </p>
+
+        <div class="success-box">
+
+          <strong>
+            Engineering Digital Trust
+          </strong>
+
+          <br />
+
+          Infrastructure قابل اعتماد یعنی حتی در بدترین سناریو،
+          یک مسیر امن و آزمایش‌شده برای بازگشت سرویس داشته باشیم.
+
+        </div>
+
+
+        <footer class="article-footer">
+
+          <a
+            href="../index.html#articles"
+            class="back-link"
+          >
+            ← بازگشت به مقالات
+          </a>
+
+          <span class="article-brand">
+            AJORLOO•TECH — Engineering Digital Trust
+          </span>
+
+        </footer>
+
+      </article>
+
+    </div>
+
+  </main>
+
+</body>
+
+</html>

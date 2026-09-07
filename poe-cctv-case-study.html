@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>PoE در شبکه دوربین‌های IP | AJORLOO•TECH</title>
+
+  <meta
+    name="description"
+    content="بررسی PoE در شبکه دوربین‌های IP، محاسبه توان، PoE Budget، مشکلات رایج و یک Case Study واقعی از افزایش تعداد دوربین‌های قابل تغذیه."
+  />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Vazirmatn:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  />
+
+  <link rel="stylesheet" href="../styles.css" />
+
+  <style>
+    .article-page {
+      min-height: 100vh;
+      padding: 140px 20px 80px;
+      background:
+        radial-gradient(circle at 15% 10%, rgba(0, 190, 255, 0.08), transparent 30%),
+        radial-gradient(circle at 85% 20%, rgba(30, 90, 255, 0.08), transparent 30%);
+    }
+
+    .article-container {
+      width: min(1050px, 100%);
+      margin: 0 auto;
+    }
+
+    .article-header {
+      text-align: center;
+      margin-bottom: 55px;
+    }
+
+    .article-category-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 15px;
+      border: 1px solid rgba(0, 200, 255, 0.25);
+      border-radius: 999px;
+      background: rgba(0, 180, 255, 0.07);
+      color: #19cfff;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      margin-bottom: 20px;
+    }
+
+    .article-header h1 {
+      margin: 0 auto 20px;
+      max-width: 900px;
+      font-size: clamp(32px, 5vw, 58px);
+      line-height: 1.3;
+      font-weight: 800;
+    }
+
+    .article-header p {
+      max-width: 800px;
+      margin: 0 auto;
+      color: rgba(255,255,255,0.68);
+      line-height: 2;
+      font-size: 16px;
+    }
+
+    .article-meta-bar {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 25px;
+    }
+
+    .article-meta-item {
+      padding: 7px 13px;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: rgba(255,255,255,0.65);
+      font-size: 13px;
+    }
+
+    .article-content {
+      background: rgba(255,255,255,0.025);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 24px;
+      padding: clamp(25px, 5vw, 55px);
+      backdrop-filter: blur(14px);
+      box-shadow: 0 30px 80px rgba(0,0,0,0.18);
+    }
+
+    .article-content h2 {
+      margin: 50px 0 18px;
+      font-size: clamp(23px, 3vw, 32px);
+      line-height: 1.5;
+    }
+
+    .article-content h2:first-child {
+      margin-top: 0;
+    }
+
+    .article-content h3 {
+      margin: 32px 0 15px;
+      font-size: 21px;
+    }
+
+    .article-content p {
+      color: rgba(255,255,255,0.72);
+      line-height: 2.15;
+      font-size: 16px;
+      margin: 0 0 18px;
+    }
+
+    .article-content ul,
+    .article-content ol {
+      padding-right: 25px;
+      margin: 20px 0;
+    }
+
+    .article-content li {
+      color: rgba(255,255,255,0.72);
+      line-height: 2;
+      margin-bottom: 8px;
+    }
+
+    .highlight-box {
+      margin: 30px 0;
+      padding: 22px 24px;
+      border-radius: 16px;
+      background: rgba(0, 180, 255, 0.06);
+      border: 1px solid rgba(0, 200, 255, 0.18);
+    }
+
+    .highlight-box strong {
+      color: #20d4ff;
+    }
+
+    .warning-box {
+      margin: 30px 0;
+      padding: 22px 24px;
+      border-radius: 16px;
+      background: rgba(255, 170, 0, 0.05);
+      border: 1px solid rgba(255, 180, 0, 0.18);
+    }
+
+    .warning-box strong {
+      color: #ffc44d;
+    }
+
+    .success-box {
+      margin: 30px 0;
+      padding: 22px 24px;
+      border-radius: 16px;
+      background: rgba(50, 220, 150, 0.05);
+      border: 1px solid rgba(50, 220, 150, 0.18);
+    }
+
+    .success-box strong {
+      color: #5ee7ad;
+    }
+
+    .case-study-label {
+      display: inline-block;
+      margin-bottom: 15px;
+      padding: 6px 12px;
+      border-radius: 7px;
+      background: rgba(255,255,255,0.06);
+      color: #20d4ff;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+    }
+
+    .comparison-table-wrapper {
+      overflow-x: auto;
+      margin: 30px 0;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .comparison-table {
+      width: 100%;
+      min-width: 650px;
+      border-collapse: collapse;
+    }
+
+    .comparison-table th,
+    .comparison-table td {
+      padding: 16px 18px;
+      text-align: right;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+
+    .comparison-table th {
+      background: rgba(255,255,255,0.05);
+      color: #fff;
+      font-weight: 700;
+    }
+
+    .comparison-table td {
+      color: rgba(255,255,255,0.68);
+    }
+
+    .comparison-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .code-block {
+      direction: ltr;
+      text-align: left;
+      margin: 25px 0;
+      padding: 22px;
+      border-radius: 14px;
+      background: #07111f;
+      border: 1px solid rgba(255,255,255,0.08);
+      overflow-x: auto;
+      font-family: "DM Sans", monospace;
+      font-size: 14px;
+      line-height: 1.8;
+      color: #dcecff;
+      white-space: pre;
+    }
+
+    .scenario-card {
+      margin: 28px 0;
+      padding: 25px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.035);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .scenario-card h3 {
+      margin-top: 0;
+    }
+
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+      margin: 30px 0;
+    }
+
+    .metric-card {
+      padding: 22px 18px;
+      text-align: center;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.035);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .metric-number {
+      display: block;
+      font-size: 30px;
+      font-weight: 800;
+      color: #20d4ff;
+      margin-bottom: 8px;
+    }
+
+    .metric-label {
+      color: rgba(255,255,255,0.6);
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .flow {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin: 30px 0;
+    }
+
+    .flow-item {
+      padding: 14px 18px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .flow-arrow {
+      color: #1bd4ff;
+      font-size: 22px;
+    }
+
+    .article-footer {
+      margin-top: 50px;
+      padding-top: 30px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #1bd4ff;
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    .article-brand {
+      color: rgba(255,255,255,0.45);
+      font-size: 13px;
+    }
+
+    @media (max-width: 800px) {
+      .metric-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 700px) {
+      .article-page {
+        padding-top: 110px;
+      }
+
+      .article-content {
+        border-radius: 18px;
+      }
+
+      .article-content p,
+      .article-content li {
+        font-size: 15px;
+      }
+
+      .article-footer {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="article-page">
+
+    <div class="article-container">
+
+      <!-- Article Header -->
+      <header class="article-header">
+
+        <div class="article-category-badge">
+          CCTV / NETWORKING
+        </div>
+
+        <h1>
+          PoE در شبکه دوربین‌های IP
+          و یک Case Study واقعی
+        </h1>
+
+        <p>
+          بررسی مفهوم Power over Ethernet، محاسبه PoE Budget،
+          دلایل روشن نشدن دوربین‌ها و یک تجربه عملی در بهینه‌سازی
+          توان یک سوئیچ PoE برای افزایش تعداد دوربین‌های قابل استفاده.
+        </p>
+
+        <div class="article-meta-bar">
+          <span class="article-meta-item">CCTV</span>
+          <span class="article-meta-item">Intermediate</span>
+          <span class="article-meta-item">12 دقیقه مطالعه</span>
+          <span class="article-meta-item">Case Study</span>
+        </div>
+
+      </header>
+
+
+      <!-- Article Content -->
+      <article class="article-content">
+
+        <h2>PoE چیست؟</h2>
+
+        <p>
+          PoE مخفف
+          <strong>Power over Ethernet</strong>
+          است و به فناوری‌هایی گفته می‌شود که امکان انتقال برق و
+          داده را از طریق کابل شبکه فراهم می‌کنند.
+        </p>
+
+        <p>
+          در شبکه‌های دوربین مداربسته IP، استفاده از PoE باعث می‌شود
+          دوربین علاوه بر ارتباط شبکه، برق موردنیاز خود را نیز از طریق
+          کابل Ethernet دریافت کند.
+        </p>
+
+        <div class="flow">
+
+          <div class="flow-item">
+            PoE Switch
+          </div>
+
+          <div class="flow-arrow">
+            →
+          </div>
+
+          <div class="flow-item">
+            Network Cable
+          </div>
+
+          <div class="flow-arrow">
+            →
+          </div>
+
+          <div class="flow-item">
+            IP Camera
+          </div>
+
+        </div>
+
+        <div class="highlight-box">
+          <strong>مزیت اصلی:</strong>
+          با PoE معمولاً نیازی به کشیدن کابل برق جداگانه برای هر دوربین
+          وجود ندارد و زیرساخت کابل‌کشی ساده‌تر می‌شود.
+        </div>
+
+
+        <h2>PoE Budget چیست؟</h2>
+
+        <p>
+          هر PoE Switch یک ظرفیت مشخص برای تأمین توان تجهیزات متصل به
+          خود دارد. این ظرفیت با عنوان
+          <strong>PoE Budget</strong>
+          شناخته می‌شود.
+        </p>
+
+        <p>
+          برای مثال اگر یک سوئیچ دارای PoE Budget برابر 370W باشد،
+          مجموع توان قابل ارائه به تجهیزات PoE باید در محدوده قابل
+          پشتیبانی سوئیچ باقی بماند.
+        </p>
+
+        <div class="metric-grid">
+
+          <div class="metric-card">
+            <span class="metric-number">370W</span>
+            <span class="metric-label">
+              نمونه PoE Budget سوئیچ
+            </span>
+          </div>
+
+          <div class="metric-card">
+            <span class="metric-number">48</span>
+            <span class="metric-label">
+              تعداد پورت‌های نمونه
+            </span>
+          </div>
+
+          <div class="metric-card">
+            <span class="metric-number">IP</span>
+            <span class="metric-label">
+              نوع تجهیزات متصل
+            </span>
+          </div>
+
+        </div>
+
+
+        <h2>محاسبه ساده توان دوربین‌ها</h2>
+
+        <p>
+          فرض کنیم یک دوربین IP در شرایط معمول حدود 8W مصرف کند.
+          اگر 20 دوربین داشته باشیم:
+        </p>
+
+        <div class="code-block">20 × 8W = 160W</div>
+
+        <p>
+          در این مثال، مصرف اسمی دوربین‌ها حدود 160W خواهد بود.
+          اما در طراحی واقعی باید شرایطی مانند IR، Heater، PTZ،
+          اسپیکر و سایر قابلیت‌های دوربین را نیز در نظر گرفت.
+        </p>
+
+        <div class="warning-box">
+          <strong>نکته:</strong>
+          مصرف واقعی هر دوربین را باید از مشخصات سازنده یا اندازه‌گیری
+          عملی به دست آورد. نباید برای تمام دوربین‌ها یک عدد ثابت فرض کرد.
+        </div>
+
+
+        <h2>Case Study: مشکل روشن نشدن تعدادی از دوربین‌ها</h2>
+
+        <span class="case-study-label">
+          REAL-WORLD TROUBLESHOOTING
+        </span>
+
+        <p>
+          در یک سناریوی عملی، یک سوئیچ PoE با 48 پورت و حدود
+          <strong>370W PoE Budget</strong>
+          در شبکه دوربین‌ها استفاده شده بود.
+        </p>
+
+        <p>
+          در ابتدا حدود 26 دوربین بدون مشکل Power می‌گرفتند، اما با
+          اضافه شدن دوربین‌های بیشتر، برخی پورت‌ها دیگر دوربین جدید
+          را روشن نمی‌کردند.
+        </p>
+
+        <div class="metric-grid">
+
+          <div class="metric-card">
+            <span class="metric-number">48</span>
+            <span class="metric-label">
+              پورت PoE
+            </span>
+          </div>
+
+          <div class="metric-card">
+            <span class="metric-number">370W</span>
+            <span class="metric-label">
+              PoE Budget
+            </span>
+          </div>
+
+          <div class="metric-card">
+            <span class="metric-number">26+</span>
+            <span class="metric-label">
+              دوربین فعال قبل از مشکل
+            </span>
+          </div>
+
+        </div>
+
+
+        <h2>آیا مشکل واقعاً کمبود توان بود؟</h2>
+
+        <p>
+          در نگاه اول، اولین فرضیه می‌تواند این باشد که PoE Budget
+          تمام شده است.
+        </p>
+
+        <p>
+          اما در Troubleshooting شبکه نباید تنها به یک فرضیه اکتفا کرد.
+          بررسی دقیق وضعیت PoE نشان داد که مسئله فقط مصرف واقعی
+          دوربین‌ها نبود.
+        </p>
+
+        <p>
+          یکی از نکات مهم در این سناریو نحوه تخصیص توان توسط سوئیچ بود.
+          سوئیچ می‌توانست برای هر پورت مقدار توان مشخصی را در نظر بگیرد
+          که لزوماً برابر با مصرف واقعی دوربین نبود.
+        </p>
+
+
+        <h2>مصرف واقعی در برابر Power Allocation</h2>
+
+        <p>
+          این دو مفهوم را باید از یکدیگر جدا کنیم:
+        </p>
+
+        <div class="comparison-table-wrapper">
+
+          <table class="comparison-table">
+
+            <thead>
+              <tr>
+                <th>مفهوم</th>
+                <th>توضیح</th>
+              </tr>
+            </thead>
+
+            <tbody>
+
+              <tr>
+                <td>Actual Consumption</td>
+                <td>
+                  توان واقعی مصرف‌شده توسط تجهیز
+                </td>
+              </tr>
+
+              <tr>
+                <td>Power Allocation</td>
+                <td>
+                  توانی که سوئیچ برای پورت در نظر می‌گیرد
+                </td>
+              </tr>
+
+              <tr>
+                <td>PoE Budget</td>
+                <td>
+                  ظرفیت کلی توان قابل ارائه توسط سوئیچ
+                </td>
+              </tr>
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+        <p>
+          بنابراین ممکن است مجموع مصرف واقعی تجهیزات از چیزی که
+          در نگاه اول تصور می‌کنیم کمتر باشد، اما نحوه تخصیص توان
+          پورت‌ها باعث محدود شدن تعداد تجهیزات قابل تغذیه شود.
+        </p>
+
+
+        <h2>راهکار عملی</h2>
+
+        <p>
+          برای حل مشکل، وضعیت PoE پورت‌ها بررسی شد و توان موردنیاز
+          تجهیزات بر اساس نیاز واقعی آن‌ها تنظیم شد.
+        </p>
+
+        <p>
+          برای دوربین‌های معمولی که مصرف بسیار بالایی نداشتند،
+          مقدار توان مناسب برای هر پورت در نظر گرفته شد.
+        </p>
+
+        <p>
+          همچنین پورت‌هایی که به تجهیزی متصل نبودند یا نیازی به PoE
+          نداشتند بررسی شدند.
+        </p>
+
+        <div class="scenario-card">
+
+          <h3>اقدامات انجام‌شده</h3>
+
+          <ul>
+
+            <li>
+              بررسی PoE Budget سوئیچ
+            </li>
+
+            <li>
+              بررسی وضعیت PoE هر پورت
+            </li>
+
+            <li>
+              بررسی مصرف واقعی دوربین‌ها
+            </li>
+
+            <li>
+              تنظیم Power Limit متناسب با نیاز تجهیزات
+            </li>
+
+            <li>
+              غیرفعال کردن PoE روی پورت‌های بلااستفاده
+            </li>
+
+            <li>
+              اولویت‌بندی پورت‌های مهم
+            </li>
+
+            <li>
+              تست مجدد دوربین‌ها پس از تغییرات
+            </li>
+
+          </ul>
+
+        </div>
+
+
+        <h2>نتیجه Case Study</h2>
+
+        <div class="success-box">
+
+          <strong>نتیجه:</strong>
+
+          <p style="margin-top: 12px;">
+            با بهینه‌سازی نحوه تخصیص توان و مدیریت PoE،
+            امکان فعال کردن دوربین‌های بیشتری بدون تعویض فوری
+            سوئیچ فراهم شد.
+          </p>
+
+        </div>
+
+        <p>
+          این تجربه نشان می‌دهد که در Troubleshooting زیرساخت،
+          قبل از خرید سخت‌افزار جدید باید وضعیت واقعی منابع،
+          Configuration و نحوه استفاده از ظرفیت موجود بررسی شود.
+        </p>
+
+
+        <h2>PoE Class چیست؟</h2>
+
+        <p>
+          تجهیزات PoE بر اساس استانداردها و کلاس‌های مختلف می‌توانند
+          نیازهای متفاوتی از نظر توان داشته باشند.
+        </p>
+
+        <p>
+          استانداردهای خانواده IEEE 802.3 شامل فناوری‌هایی مانند
+          802.3af، 802.3at و 802.3bt هستند که ظرفیت‌های متفاوتی برای
+          تأمین توان ارائه می‌کنند.
+        </p>
+
+        <div class="comparison-table-wrapper">
+
+          <table class="comparison-table">
+
+            <thead>
+
+              <tr>
+                <th>استاندارد</th>
+                <th>نام رایج</th>
+                <th>کاربرد عمومی</th>
+              </tr>
+
+            </thead>
+
+            <tbody>
+
+              <tr>
+                <td>802.3af</td>
+                <td>PoE</td>
+                <td>
+                  تجهیزات کم‌مصرف مانند برخی IP Phoneها و Cameraها
+                </td>
+              </tr>
+
+              <tr>
+                <td>802.3at</td>
+                <td>PoE+</td>
+                <td>
+                  تجهیزات با نیاز توان بالاتر
+                </td>
+              </tr>
+
+              <tr>
+                <td>802.3bt</td>
+                <td>PoE++</td>
+                <td>
+                  تجهیزات با نیاز توان بسیار بالاتر
+                </td>
+              </tr>
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+
+        <h2>چه چیزهایی مصرف دوربین را افزایش می‌دهد؟</h2>
+
+        <p>
+          هنگام طراحی PoE برای CCTV نباید فقط مصرف پایه دوربین را
+          در نظر گرفت.
+        </p>
+
+        <ul>
+
+          <li>
+            فعال شدن IR در شب
+          </li>
+
+          <li>
+            موتور و قابلیت PTZ
+          </li>
+
+          <li>
+            Heater در برخی مدل‌ها
+          </li>
+
+          <li>
+            Microphone و Speaker
+          </li>
+
+          <li>
+            قابلیت‌های پردازش داخلی دوربین
+          </li>
+
+          <li>
+            شرایط محیطی
+          </li>
+
+        </ul>
+
+
+        <h2>چگونه مشکل PoE را Troubleshoot کنیم؟</h2>
+
+        <h3>مرحله اول: بررسی فیزیکی</h3>
+
+        <ul>
+
+          <li>
+            کابل شبکه را بررسی کنید.
+          </li>
+
+          <li>
+            کانکتور RJ45 را بررسی کنید.
+          </li>
+
+          <li>
+            Patch Panel و Patch Cord را بررسی کنید.
+          </li>
+
+          <li>
+            LED پورت سوئیچ را بررسی کنید.
+          </li>
+
+        </ul>
+
+
+        <h3>مرحله دوم: بررسی وضعیت PoE</h3>
+
+        <p>
+          در سوئیچ‌های مدیریتی Cisco می‌توان از دستورات مختلفی برای
+          بررسی وضعیت PoE استفاده کرد. برای مثال:
+        </p>
+
+        <div class="code-block">show power inline</div>
+
+        <p>
+          این نوع دستور می‌تواند اطلاعات مربوط به وضعیت Power و
+          مصرف PoE پورت‌ها را نمایش دهد؛ البته Syntax دقیق دستورات
+          بسته به مدل و سیستم‌عامل سوئیچ متفاوت است.
+        </p>
+
+
+        <h3>مرحله سوم: بررسی Budget</h3>
+
+        <p>
+          باید بررسی شود که آیا ظرفیت کلی PoE Switch واقعاً تمام شده
+          یا مشکل مربوط به Configuration یک یا چند پورت است.
+        </p>
+
+
+        <h3>مرحله چهارم: تست با تجهیز سالم</h3>
+
+        <p>
+          اگر یک دوربین روی پورت خاصی Power نمی‌گیرد، می‌توان دوربین
+          یا کابل سالم را روی پورت دیگری تست کرد.
+        </p>
+
+        <p>
+          این کار کمک می‌کند مشکل را بین سه بخش اصلی تفکیک کنیم:
+        </p>
+
+        <div class="flow">
+
+          <div class="flow-item">
+            Camera
+          </div>
+
+          <div class="flow-arrow">
+            +
+          </div>
+
+          <div class="flow-item">
+            Cable
+          </div>
+
+          <div class="flow-arrow">
+            +
+          </div>
+
+          <div class="flow-item">
+            Switch Port
+          </div>
+
+        </div>
+
+
+        <h2>چه زمانی باید PoE Switch را تعویض کرد؟</h2>
+
+        <p>
+          اگر پس از بررسی Configuration، مصرف واقعی تجهیزات،
+          کابل‌کشی و وضعیت پورت‌ها مشخص شود که ظرفیت واقعی PoE
+          برای تعداد تجهیزات موردنیاز کافی نیست، تعویض یا ارتقای
+          زیرساخت می‌تواند منطقی باشد.
+        </p>
+
+        <p>
+          در این شرایط می‌توان گزینه‌هایی مانند Switch با PoE Budget
+          بالاتر، چند PoE Switch یا طراحی مجدد توپولوژی را بررسی کرد.
+        </p>
+
+        <div class="warning-box">
+
+          <strong>نکته طراحی:</strong>
+
+          <p style="margin-top: 12px;">
+            قبل از خرید PoE Switch، فقط تعداد پورت‌ها را بررسی نکنید.
+            ظرفیت کلی PoE Budget یکی از مهم‌ترین مشخصات برای شبکه
+            دوربین‌های IP است.
+          </p>
+
+        </div>
+
+
+        <h2>چک‌لیست طراحی PoE برای CCTV</h2>
+
+        <ol>
+
+          <li>
+            تعداد دوربین‌ها را مشخص کنید.
+          </li>
+
+          <li>
+            مصرف هر مدل دوربین را بررسی کنید.
+          </li>
+
+          <li>
+            مصرف حالت Night / IR را در نظر بگیرید.
+          </li>
+
+          <li>
+            PoE Budget سوئیچ را بررسی کنید.
+          </li>
+
+          <li>
+            برای رشد آینده ظرفیت رزرو در نظر بگیرید.
+          </li>
+
+          <li>
+            کیفیت کابل و مسیر کابل‌کشی را بررسی کنید.
+          </li>
+
+          <li>
+            وضعیت PoE هر پورت را مانیتور کنید.
+          </li>
+
+          <li>
+            در صورت امکان از قابلیت‌های Monitoring سوئیچ استفاده کنید.
+          </li>
+
+        </ol>
+
+
+        <h2>جمع‌بندی</h2>
+
+        <p>
+          PoE یکی از فناوری‌های بسیار کاربردی در شبکه‌های دوربین
+          مداربسته IP است و باعث ساده‌تر شدن کابل‌کشی و مدیریت
+          تجهیزات می‌شود.
+        </p>
+
+        <p>
+          اما طراحی PoE فقط به تعداد پورت‌های سوئیچ محدود نمی‌شود.
+          ظرفیت PoE Budget، مصرف واقعی دوربین‌ها، Power Allocation،
+          نوع استاندارد PoE و شرایط کاری تجهیزات همگی باید بررسی شوند.
+        </p>
+
+        <p>
+          در Case Study بررسی‌شده نیز مشخص شد که قبل از تعویض سخت‌افزار،
+          بررسی دقیق نحوه تخصیص منابع و Configuration می‌تواند
+          ظرفیت قابل استفاده زیرساخت موجود را افزایش دهد.
+        </p>
+
+        <div class="highlight-box">
+
+          <strong>قاعده طلایی Troubleshooting:</strong>
+
+          <br><br>
+
+          قبل از اینکه بگوییم
+          <strong>«سخت‌افزار کم آورده»</strong>،
+          ابتدا باید بررسی کنیم واقعاً کدام Resource محدود شده،
+          چه مقدار از آن مصرف می‌شود و Configuration چگونه آن را
+          مدیریت می‌کند.
+
+        </div>
+
+
+        <!-- Article Footer -->
+        <div class="article-footer">
+
+          <a
+            href="../index.html#articles"
+            class="back-link"
+          >
+            ← بازگشت به مقالات
+          </a>
+
+          <span class="article-brand">
+            AJORLOO•TECH — Engineering Digital Trust
+          </span>
+
+        </div>
+
+      </article>
+
+    </div>
+
+  </main>
+
+</body>
+</html>

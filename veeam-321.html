@@ -1,0 +1,1300 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Veeam 3-2-1 Backup چیست؟ راهنمای طراحی استراتژی Backup | AJORLOO•TECH</title>
+
+  <meta
+    name="description"
+    content="راهنمای کامل استراتژی Veeam 3-2-1 Backup، شامل Backup Copy، Repository، Retention، Offsite Backup و طراحی Backup برای زیرساخت‌های سازمانی."
+  />
+
+  <link rel="stylesheet" href="../styles.css" />
+
+  <style>
+    .article-page {
+      min-height: 100vh;
+      padding: 120px 20px 60px;
+      background:
+        radial-gradient(circle at 10% 10%, rgba(0, 170, 255, 0.08), transparent 30%),
+        radial-gradient(circle at 90% 20%, rgba(0, 255, 200, 0.06), transparent 30%);
+    }
+
+    .article-container {
+      width: min(1050px, 100%);
+      margin: 0 auto;
+    }
+
+    .article-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .article-category-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 8px 16px;
+      border: 1px solid rgba(0, 200, 255, 0.25);
+      border-radius: 999px;
+      background: rgba(0, 180, 255, 0.08);
+      color: #59d8ff;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      margin-bottom: 20px;
+    }
+
+    .article-header h1 {
+      font-size: clamp(2rem, 4vw, 3.4rem);
+      line-height: 1.35;
+      margin: 0 auto 18px;
+      max-width: 900px;
+    }
+
+    .article-header p {
+      max-width: 820px;
+      margin: 0 auto;
+      color: #9baabd;
+      font-size: 1.05rem;
+      line-height: 2;
+    }
+
+    .article-meta-bar {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 28px;
+    }
+
+    .article-meta-item {
+      padding: 8px 14px;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: #b9c6d6;
+      font-size: 0.85rem;
+    }
+
+    .article-content {
+      background: rgba(10, 20, 35, 0.72);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 24px;
+      padding: clamp(22px, 5vw, 52px);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.18);
+    }
+
+    .article-content h2 {
+      font-size: 1.65rem;
+      margin: 42px 0 18px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .article-content h2:first-child {
+      margin-top: 0;
+    }
+
+    .article-content h3 {
+      font-size: 1.2rem;
+      margin: 30px 0 12px;
+    }
+
+    .article-content p {
+      color: #b8c5d5;
+      line-height: 2.05;
+      margin: 12px 0;
+    }
+
+    .article-content ul,
+    .article-content ol {
+      padding-right: 24px;
+      color: #b8c5d5;
+      line-height: 2.1;
+    }
+
+    .article-content li {
+      margin-bottom: 7px;
+    }
+
+    .highlight-box,
+    .warning-box,
+    .success-box,
+    .danger-box {
+      margin: 24px 0;
+      padding: 20px 22px;
+      border-radius: 16px;
+      line-height: 2;
+    }
+
+    .highlight-box {
+      background: rgba(0, 170, 255, 0.08);
+      border-right: 4px solid #31c7ff;
+    }
+
+    .warning-box {
+      background: rgba(255, 170, 0, 0.08);
+      border-right: 4px solid #ffb52e;
+    }
+
+    .success-box {
+      background: rgba(0, 220, 160, 0.08);
+      border-right: 4px solid #27d9a2;
+    }
+
+    .danger-box {
+      background: rgba(255, 70, 100, 0.07);
+      border-right: 4px solid #ff5d7a;
+    }
+
+    .highlight-box strong,
+    .warning-box strong,
+    .success-box strong,
+    .danger-box strong {
+      color: #ffffff;
+    }
+
+    .comparison-table-wrapper {
+      width: 100%;
+      overflow-x: auto;
+      margin: 25px 0;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .comparison-table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 680px;
+    }
+
+    .comparison-table th,
+    .comparison-table td {
+      padding: 14px 16px;
+      text-align: right;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+
+    .comparison-table th {
+      background: rgba(0, 170, 255, 0.08);
+      color: #e8f5ff;
+      font-weight: 700;
+    }
+
+    .comparison-table td {
+      color: #b8c5d5;
+    }
+
+    .comparison-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .code-block {
+      direction: ltr;
+      text-align: left;
+      overflow-x: auto;
+      background: #07101d;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 14px;
+      padding: 18px;
+      margin: 20px 0;
+      color: #c8e9ff;
+      font-family: Consolas, Monaco, monospace;
+      font-size: 0.9rem;
+      line-height: 1.8;
+      white-space: pre;
+    }
+
+    .scenario-card {
+      margin: 24px 0;
+      padding: 24px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.035);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .scenario-card h3 {
+      margin-top: 0;
+      color: #ffffff;
+    }
+
+    .flow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 28px 0;
+    }
+
+    .flow-item {
+      padding: 14px 20px;
+      border-radius: 14px;
+      background: rgba(0, 170, 255, 0.08);
+      border: 1px solid rgba(0, 200, 255, 0.18);
+      color: #d9f4ff;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .flow-item small {
+      display: block;
+      color: #8194a9;
+      font-size: 0.75rem;
+      margin-top: 5px;
+      font-weight: 400;
+    }
+
+    .flow-arrow {
+      color: #51d8ff;
+      font-size: 1.3rem;
+    }
+
+    .number-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 14px;
+      margin: 25px 0;
+    }
+
+    .number-card {
+      padding: 22px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.035);
+      border: 1px solid rgba(255,255,255,0.07);
+      text-align: center;
+    }
+
+    .number-card .big-number {
+      font-size: 2rem;
+      font-weight: 800;
+      color: #ffffff;
+      margin-bottom: 8px;
+    }
+
+    .number-card strong {
+      display: block;
+      color: #dff7ff;
+      margin-bottom: 7px;
+    }
+
+    .number-card span {
+      color: #8799ad;
+      font-size: 0.84rem;
+      line-height: 1.8;
+    }
+
+    .check-list {
+      list-style: none;
+      padding-right: 0 !important;
+    }
+
+    .check-list li {
+      position: relative;
+      padding-right: 30px;
+      margin-bottom: 12px;
+    }
+
+    .check-list li::before {
+      content: "✓";
+      position: absolute;
+      right: 0;
+      top: 0;
+      color: #36d8a4;
+      font-weight: 800;
+    }
+
+    .article-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-top: 30px;
+      padding-top: 25px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #54d8ff;
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    .back-link:hover {
+      opacity: 0.8;
+    }
+
+    .article-brand {
+      color: #738399;
+      font-size: 0.85rem;
+    }
+
+    @media (max-width: 700px) {
+
+      .article-page {
+        padding: 95px 14px 40px;
+      }
+
+      .article-content {
+        padding: 22px 17px;
+        border-radius: 18px;
+      }
+
+      .article-header h1 {
+        font-size: 1.9rem;
+      }
+
+      .article-content h2 {
+        font-size: 1.4rem;
+      }
+
+      .flow {
+        flex-direction: column;
+      }
+
+      .flow-arrow {
+        transform: rotate(90deg);
+      }
+
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="article-page">
+
+    <div class="article-container">
+
+      <header class="article-header">
+
+        <div class="article-category-badge">
+          VEEAM / BACKUP / INFRASTRUCTURE
+        </div>
+
+        <h1>
+          Veeam 3-2-1 Backup چیست؟ راهنمای طراحی استراتژی Backup
+        </h1>
+
+        <p>
+          چرا داشتن یک Backup کافی نیست؟ آشنایی با قانون 3-2-1،
+          Repository، Retention، Backup Copy، Offsite Backup و طراحی
+          یک سیستم Backup قابل اعتماد برای زیرساخت‌های سازمانی.
+        </p>
+
+        <div class="article-meta-bar">
+          <span class="article-meta-item">Intermediate</span>
+          <span class="article-meta-item">حدود 15 دقیقه مطالعه</span>
+          <span class="article-meta-item">Veeam</span>
+          <span class="article-meta-item">AJORLOO•TECH</span>
+        </div>
+
+      </header>
+
+
+      <article class="article-content">
+
+
+        <h2>Backup واقعاً یعنی چه؟</h2>
+
+        <p>
+          Backup یعنی ایجاد یک نسخه قابل بازیابی از داده‌ها، سیستم‌ها یا
+          ماشین‌های مجازی به‌گونه‌ای که در صورت از دست رفتن اطلاعات بتوان
+          آن‌ها را Restore کرد.
+        </p>
+
+        <p>
+          بسیاری از سازمان‌ها تصور می‌کنند اگر یک Backup Job با وضعیت
+          Success داشته باشند، کار تمام شده است. اما در طراحی حرفه‌ای
+          Backup، فقط «ساختن Backup» مهم نیست؛ مهم‌تر از آن، امکان
+          <strong>بازیابی موفق اطلاعات در زمان نیاز</strong> است.
+        </p>
+
+        <div class="danger-box">
+          <strong>Backup بدون Restore Test، فقط یک فرض است.</strong>
+          <br />
+          تا زمانی که فرآیند بازیابی را آزمایش نکرده‌ایم، نمی‌توانیم با
+          اطمینان بگوییم Backup ما در شرایط Disaster قابل استفاده خواهد بود.
+        </div>
+
+
+        <h2>قانون 3-2-1 چیست؟</h2>
+
+        <p>
+          قانون 3-2-1 یکی از اصول شناخته‌شده در طراحی Backup است.
+          ایده اصلی این است که برای داده‌های مهم، یک نسخه تنها کافی نیست.
+        </p>
+
+        <div class="number-grid">
+
+          <div class="number-card">
+
+            <div class="big-number">3</div>
+
+            <strong>سه کپی از داده</strong>
+
+            <span>
+              حداقل سه نسخه از داده‌های مهم در نظر گرفته شود.
+            </span>
+
+          </div>
+
+          <div class="number-card">
+
+            <div class="big-number">2</div>
+
+            <strong>دو نوع Media</strong>
+
+            <span>
+              نسخه‌ها روی حداقل دو نوع Media یا Storage قرار گیرند.
+            </span>
+
+          </div>
+
+          <div class="number-card">
+
+            <div class="big-number">1</div>
+
+            <strong>یک نسخه Offsite</strong>
+
+            <span>
+              حداقل یک نسخه در محل دیگری نسبت به محیط اصلی نگهداری شود.
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <div class="highlight-box">
+
+          <strong>اصل مهم:</strong>
+
+          <br />
+
+          هدف 3-2-1 این است که خرابی یک Server، Storage، Site یا
+          نوع خاصی از Media باعث از بین رفتن تمام نسخه‌های Backup نشود.
+
+        </div>
+
+
+        <h2>ساختار ساده 3-2-1</h2>
+
+        <div class="flow">
+
+          <div class="flow-item">
+            Production
+            <small>داده اصلی</small>
+          </div>
+
+          <div class="flow-arrow">
+            →
+          </div>
+
+          <div class="flow-item">
+            Backup Repository
+            <small>نسخه Backup</small>
+          </div>
+
+          <div class="flow-arrow">
+            →
+          </div>
+
+          <div class="flow-item">
+            Offsite Copy
+            <small>نسخه خارج از Site</small>
+          </div>
+
+        </div>
+
+        <p>
+          در یک طراحی ساده، داده اصلی روی Production قرار دارد،
+          Backup روی Repository داخلی ذخیره می‌شود و یک Copy دیگر
+          به یک Storage یا Site دیگر منتقل می‌شود.
+        </p>
+
+
+        <h2>چرا یک Backup Server کافی نیست؟</h2>
+
+        <p>
+          تصور کنید تمام Virtual Machineهای سازمان روی یک Storage قرار دارند
+          و Backup نیز روی همان Storage یا در همان اتاق نگهداری می‌شود.
+        </p>
+
+        <p>
+          اگر یک حادثه جدی مانند خرابی Storage، آتش‌سوزی، سرقت،
+          خرابی برق شدید یا Ransomware اتفاق بیفتد، ممکن است Production
+          و Backup هم‌زمان آسیب ببینند.
+        </p>
+
+        <div class="warning-box">
+
+          <strong>
+            Backup باید از Failure Domain اصلی فاصله داشته باشد.
+          </strong>
+
+          <br />
+
+          داشتن دو Storage در یک Rack الزاماً به معنی داشتن دو محیط
+          مستقل و امن نیست.
+
+        </div>
+
+
+        <h2>Veeam Backup & Replication</h2>
+
+        <p>
+          Veeam Backup & Replication یکی از پلتفرم‌های شناخته‌شده برای
+          حفاظت و بازیابی Workloadهای سازمانی است.
+        </p>
+
+        <p>
+          در محیط‌های Virtualization، Veeam می‌تواند برای ایجاد Backup
+          از ماشین‌های مجازی، مدیریت Repository، تعریف Retention،
+          اجرای Backup Copy و سناریوهای مختلف Recovery استفاده شود.
+        </p>
+
+        <p>
+          در یک زیرساخت معمولی ممکن است اجزای زیر را داشته باشیم:
+        </p>
+
+        <ul>
+
+          <li>Virtualization Host</li>
+
+          <li>Virtual Machines</li>
+
+          <li>Veeam Backup Server</li>
+
+          <li>Primary Backup Repository</li>
+
+          <li>Secondary / Offsite Repository</li>
+
+          <li>Backup Copy Job</li>
+
+          <li>Monitoring و Alerting</li>
+
+        </ul>
+
+
+        <h2>Backup Job چیست؟</h2>
+
+        <p>
+          Backup Job مشخص می‌کند چه Workloadهایی، در چه زمان‌هایی و
+          با چه تنظیماتی Backup شوند.
+        </p>
+
+        <div class="scenario-card">
+
+          <h3>مثال</h3>
+
+          <div class="code-block">Job Name:
+Production-VMs-Daily
+
+Source:
+VMware Cluster
+
+VMs:
+DC01
+APP01
+SQL01
+FILE01
+
+Schedule:
+Daily
+
+Retention:
+Example: 14 Restore Points
+
+Target:
+Primary Backup Repository</div>
+
+        </div>
+
+        <p>
+          مقدار دقیق Retention باید بر اساس نیاز کسب‌وکار،
+          RPO/RTO، ظرفیت Storage و Policy سازمان تعیین شود.
+        </p>
+
+
+        <h2>Retention چیست؟</h2>
+
+        <p>
+          Retention مشخص می‌کند چه تعداد Restore Point یا چه مدت زمانی
+          از Backupها نگهداری شود.
+        </p>
+
+        <p>
+          برای مثال، ممکن است سازمان تصمیم بگیرد 14 Restore Point روزانه
+          را نگهداری کند.
+        </p>
+
+        <div class="comparison-table-wrapper">
+
+          <table class="comparison-table">
+
+            <thead>
+              <tr>
+                <th>Policy</th>
+                <th>نمونه</th>
+                <th>هدف</th>
+              </tr>
+            </thead>
+
+            <tbody>
+
+              <tr>
+                <td>Daily</td>
+                <td>14 Restore Point</td>
+                <td>بازیابی روزهای اخیر</td>
+              </tr>
+
+              <tr>
+                <td>Weekly</td>
+                <td>4 تا 8 Point</td>
+                <td>نگهداری هفتگی</td>
+              </tr>
+
+              <tr>
+                <td>Monthly</td>
+                <td>چند Restore Point</td>
+                <td>نگهداری بلندمدت‌تر</td>
+              </tr>
+
+              <tr>
+                <td>Yearly</td>
+                <td>در صورت نیاز سازمان</td>
+                <td>Compliance / Historical Data</td>
+              </tr>
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+
+        <h2>Full و Incremental Backup</h2>
+
+        <p>
+          یکی از مفاهیم مهم در Backup، تفاوت Full و Incremental است.
+        </p>
+
+        <h3>Full Backup</h3>
+
+        <p>
+          در Full Backup یک Backup کامل از داده یا Workload موردنظر
+          ایجاد می‌شود.
+        </p>
+
+        <h3>Incremental Backup</h3>
+
+        <p>
+          Incremental Backup تغییرات ایجادشده از Backup قبلی را ذخیره می‌کند.
+          این موضوع می‌تواند مقدار داده‌ای که در هر Backup منتقل و ذخیره
+          می‌شود را کاهش دهد.
+        </p>
+
+        <div class="highlight-box">
+
+          <strong>نکته:</strong>
+
+          <br />
+
+          روش دقیق Backup و Merge/Transform آن به تنظیمات Job،
+          نوع Backup و نسخه محصول وابسته است؛ بنابراین هنگام طراحی
+          باید رفتار واقعی نسخه Veeam مورد استفاده بررسی شود.
+
+        </div>
+
+
+        <h2>Backup Repository چیست؟</h2>
+
+        <p>
+          Repository محلی است که فایل‌های Backup روی آن ذخیره می‌شوند.
+        </p>
+
+        <div class="flow">
+
+          <div class="flow-item">
+            Production
+          </div>
+
+          <div class="flow-arrow">
+            →
+          </div>
+
+          <div class="flow-item">
+            Veeam
+          </div>
+
+          <div class="flow-arrow">
+            →
+          </div>
+
+          <div class="flow-item">
+            Repository
+          </div>
+
+        </div>
+
+        <p>
+          Repository می‌تواند روی Storageهای مختلف طراحی شود.
+          انتخاب نوع Storage به ظرفیت، Performance، Network،
+          هزینه و نیاز Recovery بستگی دارد.
+        </p>
+
+
+        <h2>Backup Copy چیست؟</h2>
+
+        <p>
+          Backup Copy برای ایجاد یک نسخه دیگر از Backup در یک Repository
+          یا Location دیگر استفاده می‌شود.
+        </p>
+
+        <p>
+          این مفهوم برای ساخت لایه دوم حفاظت بسیار مهم است.
+        </p>
+
+        <div class="flow">
+
+          <div class="flow-item">
+            Production
+            <small>Source</small>
+          </div>
+
+          <div class="flow-arrow">
+            →
+          </div>
+
+          <div class="flow-item">
+            Primary Backup
+            <small>Repository 01</small>
+          </div>
+
+          <div class="flow-arrow">
+            →
+          </div>
+
+          <div class="flow-item">
+            Backup Copy
+            <small>Repository 02</small>
+          </div>
+
+        </div>
+
+
+        <h2>Offsite Backup چیست؟</h2>
+
+        <p>
+          Offsite Backup یعنی حداقل یک نسخه از Backup در Location دیگری
+          نسبت به محیط اصلی نگهداری شود.
+        </p>
+
+        <p>
+          این Location می‌تواند یک Server Room دیگر، ساختمان دیگر،
+          Data Center دیگر یا یک محیط Cloud مناسب باشد.
+        </p>
+
+        <div class="scenario-card">
+
+          <h3>نمونه طراحی دو Site</h3>
+
+          <div class="code-block">SITE A
+Production
+    ↓
+Veeam Backup Server
+    ↓
+Repository A
+
+
+SITE B
+Secondary Repository
+    ↑
+Backup Copy / Replication</div>
+
+        </div>
+
+
+        <h2>RPO و RTO چه نقشی دارند؟</h2>
+
+        <h3>RPO — Recovery Point Objective</h3>
+
+        <p>
+          RPO مشخص می‌کند حداکثر چه مقدار Data Loss از نظر زمانی
+          قابل قبول است.
+        </p>
+
+        <p>
+          مثلاً اگر RPO برابر یک ساعت باشد، طراحی Backup باید به شکلی
+          باشد که در سناریوی موردنظر بتوانیم حداکثر حدود یک ساعت
+          تغییرات را از دست بدهیم.
+        </p>
+
+        <h3>RTO — Recovery Time Objective</h3>
+
+        <p>
+          RTO مشخص می‌کند چه مدت زمانی برای بازگرداندن سرویس قابل قبول است.
+        </p>
+
+        <div class="comparison-table-wrapper">
+
+          <table class="comparison-table">
+
+            <thead>
+              <tr>
+                <th>مفهوم</th>
+                <th>سؤال اصلی</th>
+              </tr>
+            </thead>
+
+            <tbody>
+
+              <tr>
+                <td>RPO</td>
+                <td>چقدر Data Loss قابل قبول است؟</td>
+              </tr>
+
+              <tr>
+                <td>RTO</td>
+                <td>چقدر زمان برای Recovery قابل قبول است؟</td>
+              </tr>
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+
+        <h2>Backup و Replication یکی نیستند</h2>
+
+        <p>
+          این دو مفهوم گاهی با یکدیگر اشتباه گرفته می‌شوند.
+        </p>
+
+        <div class="comparison-table-wrapper">
+
+          <table class="comparison-table">
+
+            <thead>
+              <tr>
+                <th>Backup</th>
+                <th>Replication</th>
+              </tr>
+            </thead>
+
+            <tbody>
+
+              <tr>
+                <td>برای نگهداری نسخه‌های قابل بازیابی</td>
+                <td>برای ایجاد Replica از Workload</td>
+              </tr>
+
+              <tr>
+                <td>تمرکز بیشتر روی Data Protection</td>
+                <td>تمرکز بیشتر روی Availability / DR</td>
+              </tr>
+
+              <tr>
+                <td>دارای Restore Pointهای مختلف</td>
+                <td>معمولاً Replica نزدیک به Source</td>
+              </tr>
+
+              <tr>
+                <td>برای Recovery از حذف یا خرابی داده بسیار مهم</td>
+                <td>برای سناریوهای سریع‌تر DR مفید</td>
+              </tr>
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+        <div class="warning-box">
+
+          <strong>
+            Replication جای Backup را نمی‌گیرد.
+          </strong>
+
+          <br />
+
+          اگر داده مخرب یا رمزگذاری‌شده به Replica منتقل شود،
+          داشتن Replica به‌تنهایی لزوماً شما را از Data Corruption
+          یا Ransomware نجات نمی‌دهد.
+
+        </div>
+
+
+        <h2>3-2-1 در برابر Ransomware</h2>
+
+        <p>
+          یکی از دلایل مهم استفاده از معماری چندلایه Backup،
+          مقابله با سناریوهایی مانند Ransomware است.
+        </p>
+
+        <p>
+          اگر Malware بتواند به Production و Repository دسترسی پیدا کند،
+          ممکن است چندین نسخه از اطلاعات تحت تأثیر قرار بگیرند.
+        </p>
+
+        <p>
+          به همین دلیل، علاوه بر 3-2-1 کلاسیک، طراحی‌های مدرن‌تر روی
+          Isolation و Immutability نیز تأکید می‌کنند.
+        </p>
+
+        <div class="danger-box">
+
+          <strong>اشتباه خطرناک:</strong>
+
+          <br />
+
+          اینکه Backup Repository فقط یک Share معمولی باشد و همان
+          Credentialهایی را داشته باشد که Administrator روی Production
+          استفاده می‌کند، سطح ریسک را افزایش می‌دهد.
+
+        </div>
+
+
+        <h2>Immutable Backup چیست؟</h2>
+
+        <p>
+          Immutable Backup به نسخه‌ای از Backup اشاره دارد که در یک
+          بازه مشخص نمی‌توان آن را به‌سادگی تغییر یا حذف کرد.
+        </p>
+
+        <p>
+          Immutability یکی از لایه‌های مهم در طراحی مدرن حفاظت از Backup
+          در برابر حملاتی مانند Ransomware است.
+        </p>
+
+        <div class="success-box">
+
+          <strong>
+            معماری بهتر:
+          </strong>
+
+          <br />
+
+          Production
+          →
+          Primary Backup
+          →
+          Offsite / Immutable Backup
+
+        </div>
+
+
+        <h2>سناریوی پیشنهادی برای یک سازمان</h2>
+
+        <div class="scenario-card">
+
+          <h3>Infrastructure</h3>
+
+          <div class="code-block">VMware / Hyper-V
+        │
+        ▼
+Veeam Backup & Replication
+        │
+        ├──► Repository 01
+        │
+        └──► Backup Copy
+                  │
+                  ▼
+            Repository 02
+                  │
+                  ▼
+             Offsite / Immutable</div>
+
+        </div>
+
+        <p>
+          در این معماری، Production تنها نقطه نگهداری داده نیست.
+          چند لایه Backup ایجاد می‌شود تا خرابی یک جزء کل سیستم
+          حفاظت را از بین نبرد.
+        </p>
+
+
+        <h2>یک Backup خوب چه ویژگی‌هایی دارد؟</h2>
+
+        <ul class="check-list">
+
+          <li>
+            Backup به‌صورت منظم و طبق Policy اجرا شود.
+          </li>
+
+          <li>
+            Jobها Monitoring و Alert داشته باشند.
+          </li>
+
+          <li>
+            Repository از Production جدا باشد.
+          </li>
+
+          <li>
+            حداقل یک Copy خارج از Site اصلی وجود داشته باشد.
+          </li>
+
+          <li>
+            در صورت امکان از Immutability استفاده شود.
+          </li>
+
+          <li>
+            Restore به‌صورت دوره‌ای آزمایش شود.
+          </li>
+
+          <li>
+            ظرفیت Repository مرتب بررسی شود.
+          </li>
+
+          <li>
+            Retention متناسب با Business Requirement تنظیم شود.
+          </li>
+
+          <li>
+            Credentialهای Backup با Production به‌صورت بی‌دلیل مشترک نباشند.
+          </li>
+
+          <li>
+            مستندات Recovery در دسترس تیم IT باشد.
+          </li>
+
+        </ul>
+
+
+        <h2>اشتباهات رایج در طراحی Backup</h2>
+
+        <ul>
+
+          <li>
+            داشتن فقط یک نسخه Backup
+          </li>
+
+          <li>
+            نگهداری Backup و Production روی یک Storage
+          </li>
+
+          <li>
+            نگهداری تمام نسخه‌ها در یک Server Room
+          </li>
+
+          <li>
+            نداشتن Offsite Copy
+          </li>
+
+          <li>
+            عدم تست Restore
+          </li>
+
+          <li>
+            عدم بررسی فضای Repository
+          </li>
+
+          <li>
+            نادیده گرفتن رشد حجم Backup
+          </li>
+
+          <li>
+            استفاده از Credentialهای بیش از حد قدرتمند
+          </li>
+
+          <li>
+            نداشتن Monitoring و Alerting
+          </li>
+
+          <li>
+            تصور اینکه Replication به‌تنهایی Backup است
+          </li>
+
+        </ul>
+
+
+        <h2>محاسبه ظرفیت Repository</h2>
+
+        <p>
+          یکی از مهم‌ترین قسمت‌های طراحی Backup، تخمین Storage موردنیاز است.
+        </p>
+
+        <p>
+          نمی‌توان فقط حجم فعلی VMها را محاسبه کرد و همان مقدار Storage
+          خریداری کرد. باید رشد داده، Retention، Change Rate و ساختار
+          Backup در نظر گرفته شود.
+        </p>
+
+        <div class="scenario-card">
+
+          <h3>مثال ساده</h3>
+
+          <div class="code-block">Production Data:
+8 TB
+
+Daily Change Rate:
+5%
+
+Retention:
+14 Restore Points
+
+Growth:
+Future expansion required</div>
+
+        </div>
+
+        <p>
+          این اعداد صرفاً یک مثال هستند. ظرفیت واقعی Repository باید
+          با توجه به روش Backup، Compression، Deduplication،
+          Retention و نرخ تغییر واقعی محیط محاسبه شود.
+        </p>
+
+
+        <h2>تجربه عملی در محیط Backup</h2>
+
+        <p>
+          در محیط‌های واقعی، موفق بودن Backup Job تنها یکی از معیارهای
+          سلامت سیستم Backup است.
+        </p>
+
+        <p>
+          مواردی مثل پر شدن Repository، قطع ارتباط با Storage،
+          مشکل Permission، خرابی Service، تغییرات شبکه، Credential،
+          Repository Availability و مشکلات مربوط به Virtualization
+          می‌توانند باعث شکست Recovery شوند؛ حتی اگر در ظاهر
+          Configuration اولیه درست باشد.
+        </p>
+
+        <div class="highlight-box">
+
+          <strong>
+            رویکرد حرفه‌ای:
+          </strong>
+
+          <br />
+
+          Backup را به‌عنوان یک سیستم کامل ببینید، نه فقط یک Job.
+          Source، Network، Backup Server، Repository، Storage،
+          Offsite Copy، Monitoring و Recovery Test همگی بخشی از
+          این سیستم هستند.
+
+        </div>
+
+
+        <h2>چک‌لیست نهایی طراحی Veeam Backup</h2>
+
+        <ul class="check-list">
+
+          <li>
+            مشخص کردن Workloadهای Critical
+          </li>
+
+          <li>
+            تعیین RPO و RTO
+          </li>
+
+          <li>
+            طراحی Backup Schedule
+          </li>
+
+          <li>
+            تعیین Retention
+          </li>
+
+          <li>
+            طراحی Primary Repository
+          </li>
+
+          <li>
+            ایجاد Backup Copy
+          </li>
+
+          <li>
+            در نظر گرفتن Offsite Storage
+          </li>
+
+          <li>
+            بررسی Immutability
+          </li>
+
+          <li>
+            Monitoring و Alerting
+          </li>
+
+          <li>
+            Restore Test دوره‌ای
+          </li>
+
+          <li>
+            مستندسازی Recovery Procedure
+          </li>
+
+          <li>
+            بررسی ظرفیت و رشد Storage
+          </li>
+
+        </ul>
+
+
+        <h2>جمع‌بندی</h2>
+
+        <p>
+          قانون 3-2-1 یکی از اصول پایه‌ای و ارزشمند در طراحی Backup است:
+          سه کپی از داده، روی دو نوع Media و حداقل یک نسخه خارج از
+          محیط اصلی.
+        </p>
+
+        <p>
+          اما در زیرساخت‌های مدرن، طراحی Backup باید فراتر از این عددها
+          باشد و مواردی مانند Offsite Copy، Immutability، امنیت Credential،
+          Monitoring و تست واقعی Restore نیز در نظر گرفته شوند.
+        </p>
+
+        <p>
+          در نهایت، هدف Backup این نیست که فقط یک فایل Backup موفق
+          تولید کنیم؛ هدف این است که در روزی که Production از دست رفت،
+          بتوانیم سرویس را با کمترین Data Loss و در زمان قابل قبول
+          برگردانیم.
+        </p>
+
+        <div class="success-box">
+
+          <strong>
+            Engineering Digital Trust
+          </strong>
+
+          <br />
+
+          یک زیرساخت قابل اعتماد فقط با Network و Server ساخته نمی‌شود؛
+          توانایی Recovery بعد از Failure نیز بخشی از اعتمادپذیری
+          Infrastructure است.
+
+        </div>
+
+
+        <footer class="article-footer">
+
+          <a
+            href="../index.html#articles"
+            class="back-link"
+          >
+            ← بازگشت به مقالات
+          </a>
+
+          <span class="article-brand">
+            AJORLOO•TECH — Engineering Digital Trust
+          </span>
+
+        </footer>
+
+      </article>
+
+    </div>
+
+  </main>
+
+</body>
+</html>

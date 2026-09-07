@@ -1,0 +1,1224 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Subnetting چیست؟ راهنمای کامل Subnet Mask و CIDR | AJORLOO•TECH</title>
+
+  <meta
+    name="description"
+    content="آموزش کامل Subnetting، Subnet Mask، CIDR، Network ID، Broadcast، محاسبه تعداد Host و طراحی Subnet در شبکه‌های سازمانی."
+  />
+
+  <link rel="stylesheet" href="../styles.css" />
+
+  <style>
+    .article-page {
+      min-height: 100vh;
+      padding: 120px 20px 60px;
+      background:
+        radial-gradient(circle at 10% 10%, rgba(0, 170, 255, 0.08), transparent 30%),
+        radial-gradient(circle at 90% 20%, rgba(0, 255, 200, 0.06), transparent 30%);
+    }
+
+    .article-container {
+      width: min(1050px, 100%);
+      margin: 0 auto;
+    }
+
+    .article-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .article-category-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 8px 16px;
+      border: 1px solid rgba(0, 200, 255, 0.25);
+      border-radius: 999px;
+      background: rgba(0, 180, 255, 0.08);
+      color: #59d8ff;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      margin-bottom: 20px;
+    }
+
+    .article-header h1 {
+      font-size: clamp(2rem, 4vw, 3.4rem);
+      line-height: 1.35;
+      margin: 0 auto 18px;
+      max-width: 900px;
+    }
+
+    .article-header p {
+      max-width: 800px;
+      margin: 0 auto;
+      color: #9baabd;
+      font-size: 1.05rem;
+      line-height: 2;
+    }
+
+    .article-meta-bar {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 28px;
+    }
+
+    .article-meta-item {
+      padding: 8px 14px;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: #b9c6d6;
+      font-size: 0.85rem;
+    }
+
+    .article-content {
+      background: rgba(10, 20, 35, 0.72);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 24px;
+      padding: clamp(22px, 5vw, 52px);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.18);
+    }
+
+    .article-content h2 {
+      font-size: 1.65rem;
+      margin: 42px 0 18px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .article-content h2:first-child {
+      margin-top: 0;
+    }
+
+    .article-content h3 {
+      font-size: 1.2rem;
+      margin: 30px 0 12px;
+    }
+
+    .article-content p {
+      color: #b8c5d5;
+      line-height: 2.05;
+      margin: 12px 0;
+    }
+
+    .article-content ul,
+    .article-content ol {
+      padding-right: 24px;
+      color: #b8c5d5;
+      line-height: 2.1;
+    }
+
+    .article-content li {
+      margin-bottom: 7px;
+    }
+
+    .highlight-box,
+    .warning-box,
+    .success-box {
+      margin: 24px 0;
+      padding: 20px 22px;
+      border-radius: 16px;
+      line-height: 2;
+    }
+
+    .highlight-box {
+      background: rgba(0, 170, 255, 0.08);
+      border-right: 4px solid #31c7ff;
+    }
+
+    .warning-box {
+      background: rgba(255, 170, 0, 0.08);
+      border-right: 4px solid #ffb52e;
+    }
+
+    .success-box {
+      background: rgba(0, 220, 160, 0.08);
+      border-right: 4px solid #27d9a2;
+    }
+
+    .highlight-box strong,
+    .warning-box strong,
+    .success-box strong {
+      color: #ffffff;
+    }
+
+    .comparison-table-wrapper {
+      width: 100%;
+      overflow-x: auto;
+      margin: 25px 0;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .comparison-table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 650px;
+    }
+
+    .comparison-table th,
+    .comparison-table td {
+      padding: 14px 16px;
+      text-align: right;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+
+    .comparison-table th {
+      background: rgba(0, 170, 255, 0.08);
+      color: #e8f5ff;
+      font-weight: 700;
+    }
+
+    .comparison-table td {
+      color: #b8c5d5;
+    }
+
+    .comparison-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .code-block {
+      direction: ltr;
+      text-align: left;
+      overflow-x: auto;
+      background: #07101d;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 14px;
+      padding: 18px;
+      margin: 20px 0;
+      color: #c8e9ff;
+      font-family: Consolas, Monaco, monospace;
+      font-size: 0.9rem;
+      line-height: 1.8;
+    }
+
+    .scenario-card {
+      margin: 24px 0;
+      padding: 24px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.035);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .scenario-card h3 {
+      margin-top: 0;
+      color: #ffffff;
+    }
+
+    .flow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 28px 0;
+    }
+
+    .flow-item {
+      padding: 12px 18px;
+      border-radius: 12px;
+      background: rgba(0, 170, 255, 0.08);
+      border: 1px solid rgba(0, 200, 255, 0.18);
+      color: #d9f4ff;
+      font-weight: 600;
+    }
+
+    .flow-arrow {
+      color: #51d8ff;
+      font-size: 1.3rem;
+    }
+
+    .article-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-top: 30px;
+      padding-top: 25px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #54d8ff;
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    .back-link:hover {
+      opacity: 0.8;
+    }
+
+    .article-brand {
+      color: #738399;
+      font-size: 0.85rem;
+    }
+
+    .formula {
+      direction: ltr;
+      text-align: center;
+      font-family: Consolas, Monaco, monospace;
+      font-size: 1.1rem;
+      padding: 18px;
+      margin: 20px 0;
+      border-radius: 14px;
+      background: rgba(0,0,0,0.22);
+      color: #c9f1ff;
+    }
+
+    .number-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 14px;
+      margin: 25px 0;
+    }
+
+    .number-card {
+      padding: 18px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.035);
+      border: 1px solid rgba(255,255,255,0.07);
+      text-align: center;
+    }
+
+    .number-card strong {
+      display: block;
+      color: #ffffff;
+      font-size: 1.1rem;
+      margin-bottom: 7px;
+    }
+
+    .number-card span {
+      color: #8fa0b5;
+      font-size: 0.85rem;
+    }
+
+    @media (max-width: 700px) {
+      .article-page {
+        padding: 95px 14px 40px;
+      }
+
+      .article-content {
+        padding: 22px 17px;
+        border-radius: 18px;
+      }
+
+      .article-header h1 {
+        font-size: 1.9rem;
+      }
+
+      .article-content h2 {
+        font-size: 1.4rem;
+      }
+
+      .flow {
+        flex-direction: column;
+      }
+
+      .flow-arrow {
+        transform: rotate(90deg);
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="article-page">
+    <div class="article-container">
+
+      <header class="article-header">
+
+        <div class="article-category-badge">
+          NETWORK+ / IP NETWORKING
+        </div>
+
+        <h1>
+          Subnetting چیست؟ راهنمای کامل Subnet Mask و CIDR
+        </h1>
+
+        <p>
+          از مفاهیم Network ID و Host ID تا محاسبه تعداد Host،
+          پیدا کردن Network و Broadcast Address و طراحی Subnet در شبکه‌های سازمانی.
+        </p>
+
+        <div class="article-meta-bar">
+          <span class="article-meta-item">Intermediate</span>
+          <span class="article-meta-item">حدود 14 دقیقه مطالعه</span>
+          <span class="article-meta-item">AJORLOO•TECH</span>
+        </div>
+
+      </header>
+
+
+      <article class="article-content">
+
+        <h2>Subnetting چیست؟</h2>
+
+        <p>
+          Subnetting یا تقسیم‌بندی شبکه، یکی از مهم‌ترین مفاهیم در طراحی
+          شبکه‌های IP است. در Subnetting یک Network بزرگ‌تر را به چند
+          Network کوچک‌تر تقسیم می‌کنیم تا مدیریت، امنیت، Routing و استفاده
+          از آدرس‌های IP بهتر انجام شود.
+        </p>
+
+        <p>
+          فرض کنید یک سازمان شبکه
+          <strong>192.168.10.0/24</strong>
+          دارد. اگر همه کاربران، سرورها، دوربین‌ها و تجهیزات مدیریتی در
+          یک Subnet قرار بگیرند، شبکه به‌مرور بزرگ و مدیریت آن دشوار می‌شود.
+        </p>
+
+        <p>
+          با Subnetting می‌توان همین Network را به چند بخش منطقی تقسیم کرد؛
+          مثلاً یک Subnet برای کاربران، یک Subnet برای CCTV، یک Subnet برای
+          Serverها و یک Subnet برای Management.
+        </p>
+
+        <div class="highlight-box">
+          <strong>نکته مهم:</strong>
+          Subnetting فقط یک محاسبه ریاضی نیست؛ در شبکه‌های واقعی، یکی از
+          پایه‌های طراحی صحیح IP Addressing و Routing محسوب می‌شود.
+        </div>
+
+
+        <h2>IPv4 چگونه ساخته شده است؟</h2>
+
+        <p>
+          یک IPv4 Address دارای 32 بیت است که به چهار Octet تقسیم می‌شود.
+          هر Octet می‌تواند عددی بین 0 تا 255 داشته باشد.
+        </p>
+
+        <div class="formula">
+          IPv4 = 32 bits = 4 × 8 bits
+        </div>
+
+        <p>
+          برای مثال:
+        </p>
+
+        <div class="code-block">
+192.168.10.25
+        </div>
+
+        <p>
+          در یک Subnet مشخص، بخشی از این 32 بیت برای مشخص کردن Network
+          و بخش دیگر برای مشخص کردن Host استفاده می‌شود.
+        </p>
+
+
+        <h2>Network ID و Host ID</h2>
+
+        <div class="flow">
+          <div class="flow-item">IP Address</div>
+          <div class="flow-arrow">←</div>
+          <div class="flow-item">Network Portion</div>
+          <div class="flow-arrow">+</div>
+          <div class="flow-item">Host Portion</div>
+        </div>
+
+        <p>
+          فرض کنیم آدرس زیر را داریم:
+        </p>
+
+        <div class="code-block">
+192.168.10.25/24
+        </div>
+
+        <p>
+          در Prefix Length برابر با /24، تعداد 24 بیت برای Network و
+          8 بیت برای Host استفاده می‌شود.
+        </p>
+
+        <p>
+          بنابراین:
+        </p>
+
+        <div class="comparison-table-wrapper">
+          <table class="comparison-table">
+            <thead>
+              <tr>
+                <th>مورد</th>
+                <th>مقدار</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr>
+                <td>IP Address</td>
+                <td>192.168.10.25</td>
+              </tr>
+
+              <tr>
+                <td>Prefix</td>
+                <td>/24</td>
+              </tr>
+
+              <tr>
+                <td>Subnet Mask</td>
+                <td>255.255.255.0</td>
+              </tr>
+
+              <tr>
+                <td>Network Address</td>
+                <td>192.168.10.0</td>
+              </tr>
+
+              <tr>
+                <td>Broadcast Address</td>
+                <td>192.168.10.255</td>
+              </tr>
+
+              <tr>
+                <td>Usable Host Range</td>
+                <td>192.168.10.1 – 192.168.10.254</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+
+        <h2>Subnet Mask چیست؟</h2>
+
+        <p>
+          Subnet Mask مشخص می‌کند کدام قسمت از IP مربوط به Network و
+          کدام قسمت مربوط به Host است.
+        </p>
+
+        <p>
+          برای مثال:
+        </p>
+
+        <div class="code-block">
+IP Address : 192.168.10.25
+Subnet Mask: 255.255.255.0
+CIDR       : /24
+        </div>
+
+        <p>
+          مقدار <strong>/24</strong> یعنی 24 بیت اول مربوط به Network
+          هستند.
+        </p>
+
+
+        <h2>CIDR چیست؟</h2>
+
+        <p>
+          CIDR مخفف Classless Inter-Domain Routing است.
+          در CIDR به‌جای استفاده صرف از کلاس‌های قدیمی A، B و C،
+          تعداد بیت‌های Network را با Prefix Length مشخص می‌کنیم.
+        </p>
+
+        <div class="number-grid">
+
+          <div class="number-card">
+            <strong>/24</strong>
+            <span>255.255.255.0</span>
+          </div>
+
+          <div class="number-card">
+            <strong>/25</strong>
+            <span>255.255.255.128</span>
+          </div>
+
+          <div class="number-card">
+            <strong>/26</strong>
+            <span>255.255.255.192</span>
+          </div>
+
+          <div class="number-card">
+            <strong>/27</strong>
+            <span>255.255.255.224</span>
+          </div>
+
+          <div class="number-card">
+            <strong>/28</strong>
+            <span>255.255.255.240</span>
+          </div>
+
+          <div class="number-card">
+            <strong>/29</strong>
+            <span>255.255.255.248</span>
+          </div>
+
+        </div>
+
+
+        <h2>چطور تعداد Hostها را محاسبه کنیم؟</h2>
+
+        <p>
+          اگر تعداد بیت‌های Host را بدانیم، می‌توانیم تعداد Addressهای
+          موجود در Subnet را محاسبه کنیم.
+        </p>
+
+        <div class="formula">
+          Total Addresses = 2^h
+        </div>
+
+        <p>
+          در بیشتر Subnetهای IPv4 معمولی، Network Address و Broadcast Address
+          قابل تخصیص به Host نیستند.
+        </p>
+
+        <div class="formula">
+          Usable Hosts = 2^h - 2
+        </div>
+
+        <p>
+          البته /31 برای لینک‌های Point-to-Point و /32 برای Host Route
+          استثناهای مهمی هستند.
+        </p>
+
+
+        <h2>جدول مهم Subnetها</h2>
+
+        <div class="comparison-table-wrapper">
+          <table class="comparison-table">
+            <thead>
+              <tr>
+                <th>CIDR</th>
+                <th>Subnet Mask</th>
+                <th>Total IP</th>
+                <th>Usable Host</th>
+                <th>Block Size</th>
+              </tr>
+            </thead>
+
+            <tbody>
+
+              <tr>
+                <td>/24</td>
+                <td>255.255.255.0</td>
+                <td>256</td>
+                <td>254</td>
+                <td>256</td>
+              </tr>
+
+              <tr>
+                <td>/25</td>
+                <td>255.255.255.128</td>
+                <td>128</td>
+                <td>126</td>
+                <td>128</td>
+              </tr>
+
+              <tr>
+                <td>/26</td>
+                <td>255.255.255.192</td>
+                <td>64</td>
+                <td>62</td>
+                <td>64</td>
+              </tr>
+
+              <tr>
+                <td>/27</td>
+                <td>255.255.255.224</td>
+                <td>32</td>
+                <td>30</td>
+                <td>32</td>
+              </tr>
+
+              <tr>
+                <td>/28</td>
+                <td>255.255.255.240</td>
+                <td>16</td>
+                <td>14</td>
+                <td>16</td>
+              </tr>
+
+              <tr>
+                <td>/29</td>
+                <td>255.255.255.248</td>
+                <td>8</td>
+                <td>6</td>
+                <td>8</td>
+              </tr>
+
+              <tr>
+                <td>/30</td>
+                <td>255.255.255.252</td>
+                <td>4</td>
+                <td>2</td>
+                <td>4</td>
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+
+
+        <h2>مثال عملی: تقسیم 192.168.10.0/24</h2>
+
+        <p>
+          فرض کنیم یک شبکه با آدرس زیر داریم:
+        </p>
+
+        <div class="code-block">
+192.168.10.0/24
+        </div>
+
+        <p>
+          این شبکه 256 Address دارد و در حالت معمول 254 Host قابل استفاده
+          در اختیار ما قرار می‌دهد.
+        </p>
+
+        <p>
+          اگر بخواهیم آن را به چهار Subnet مساوی تقسیم کنیم، Prefix را
+          از /24 به /26 تغییر می‌دهیم.
+        </p>
+
+        <div class="highlight-box">
+          <strong>چرا /26؟</strong>
+          <br />
+          چون با اضافه کردن 2 بیت به بخش Network، چهار Subnet ایجاد می‌شود:
+          <br />
+          2² = 4
+        </div>
+
+
+        <h3>Subnet شماره 1</h3>
+
+        <div class="code-block">
+Network   : 192.168.10.0/26
+Usable    : 192.168.10.1 - 192.168.10.62
+Broadcast : 192.168.10.63
+        </div>
+
+
+        <h3>Subnet شماره 2</h3>
+
+        <div class="code-block">
+Network   : 192.168.10.64/26
+Usable    : 192.168.10.65 - 192.168.10.126
+Broadcast : 192.168.10.127
+        </div>
+
+
+        <h3>Subnet شماره 3</h3>
+
+        <div class="code-block">
+Network   : 192.168.10.128/26
+Usable    : 192.168.10.129 - 192.168.10.190
+Broadcast : 192.168.10.191
+        </div>
+
+
+        <h3>Subnet شماره 4</h3>
+
+        <div class="code-block">
+Network   : 192.168.10.192/26
+Usable    : 192.168.10.193 - 192.168.10.254
+Broadcast : 192.168.10.255
+        </div>
+
+
+        <div class="success-box">
+          <strong>نتیجه:</strong>
+          <br />
+          یک /24 را به چهار /26 تقسیم کردیم و هر Subnet دارای 62 Host
+          قابل استفاده شد.
+        </div>
+
+
+        <h2>تقسیم /24 به /25، /26 و /27</h2>
+
+        <p>
+          با تغییر Prefix Length، اندازه Subnet نیز تغییر می‌کند.
+        </p>
+
+        <div class="comparison-table-wrapper">
+          <table class="comparison-table">
+            <thead>
+              <tr>
+                <th>Prefix</th>
+                <th>Subnetها در 192.168.10.0/24</th>
+                <th>Host قابل استفاده</th>
+              </tr>
+            </thead>
+
+            <tbody>
+
+              <tr>
+                <td>/25</td>
+                <td>.0 و .128</td>
+                <td>126</td>
+              </tr>
+
+              <tr>
+                <td>/26</td>
+                <td>.0، .64، .128، .192</td>
+                <td>62</td>
+              </tr>
+
+              <tr>
+                <td>/27</td>
+                <td>.0، .32، .64، .96، .128، .160، .192، .224</td>
+                <td>30</td>
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+
+
+        <h2>VLSM چیست؟</h2>
+
+        <p>
+          VLSM یا Variable Length Subnet Mask به ما اجازه می‌دهد
+          Subnetهایی با اندازه‌های متفاوت ایجاد کنیم.
+        </p>
+
+        <p>
+          این روش در شبکه‌های واقعی بسیار کاربردی است؛ چون همه بخش‌های
+          سازمان به تعداد یکسانی IP نیاز ندارند.
+        </p>
+
+        <div class="scenario-card">
+
+          <h3>سناریوی یک شبکه سازمانی</h3>
+
+          <p>
+            فرض کنیم شبکه اصلی ما:
+          </p>
+
+          <div class="code-block">
+192.168.10.0/24
+          </div>
+
+          <p>
+            نیازهای سازمان:
+          </p>
+
+          <ul>
+            <li>کاربران: حدود 50 دستگاه</li>
+            <li>CCTV: حدود 25 دوربین و تجهیزات مرتبط</li>
+            <li>Serverها: حدود 10 دستگاه</li>
+            <li>Management: حدود 5 دستگاه</li>
+            <li>Point-to-Point: دو IP</li>
+          </ul>
+
+        </div>
+
+
+        <h3>Subnet کاربران</h3>
+
+        <div class="code-block">
+192.168.10.0/26
+
+Network   : 192.168.10.0
+Usable    : 192.168.10.1 - 192.168.10.62
+Broadcast : 192.168.10.63
+Hosts     : 62
+        </div>
+
+
+        <h3>Subnet دوربین‌ها</h3>
+
+        <div class="code-block">
+192.168.10.64/27
+
+Network   : 192.168.10.64
+Usable    : 192.168.10.65 - 192.168.10.94
+Broadcast : 192.168.10.95
+Hosts     : 30
+        </div>
+
+
+        <h3>Subnet سرورها</h3>
+
+        <div class="code-block">
+192.168.10.96/28
+
+Network   : 192.168.10.96
+Usable    : 192.168.10.97 - 192.168.10.110
+Broadcast : 192.168.10.111
+Hosts     : 14
+        </div>
+
+
+        <h3>Subnet Management</h3>
+
+        <div class="code-block">
+192.168.10.112/29
+
+Network   : 192.168.10.112
+Usable    : 192.168.10.113 - 192.168.10.118
+Broadcast : 192.168.10.119
+Hosts     : 6
+        </div>
+
+
+        <h3>Point-to-Point Link</h3>
+
+        <div class="code-block">
+192.168.10.120/30
+
+Network   : 192.168.10.120
+Usable    : 192.168.10.121 - 192.168.10.122
+Broadcast : 192.168.10.123
+Hosts     : 2
+        </div>
+
+
+        <div class="success-box">
+          <strong>مزیت VLSM:</strong>
+          <br />
+          به‌جای اینکه برای همه واحدها یک /24 یا حتی /26 اختصاص دهیم،
+          برای هر بخش دقیقاً متناسب با نیاز آن Subnet طراحی می‌کنیم.
+          در نتیجه IP Addressها بهتر استفاده می‌شوند و فضای کافی برای
+          توسعه آینده باقی می‌ماند.
+        </div>
+
+
+        <h2>Subnet و VLAN چه تفاوتی دارند؟</h2>
+
+        <p>
+          این دو مفهوم بسیار به هم مرتبط هستند اما یکی نیستند.
+        </p>
+
+        <div class="comparison-table-wrapper">
+          <table class="comparison-table">
+
+            <thead>
+              <tr>
+                <th>VLAN</th>
+                <th>Subnet</th>
+              </tr>
+            </thead>
+
+            <tbody>
+
+              <tr>
+                <td>مفهوم Layer 2</td>
+                <td>مفهوم Layer 3</td>
+              </tr>
+
+              <tr>
+                <td>Broadcast Domain را جدا می‌کند</td>
+                <td>IP Network را تعریف می‌کند</td>
+              </tr>
+
+              <tr>
+                <td>روی Switch بسیار مهم است</td>
+                <td>در Routing و IP Addressing بسیار مهم است</td>
+              </tr>
+
+              <tr>
+                <td>مثلاً VLAN 20</td>
+                <td>مثلاً 192.168.20.0/24</td>
+              </tr>
+
+            </tbody>
+
+          </table>
+        </div>
+
+        <p>
+          در بسیاری از طراحی‌های سازمانی، هر VLAN یک Subnet اختصاصی دارد.
+          مثلاً:
+        </p>
+
+        <div class="code-block">
+VLAN 10  → Users      → 192.168.10.0/24
+VLAN 20  → CCTV       → 192.168.20.0/24
+VLAN 30  → Servers    → 192.168.30.0/24
+VLAN 40  → Management → 192.168.40.0/24
+        </div>
+
+
+        <h2>چرا Subnetting در شبکه‌های سازمانی مهم است؟</h2>
+
+        <ul>
+          <li>کاهش Broadcast Domain</li>
+          <li>بهبود ساختار IP Addressing</li>
+          <li>مدیریت بهتر VLANها</li>
+          <li>کنترل بهتر ترافیک بین بخش‌های مختلف</li>
+          <li>امکان اعمال Policyهای Firewall و ACL</li>
+          <li>بهبود Troubleshooting</li>
+          <li>استفاده بهینه‌تر از IP Addressها</li>
+          <li>امکان طراحی شبکه برای رشد آینده</li>
+        </ul>
+
+
+        <h2>یک مثال واقعی از طراحی شبکه</h2>
+
+        <p>
+          فرض کنید در یک سازمان چند بخش مختلف داریم. کاربران نباید مستقیماً
+          به شبکه دوربین‌ها دسترسی داشته باشند و تجهیزات مدیریتی نیز باید
+          از شبکه کاربران جدا باشند.
+        </p>
+
+        <div class="scenario-card">
+
+          <h3>نمونه طراحی</h3>
+
+          <div class="code-block">
+VLAN 10
+Users
+192.168.10.0/24
+
+VLAN 20
+CCTV
+192.168.20.0/24
+
+VLAN 30
+Servers
+192.168.30.0/24
+
+VLAN 40
+Management
+192.168.40.0/24
+          </div>
+
+          <p>
+            سپس روی Router یا Layer 3 Switch می‌توان Routing بین VLANها
+            را کنترل کرد و با ACL یا Firewall مشخص کرد کدام بخش اجازه
+            دسترسی به بخش دیگر را دارد.
+          </p>
+
+        </div>
+
+
+        <h2>دستورهای کاربردی Cisco</h2>
+
+        <p>
+          برای بررسی وضعیت Interfaceها و IP Addressها در تجهیزات Cisco:
+        </p>
+
+        <div class="code-block">
+show ip interface brief
+        </div>
+
+        <p>
+          برای مشاهده تنظیمات یک Interface:
+        </p>
+
+        <div class="code-block">
+show running-config interface GigabitEthernet0/1
+        </div>
+
+        <p>
+          و برای مشاهده Routing Table:
+        </p>
+
+        <div class="code-block">
+show ip route
+        </div>
+
+        <p>
+          در زمان Troubleshooting، ترکیب اطلاعات IP Address، Subnet Mask،
+          VLAN و Routing Table معمولاً تصویر بسیار خوبی از وضعیت شبکه
+          به ما می‌دهد.
+        </p>
+
+
+        <h2>Wildcard Mask چیست؟</h2>
+
+        <p>
+          Wildcard Mask در برخی تنظیمات شبکه، مخصوصاً ACL و OSPF،
+          کاربرد دارد. در ساده‌ترین حالت، Wildcard Mask مکمل Subnet Mask
+          نسبت به 255.255.255.255 است.
+        </p>
+
+        <div class="code-block">
+Subnet Mask : 255.255.255.0
+Wildcard    : 0.0.0.255
+        </div>
+
+        <p>
+          برای مثال، برای یک /24، Wildcard Mask برابر با
+          <strong>0.0.0.255</strong> است.
+        </p>
+
+
+        <h2>اشتباهات رایج در Subnetting</h2>
+
+        <ul>
+
+          <li>
+            انتخاب Subnet کوچک‌تر از نیاز واقعی شبکه
+          </li>
+
+          <li>
+            فراموش کردن Network Address و Broadcast Address
+          </li>
+
+          <li>
+            استفاده از IPهای یکسان در دو Subnet
+          </li>
+
+          <li>
+            ایجاد Subnetهای Overlap
+          </li>
+
+          <li>
+            اشتباه در محاسبه Block Size
+          </li>
+
+          <li>
+            عدم در نظر گرفتن رشد آینده سازمان
+          </li>
+
+          <li>
+            تصور اینکه VLAN و Subnet دقیقاً یک مفهوم هستند
+          </li>
+
+          <li>
+            تنظیم اشتباه Default Gateway
+          </li>
+
+        </ul>
+
+
+        <div class="warning-box">
+
+          <strong>یک نکته مهم در طراحی:</strong>
+
+          <br />
+
+          فقط بر اساس تعداد فعلی دستگاه‌ها Subnet طراحی نکنید.
+          اگر یک بخش امروز 40 دستگاه دارد، ممکن است چند ماه بعد
+          به 70 یا 100 دستگاه برسد. همیشه ظرفیت توسعه را نیز در نظر بگیرید.
+
+        </div>
+
+
+        <h2>روش سریع محاسبه Subnet</h2>
+
+        <p>
+          برای حل سریع مسائل Subnetting می‌توان این مراحل را دنبال کرد:
+        </p>
+
+        <ol>
+
+          <li>
+            Prefix Length را مشخص کنید.
+          </li>
+
+          <li>
+            تعداد بیت‌های Host را محاسبه کنید.
+          </li>
+
+          <li>
+            تعداد کل Addressها را به دست آورید.
+          </li>
+
+          <li>
+            Block Size را مشخص کنید.
+          </li>
+
+          <li>
+            Network Address را پیدا کنید.
+          </li>
+
+          <li>
+            Broadcast Address را پیدا کنید.
+          </li>
+
+          <li>
+            محدوده Usable Hostها را مشخص کنید.
+          </li>
+
+        </ol>
+
+
+        <div class="highlight-box">
+
+          <strong>مثال سریع:</strong>
+
+          <br />
+
+          برای 192.168.10.70/26:
+
+          <br /><br />
+
+          Block Size = 64
+
+          <br />
+
+          Subnetها = .0، .64، .128، .192
+
+          <br />
+
+          بنابراین IP شماره 70 داخل Subnet دوم قرار دارد:
+
+          <br />
+
+          Network = 192.168.10.64
+
+          <br />
+
+          Broadcast = 192.168.10.127
+
+          <br />
+
+          Usable = 192.168.10.65 تا 192.168.10.126
+
+        </div>
+
+
+        <h2>جمع‌بندی</h2>
+
+        <p>
+          Subnetting یکی از پایه‌ای‌ترین مهارت‌های Networking است و تقریباً
+          در تمام طراحی‌های حرفه‌ای شبکه با آن سروکار داریم.
+        </p>
+
+        <p>
+          وقتی مفهوم‌های Network ID، Host ID، Subnet Mask، CIDR،
+          Network Address و Broadcast Address را به‌خوبی درک کنیم،
+          طراحی IP Addressing بسیار ساده‌تر می‌شود.
+        </p>
+
+        <p>
+          در شبکه‌های سازمانی، Subnetting معمولاً در کنار VLAN،
+          Routing، ACL و Firewall استفاده می‌شود تا شبکه‌ای ساختاریافته،
+          قابل مدیریت و قابل توسعه ایجاد شود.
+        </p>
+
+        <div class="success-box">
+
+          <strong>خلاصه حرفه‌ای:</strong>
+
+          <br />
+
+          IP Addressing خوب فقط به معنی «IP دادن به دستگاه‌ها» نیست؛
+          یک طراحی صحیح باید از ابتدا مشخص کند هر بخش شبکه چه محدوده‌ای
+          دارد، چه تعداد Host نیاز دارد، چقدر ظرفیت رشد دارد و چگونه
+          با VLAN و Routing با سایر بخش‌ها ارتباط برقرار می‌کند.
+
+        </div>
+
+
+        <footer class="article-footer">
+
+          <a
+            href="../index.html#articles"
+            class="back-link"
+          >
+            ← بازگشت به مقالات
+          </a>
+
+          <span class="article-brand">
+            AJORLOO•TECH — Engineering Digital Trust
+          </span>
+
+        </footer>
+
+      </article>
+
+    </div>
+  </main>
+
+</body>
+</html>

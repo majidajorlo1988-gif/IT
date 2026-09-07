@@ -1,75 +1,2005 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fa" dir="rtl">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="پشتیبانی شبکه، زیرساخت و طراحی وب به‌صورت ۲۴ ساعته." />
-    <title>Ajorloo Tech | خدمات شبکه</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Vazirmatn:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css" />
-  </head>
-  <body>
-    <header class="topbar">
-      <a class="brand" href="#home" aria-label="Ajorloo Tech">AJORLOO<span>•</span>TECH</a>
-      <nav aria-label="Navigation">
-        <a href="#services" data-i18n="navServices">خدمات</a>
-        <a href="#about" data-i18n="navAbout">دربارهٔ ما</a>
-        <a href="#contact" data-i18n="navContact">تماس</a>
+
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <meta
+    name="description"
+    content="AJORLOO•TECH — IT Infrastructure, Network, Systems, Backup, VoIP, CCTV and Technical Knowledge Base."
+  >
+
+  <meta
+    name="keywords"
+    content="IT Infrastructure, Network, Cisco, MikroTik, VMware, Veeam, Windows Server, Active Directory, VoIP, CCTV, Backup, Network+"
+  >
+
+  <meta
+    name="author"
+    content="Majid Ajorloo"
+  >
+
+  <meta
+    name="theme-color"
+    content="#0a0f16"
+  >
+
+  <title>
+    AJORLOO•TECH | Engineering Digital Trust
+  </title>
+
+  <!-- =========================
+       FONTS
+  ========================== -->
+
+  <link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+  >
+
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Vazirmatn:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet"
+  >
+
+  <!-- =========================
+       STYLES
+  ========================== -->
+
+  <link
+    rel="stylesheet"
+    href="styles.css"
+  >
+</head>
+
+
+<body>
+
+  <!-- =========================================================
+       HEADER
+  ========================================================== -->
+
+  <header class="site-header">
+
+    <div class="container header-inner">
+
+      <!-- BRAND -->
+
+      <a
+        href="#home"
+        class="brand"
+        aria-label="AJORLOO TECH"
+      >
+
+        <span class="brand-mark" aria-hidden="true">
+          <span>A</span>
+          <b>•</b>
+          <span>T</span>
+        </span>
+
+        <span class="brand-text">
+          <strong>AJORLOO</strong>
+          <span>•TECH</span>
+        </span>
+
+      </a>
+
+
+      <!-- NAVIGATION -->
+
+      <nav
+        class="main-nav"
+        id="mainNav"
+        aria-label="Main Navigation"
+      >
+
+        <a
+          href="#home"
+          class="nav-link active"
+          data-i18n="navHome"
+        >
+          خانه
+        </a>
+
+        <a
+          href="#services"
+          class="nav-link"
+          data-i18n="navServices"
+        >
+          خدمات
+        </a>
+
+        <a
+          href="#projects"
+          class="nav-link"
+          data-i18n="navProjects"
+        >
+          پروژه‌ها
+        </a>
+
+        <a
+          href="#articles"
+          class="nav-link"
+          data-i18n="navArticles"
+        >
+          مقالات
+        </a>
+
+        <a
+          href="#about"
+          class="nav-link"
+          data-i18n="navAbout"
+        >
+          درباره من
+        </a>
+
+        <a
+          href="#contact"
+          class="nav-link"
+          data-i18n="navContact"
+        >
+          تماس
+        </a>
+
       </nav>
-      <div class="language-switcher" aria-label="Language selection">
-        <button data-lang="fa" class="active">فا</button>
-        <button data-lang="en">EN</button>
-        <button data-lang="de">DE</button>
+
+
+      <!-- LANGUAGE -->
+
+      <div
+        class="language-switcher"
+        aria-label="Language selector"
+      >
+
+        <button
+          type="button"
+          class="lang-btn"
+          data-lang="de"
+          aria-pressed="false"
+        >
+          DE
+        </button>
+
+        <button
+          type="button"
+          class="lang-btn"
+          data-lang="en"
+          aria-pressed="false"
+        >
+          EN
+        </button>
+
+        <button
+          type="button"
+          class="lang-btn active"
+          data-lang="fa"
+          aria-pressed="true"
+        >
+          FA
+        </button>
+
       </div>
-    </header>
 
-    <main id="home">
-      <section class="hero">
-        <div class="hero-copy">
-          <p class="eyebrow"><span></span><span data-i18n="availability">همیشه در دسترس</span></p>
-          <h1 data-i18n="headline">زیرساخت پایدار،<br />پشتیبانی بی‌وقفه.</h1>
-          <p class="lead" data-i18n="intro">از راه‌اندازی شبکه تا طراحی وب؛ خدمات تخصصی IT را ۲۴ ساعت شبانه‌روز و ۷ روز هفته دریافت کنید.</p>
+
+      <!-- MOBILE MENU -->
+
+      <button
+        type="button"
+        class="menu-toggle mobile-menu-toggle"
+        id="menuToggle"
+        aria-label="باز کردن منو"
+        aria-expanded="false"
+        aria-controls="mainNav"
+      >
+
+        <span></span>
+        <span></span>
+        <span></span>
+
+      </button>
+
+    </div>
+
+  </header>
+
+
+  <!-- =========================================================
+       MAIN
+  ========================================================== -->
+
+  <main>
+
+
+    <!-- =======================================================
+         HERO
+    ======================================================== -->
+
+    <section
+      class="hero"
+      id="home"
+    >
+
+      <div class="container hero-grid">
+
+
+        <!-- HERO CONTENT -->
+
+        <div class="hero-content">
+
+          <div
+            class="hero-eyebrow"
+            data-i18n="heroEyebrow"
+          >
+            IT INFRASTRUCTURE • NETWORK • SYSTEMS
+          </div>
+
+
+          <h1>
+
+            <span data-i18n="heroTitle1">
+              Engineering
+            </span>
+
+            <br>
+
+            <span data-i18n="heroTitle2">
+              Digital Trust
+            </span>
+
+          </h1>
+
+
+          <p
+            class="hero-description"
+            data-i18n="heroDescription"
+          >
+            طراحی، پیاده‌سازی و پشتیبانی زیرساخت‌های شبکه و سیستم؛
+            با تمرکز بر پایداری، امنیت، مانیتورینگ، Backup و حل مسئله
+            در محیط‌های واقعی.
+          </p>
+
+
           <div class="hero-actions">
-            <a class="button primary" href="#contact" data-i18n="cta">درخواست خدمات</a>
-            <a class="button quiet" href="#services" data-i18n="discover">مشاهدهٔ خدمات <b>←</b></a>
+
+            <a
+              href="#services"
+              class="btn btn-primary"
+              data-i18n="heroPrimaryButton"
+            >
+              مشاهده خدمات
+            </a>
+
+            <a
+              href="#projects"
+              class="btn btn-secondary"
+              data-i18n="heroSecondaryButton"
+            >
+              مشاهده پروژه‌ها
+            </a>
+
           </div>
-        </div>
-        <div class="hero-art" aria-hidden="true">
-          <div class="orb orb-one"></div><div class="orb orb-two"></div>
-          <div class="network-card">
-            <div class="card-top"><span class="pulse"></span><span data-i18n="systemOnline">سیستم آنلاین</span><small>24/7</small></div>
-            <div class="network-lines"><i></i><i></i><i></i><i></i><i></i></div>
-            <div class="node n1"></div><div class="node n2"></div><div class="node n3"></div>
+
+
+          <!-- HERO STATS -->
+
+          <div class="hero-stats">
+
+            <div class="hero-stat">
+
+              <strong>
+                10+
+              </strong>
+
+              <span data-i18n="statExperience">
+                سال تجربه
+              </span>
+
+            </div>
+
+
+            <div class="hero-stat">
+
+              <strong>
+                IT
+              </strong>
+
+              <span data-i18n="statInfrastructure">
+                زیرساخت و شبکه
+              </span>
+
+            </div>
+
+
+            <div class="hero-stat">
+
+              <strong>
+                24/7
+              </strong>
+
+              <span data-i18n="statMindset">
+                Problem Solving
+              </span>
+
+            </div>
+
           </div>
+
         </div>
-      </section>
 
-      <section class="metrics" aria-label="Service highlights">
-        <div><strong>24/7</strong><span data-i18n="metricOne">پاسخ‌گویی و پشتیبانی</span></div>
-        <div><strong>IT</strong><span data-i18n="metricTwo">راهکارهای کامل فناوری</span></div>
-        <div><strong>3</strong><span data-i18n="metricThree">زبان برای ارتباط آسان</span></div>
-      </section>
 
-      <section class="services section" id="services">
-        <div class="section-heading"><p data-i18n="servicesKicker">تخصص ما</p><h2 data-i18n="servicesTitle">هرآنچه کسب‌وکار شما برای کارکرد مطمئن نیاز دارد.</h2></div>
-        <div class="service-grid">
-          <article><div class="icon">⌘</div><h3 data-i18n="serviceOneTitle">شبکه و زیرساخت</h3><p data-i18n="serviceOneText">طراحی، نصب و بهینه‌سازی شبکه، سرور، تجهیزات و ارتباطات سازمانی.</p></article>
-          <article><div class="icon">◌</div><h3 data-i18n="serviceTwoTitle">پشتیبانی IT</h3><p data-i18n="serviceTwoText">عیب‌یابی سریع، نگهداری پیشگیرانه و همراهی فنی برای کار بی‌وقفه.</p></article>
-          <article><div class="icon">◇</div><h3 data-i18n="serviceThreeTitle">طراحی سایت</h3><p data-i18n="serviceThreeText">وب‌سایت‌های سریع، مدرن و سازگار با موبایل، متناسب با هویت کسب‌وکار شما.</p></article>
-          <article><div class="icon">↗</div><h3 data-i18n="serviceFourTitle">مشاوره تخصصی</h3><p data-i18n="serviceFourText">انتخاب راهکار، امنیت، توسعه و هر وظیفه‌ای که از یک مهندس IT انتظار دارید.</p></article>
+        <!-- ===================================================
+             HERO DASHBOARD
+        ==================================================== -->
+
+        <div class="hero-dashboard">
+
+
+          <!-- DASHBOARD HEADER -->
+
+          <div class="dashboard-header">
+
+            <div>
+
+              <div
+                class="dashboard-label"
+                data-i18n="dashboardLabel"
+              >
+                INFRASTRUCTURE STATUS
+              </div>
+
+              <div
+                class="dashboard-title"
+                data-i18n="dashboardTitle"
+              >
+                زیرساخت پایدار، قابل مشاهده و قابل اعتماد
+              </div>
+
+            </div>
+
+
+            <div
+              class="dashboard-status"
+              data-i18n="dashboardLive"
+            >
+              LIVE
+            </div>
+
+          </div>
+
+
+          <!-- =================================================
+               NETWORK VISUAL
+          ================================================== -->
+
+          <div class="network-visual">
+
+            <div class="network-lines">
+
+              <span class="line line-top"></span>
+              <span class="line line-bottom"></span>
+              <span class="line line-left"></span>
+              <span class="line line-right"></span>
+
+            </div>
+
+
+            <div class="network-pulse"></div>
+
+
+            <div class="network-node top">
+              <span>WAN</span>
+            </div>
+
+            <div class="network-node left">
+              <span>LAN</span>
+            </div>
+
+            <div class="network-node center">
+              <span>CORE</span>
+            </div>
+
+            <div class="network-node right">
+              <span>USERS</span>
+            </div>
+
+            <div class="network-node bottom">
+              <span>DATA</span>
+            </div>
+
+          </div>
+
+
+          <!-- =================================================
+               METRICS
+          ================================================== -->
+
+          <div class="dashboard-metrics">
+
+
+            <div class="metric">
+
+              <span
+                class="metric-label"
+                data-i18n="metricNetwork"
+              >
+                Network
+              </span>
+
+              <strong
+                class="metric-value"
+                data-i18n="metricNetworkValue"
+              >
+                Stable
+              </strong>
+
+            </div>
+
+
+            <div class="metric">
+
+              <span
+                class="metric-label"
+                data-i18n="metricBackup"
+              >
+                Backup
+              </span>
+
+              <strong
+                class="metric-value"
+                data-i18n="metricBackupValue"
+              >
+                Protected
+              </strong>
+
+            </div>
+
+
+            <div class="metric">
+
+              <span
+                class="metric-label"
+                data-i18n="metricSecurity"
+              >
+                Security
+              </span>
+
+              <strong
+                class="metric-value"
+                data-i18n="metricSecurityValue"
+              >
+                Active
+              </strong>
+
+            </div>
+
+          </div>
+
         </div>
-      </section>
 
-      <section class="about section" id="about">
-        <div class="about-panel"><p data-i18n="aboutKicker">همراه فناوری شما</p><h2 data-i18n="aboutTitle">فناوری باید به کار شما سرعت بدهد، نه دغدغه اضافه کند.</h2><div class="profile"><strong>Majid Ajorloo</strong><span>IT Infrastructure Engineer</span><span>10+ years of professional experience</span></div></div>
-        <div class="about-text"><p data-i18n="aboutText">با یک نقطهٔ تماس برای پشتیبانی، زیرساخت، امنیت و وب، مسائل فنی شما با دیدی یکپارچه و عملی حل می‌شوند.</p><ul><li data-i18n="aboutOne">پاسخ‌گویی در تمام روزهای هفته</li><li data-i18n="aboutTwo">راهکار متناسب با نیاز واقعی شما</li><li data-i18n="aboutThree">ارتباط شفاف به فارسی، انگلیسی و آلمانی</li></ul></div>
-      </section>
+      </div>
 
-      <section class="contact" id="contact"><p data-i18n="contactKicker">آمادهٔ شروع هستید؟</p><h2 data-i18n="contactTitle">برای یک زیرساخت بهتر، گفتگو را شروع کنیم.</h2><div class="contact-actions"><a class="button primary light" href="mailto:majidajorlo1988@gmail.com" data-i18n="contactCta">تماس با ما</a><a class="button outline" href="tel:+989382630797">+98 938 263 0797</a></div><div class="contact-links"><a href="mailto:majidajorlo1988@gmail.com">majidajorlo1988@gmail.com</a><a href="https://www.linkedin.com/in/majidajorlo" target="_blank" rel="noopener">LinkedIn / majidajorlo</a></div><p class="contact-note">Iran · Available 24/7</p></section>
-    </main>
-    <footer><span>© <span id="year"></span> Ajorloo Tech</span><span data-i18n="footer">پشتیبانی شبکه · زیرساخت · طراحی وب</span></footer>
-    <script src="app.js"></script>
-  </body>
+    </section>
+
+
+    <!-- =======================================================
+         SERVICES
+    ======================================================== -->
+
+    <section
+      class="section"
+      id="services"
+    >
+
+      <div class="container">
+
+        <div class="section-heading">
+
+          <div class="section-eyebrow">
+            SERVICES
+          </div>
+
+          <h2 data-i18n="servicesTitle">
+            خدمات تخصصی
+          </h2>
+
+          <p data-i18n="servicesDescription">
+            از طراحی شبکه تا نگهداری سرورها و سیستم‌های سازمانی؛
+            تمرکز من روی ساخت زیرساختی پایدار، امن و قابل مدیریت است.
+          </p>
+
+        </div>
+
+
+        <div class="services-grid">
+
+
+          <!-- SERVICE 1 -->
+
+          <article class="card service-card">
+
+            <div class="service-icon">
+              ◈
+            </div>
+
+            <h3 data-i18n="service1Title">
+              Network Infrastructure
+            </h3>
+
+            <p data-i18n="service1Text">
+              طراحی، پیاده‌سازی و عیب‌یابی شبکه‌های LAN/WAN،
+              VLAN، Routing، Switching و ارتباط بین شعب.
+            </p>
+
+            <div class="service-tags">
+
+              <span>LAN/WAN</span>
+              <span>VLAN</span>
+              <span>Routing</span>
+
+            </div>
+
+          </article>
+
+
+          <!-- SERVICE 2 -->
+
+          <article class="card service-card">
+
+            <div class="service-icon">
+              ◉
+            </div>
+
+            <h3 data-i18n="service2Title">
+              Systems & Servers
+            </h3>
+
+            <p data-i18n="service2Text">
+              راه‌اندازی و مدیریت Windows Server،
+              Active Directory، DNS، DHCP، File Server
+              و سرویس‌های سازمانی.
+            </p>
+
+            <div class="service-tags">
+
+              <span>Windows Server</span>
+              <span>AD</span>
+              <span>DNS</span>
+
+            </div>
+
+          </article>
+
+
+          <!-- SERVICE 3 -->
+
+          <article class="card service-card">
+
+            <div class="service-icon">
+              ⬡
+            </div>
+
+            <h3 data-i18n="service3Title">
+              Virtualization
+            </h3>
+
+            <p data-i18n="service3Text">
+              پیاده‌سازی و مدیریت VMware ESXi،
+              ماشین‌های مجازی، منابع سرور و زیرساخت‌های مجازی.
+            </p>
+
+            <div class="service-tags">
+
+              <span>VMware</span>
+              <span>ESXi</span>
+              <span>VM</span>
+
+            </div>
+
+          </article>
+
+
+          <!-- SERVICE 4 -->
+
+          <article class="card service-card">
+
+            <div class="service-icon">
+              ◇
+            </div>
+
+            <h3 data-i18n="service4Title">
+              Backup & Recovery
+            </h3>
+
+            <p data-i18n="service4Text">
+              طراحی Backup Strategy، Veeam Backup،
+              Recovery و ایجاد معماری مناسب برای محافظت از اطلاعات.
+            </p>
+
+            <div class="service-tags">
+
+              <span>Veeam</span>
+              <span>Backup</span>
+              <span>Recovery</span>
+
+            </div>
+
+          </article>
+
+
+          <!-- SERVICE 5 -->
+
+          <article class="card service-card">
+
+            <div class="service-icon">
+              ⛨
+            </div>
+
+            <h3 data-i18n="service5Title">
+              Security & Monitoring
+            </h3>
+
+            <p data-i18n="service5Text">
+              مانیتورینگ زیرساخت، کنترل دسترسی،
+              عیب‌یابی امنیتی و استفاده از ابزارهایی مانند
+              PRTG و SolarWinds.
+            </p>
+
+            <div class="service-tags">
+
+              <span>PRTG</span>
+              <span>Monitoring</span>
+              <span>Security</span>
+
+            </div>
+
+          </article>
+
+
+          <!-- SERVICE 6 -->
+
+          <article class="card service-card">
+
+            <div class="service-icon">
+              ◌
+            </div>
+
+            <h3 data-i18n="service6Title">
+              VoIP & CCTV
+            </h3>
+
+            <p data-i18n="service6Text">
+              راه‌اندازی و عیب‌یابی VoIP، SIP،
+              Issabel/Asterisk و زیرساخت دوربین‌های IP،
+              NVR و PoE.
+            </p>
+
+            <div class="service-tags">
+
+              <span>VoIP</span>
+              <span>SIP</span>
+              <span>CCTV</span>
+
+            </div>
+
+          </article>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =======================================================
+         PROJECTS
+    ======================================================== -->
+
+    <section
+      class="section"
+      id="projects"
+    >
+
+      <div class="container">
+
+        <div class="section-heading">
+
+          <div class="section-eyebrow">
+            PROJECTS
+          </div>
+
+          <h2 data-i18n="projectsTitle">
+            پروژه‌های واقعی
+          </h2>
+
+          <p data-i18n="projectsDescription">
+            نمونه‌هایی از چالش‌ها و راهکارهایی که در محیط‌های واقعی
+            زیرساخت و شبکه با آن‌ها درگیر بوده‌ام.
+          </p>
+
+        </div>
+
+
+        <div class="projects-grid">
+
+
+          <!-- PROJECT 1 -->
+
+          <article class="card project-card featured">
+
+            <div class="project-number">
+              01 / NETWORK
+            </div>
+
+            <h3 data-i18n="project1Title">
+              SIP Registration Troubleshooting
+            </h3>
+
+            <p data-i18n="project1Text">
+              عیب‌یابی ثبت نشدن تلفن‌ها در یک زیرساخت VoIP
+              چند شعبه‌ای؛ از بررسی Tunnel و Firewall تا
+              Packet Capture و وضعیت Asterisk.
+            </p>
+
+            <div class="project-tags">
+
+              <span>SIP</span>
+              <span>Asterisk</span>
+              <span>NAT</span>
+              <span>Firewall</span>
+
+            </div>
+
+          </article>
+
+
+          <!-- PROJECT 2 -->
+
+          <article class="card project-card">
+
+            <div class="project-number">
+              02 / POWER
+            </div>
+
+            <h3 data-i18n="project2Title">
+              PoE Optimization
+            </h3>
+
+            <p data-i18n="project2Text">
+              بهینه‌سازی مصرف PoE در یک سوئیچ 48-Port
+              با Power Budget برابر 370W و افزایش تعداد
+              دوربین‌های فعال بدون تعویض سخت‌افزار.
+            </p>
+
+            <div class="project-tags">
+
+              <span>PoE</span>
+              <span>IP Camera</span>
+              <span>370W</span>
+
+            </div>
+
+          </article>
+
+
+          <!-- PROJECT 3 -->
+
+          <article class="card project-card">
+
+            <div class="project-number">
+              03 / WIRELESS
+            </div>
+
+            <h3 data-i18n="project3Title">
+              UniFi Controller Integration
+            </h3>
+
+            <p data-i18n="project3Text">
+              راه‌اندازی و مدیریت UniFi Controller،
+              مدیریت تجهیزات، Monitoring، Firmware،
+              WAN و QoS.
+            </p>
+
+            <div class="project-tags">
+
+              <span>UniFi</span>
+              <span>WAN</span>
+              <span>QoS</span>
+
+            </div>
+
+          </article>
+
+
+          <!-- PROJECT 4 -->
+
+          <article class="card project-card">
+
+            <div class="project-number">
+              04 / MIKROTIK
+            </div>
+
+            <h3 data-i18n="project4Title">
+              MikroTik Wireless Deployment
+            </h3>
+
+            <p data-i18n="project4Text">
+              پیاده‌سازی ارتباط Wireless با تجهیزات MikroTik
+              RB532 و طراحی Bridge/Station برای اتصال چند نقطه.
+            </p>
+
+            <div class="project-tags">
+
+              <span>MikroTik</span>
+              <span>Wireless</span>
+              <span>Bridge</span>
+
+            </div>
+
+          </article>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =======================================================
+         ARTICLES
+    ======================================================== -->
+
+    <section
+      class="section"
+      id="articles"
+    >
+
+      <div class="container">
+
+        <div class="section-heading">
+
+          <div class="section-eyebrow">
+            KNOWLEDGE BASE
+          </div>
+
+          <h2 data-i18n="articlesTitle">
+            مقالات فنی
+          </h2>
+
+          <p data-i18n="articlesDescription">
+            یادداشت‌ها و آموزش‌های کاربردی درباره شبکه،
+            سیستم، Backup، VoIP و زیرساخت IT.
+          </p>
+
+        </div>
+
+
+        <!-- ARTICLE FILTERS -->
+
+        <div class="article-filters">
+
+          <button
+            type="button"
+            class="article-filter active"
+            data-category="all"
+            data-i18n="articleFilterAll"
+          >
+            همه
+          </button>
+
+          <button
+            type="button"
+            class="article-filter"
+            data-category="switching"
+            data-i18n="articleFilterSwitching"
+          >
+            Switching
+          </button>
+
+          <button
+            type="button"
+            class="article-filter"
+            data-category="networkplus"
+            data-i18n="articleFilterNetworkPlus"
+          >
+            Network+
+          </button>
+
+          <button
+            type="button"
+            class="article-filter"
+            data-category="routing"
+            data-i18n="articleFilterRouting"
+          >
+            Routing
+          </button>
+
+          <button
+            type="button"
+            class="article-filter"
+            data-category="veeam"
+            data-i18n="articleFilterVeeam"
+          >
+            Veeam
+          </button>
+
+          <button
+            type="button"
+            class="article-filter"
+            data-category="voip"
+            data-i18n="articleFilterVoip"
+          >
+            VoIP
+          </button>
+
+          <button
+            type="button"
+            class="article-filter"
+            data-category="systems"
+            data-i18n="articleFilterSystems"
+          >
+            Systems
+          </button>
+
+          <button
+            type="button"
+            class="article-filter"
+            data-category="cctv"
+            data-i18n="articleFilterCctv"
+          >
+            CCTV
+          </button>
+
+        </div>
+
+
+        <!-- ARTICLES GRID -->
+
+        <div class="articles-grid">
+
+
+          <!-- ARTICLE 1 -->
+
+          <article
+            class="card article-card featured"
+            data-category="switching"
+          >
+
+            <div class="article-icon">
+              ◈
+            </div>
+
+            <div class="article-category">
+              SWITCHING
+            </div>
+
+            <h3 data-i18n="article1Title">
+              VLAN چیست؟ راهنمای کامل VLAN و کاربرد آن در شبکه
+            </h3>
+
+            <p data-i18n="article1Text">
+              مفاهیم VLAN، Broadcast Domain، Access و Trunk
+              و سناریوهای واقعی استفاده از VLAN.
+            </p>
+
+            <div class="article-meta">
+              <span>VLAN</span>
+              <span>Switching</span>
+            </div>
+
+            <a
+              href="articles/vlan.html"
+              class="article-link"
+            >
+              <span data-i18n="readArticle">
+                مطالعه مقاله
+              </span>
+              <span>←</span>
+            </a>
+
+          </article>
+
+
+          <!-- ARTICLE 2 -->
+
+          <article
+            class="card article-card"
+            data-category="switching"
+          >
+
+            <div class="article-icon">
+              ◇
+            </div>
+
+            <div class="article-category">
+              SWITCHING
+            </div>
+
+            <h3 data-i18n="article2Title">
+              Access Port و Trunk Port چیست؟
+            </h3>
+
+            <p data-i18n="article2Text">
+              تفاوت Access و Trunk، 802.1Q و نحوه عبور VLANها
+              از لینک‌های Trunk.
+            </p>
+
+            <div class="article-meta">
+              <span>802.1Q</span>
+              <span>Trunk</span>
+            </div>
+
+            <a
+              href="articles/access-vs-trunk.html"
+              class="article-link"
+            >
+              <span data-i18n="readArticle">
+                مطالعه مقاله
+              </span>
+              <span>←</span>
+            </a>
+
+          </article>
+
+
+          <!-- ARTICLE 3 -->
+
+          <article
+            class="card article-card"
+            data-category="switching"
+          >
+
+            <div class="article-icon">
+              ⟳
+            </div>
+
+            <div class="article-category">
+              SWITCHING
+            </div>
+
+            <h3 data-i18n="article3Title">
+              STP و RSTP چیست؟
+            </h3>
+
+            <p data-i18n="article3Text">
+              مفهوم Loop در شبکه، Spanning Tree Protocol
+              و تفاوت STP با RSTP.
+            </p>
+
+            <div class="article-meta">
+              <span>STP</span>
+              <span>RSTP</span>
+            </div>
+
+            <a
+              href="articles/stp-rstp.html"
+              class="article-link"
+            >
+              <span data-i18n="readArticle">
+                مطالعه مقاله
+              </span>
+              <span>←</span>
+            </a>
+
+          </article>
+
+
+          <!-- ARTICLE 4 -->
+
+          <article
+            class="card article-card"
+            data-category="cctv"
+          >
+
+            <div class="article-icon">
+              ◉
+            </div>
+
+            <div class="article-category">
+              CCTV
+            </div>
+
+            <h3 data-i18n="article4Title">
+              Case Study: بهینه‌سازی PoE برای دوربین‌های IP
+            </h3>
+
+            <p data-i18n="article4Text">
+              بررسی یک مشکل واقعی مصرف PoE و راهکاری
+              برای افزایش ظرفیت بدون تعویض Switch.
+            </p>
+
+            <div class="article-meta">
+              <span>PoE</span>
+              <span>CCTV</span>
+            </div>
+
+            <a
+              href="articles/poe-cctv-case-study.html"
+              class="article-link"
+            >
+              <span data-i18n="readArticle">
+                مطالعه مقاله
+              </span>
+              <span>←</span>
+            </a>
+
+          </article>
+
+
+          <!-- ARTICLE 5 -->
+
+          <article
+            class="card article-card"
+            data-category="networkplus"
+          >
+
+            <div class="article-icon">
+              #
+            </div>
+
+            <div class="article-category">
+              NETWORK+
+            </div>
+
+            <h3 data-i18n="article5Title">
+              Subnetting چیست؟ آموزش کاربردی Subnet Mask
+            </h3>
+
+            <p data-i18n="article5Text">
+              محاسبه Subnet، Network Address، Broadcast
+              و تعداد Hostها با مثال‌های واقعی.
+            </p>
+
+            <div class="article-meta">
+              <span>Network+</span>
+              <span>IPv4</span>
+            </div>
+
+            <a
+              href="articles/subnetting.html"
+              class="article-link"
+            >
+              <span data-i18n="readArticle">
+                مطالعه مقاله
+              </span>
+              <span>←</span>
+            </a>
+
+          </article>
+
+
+          <!-- ARTICLE 6 -->
+
+          <article
+            class="card article-card"
+            data-category="routing"
+          >
+
+            <div class="article-icon">
+              ⇄
+            </div>
+
+            <div class="article-category">
+              ROUTING
+            </div>
+
+            <h3 data-i18n="article6Title">
+              Static Routing چیست؟
+            </h3>
+
+            <p data-i18n="article6Text">
+              مفهوم Static Route، Gateway و سناریوهای
+              کاربردی Routing در شبکه.
+            </p>
+
+            <div class="article-meta">
+              <span>Routing</span>
+              <span>Gateway</span>
+            </div>
+
+            <a
+              href="articles/static-routing.html"
+              class="article-link"
+            >
+              <span data-i18n="readArticle">
+                مطالعه مقاله
+              </span>
+              <span>←</span>
+            </a>
+
+          </article>
+
+
+          <!-- ARTICLE 7 -->
+
+          <article
+            class="card article-card featured"
+            data-category="veeam"
+          >
+
+            <div class="article-icon">
+              ◇
+            </div>
+
+            <div class="article-category">
+              VEEAM
+            </div>
+
+            <h3 data-i18n="article7Title">
+              قانون 3-2-1 در Backup چیست؟
+            </h3>
+
+            <p data-i18n="article7Text">
+              معماری 3-2-1 برای محافظت بهتر از اطلاعات
+              و کاهش ریسک از دست رفتن Backup.
+            </p>
+
+            <div class="article-meta">
+              <span>Veeam</span>
+              <span>Backup</span>
+            </div>
+
+            <a
+              href="articles/veeam-321.html"
+              class="article-link"
+            >
+              <span data-i18n="readArticle">
+                مطالعه مقاله
+              </span>
+              <span>←</span>
+            </a>
+
+          </article>
+
+
+          <!-- ARTICLE 8 -->
+
+          <article
+            class="card article-card"
+            data-category="veeam"
+          >
+
+            <div class="article-icon">
+              0
+            </div>
+
+            <div class="article-category">
+              VEEAM
+            </div>
+
+            <h3 data-i18n="article8Title">
+              قانون 3-2-1-1-0 در Backup
+            </h3>
+
+            <p data-i18n="article8Text">
+              نسخه کامل‌تر استراتژی Backup با تمرکز روی
+              Immutable و تست صحت Backup.
+            </p>
+
+            <div class="article-meta">
+              <span>3-2-1-1-0</span>
+              <span>Verification</span>
+            </div>
+
+            <a
+              href="articles/veeam-32110.html"
+              class="article-link"
+            >
+              <span data-i18n="readArticle">
+                مطالعه مقاله
+              </span>
+              <span>←</span>
+            </a>
+
+          </article>
+
+
+          <!-- ARTICLE 9 -->
+
+          <article
+            class="card article-card"
+            data-category="veeam"
+          >
+
+            <div class="article-icon">
+              ▣
+            </div>
+
+            <div class="article-category">
+              VEEAM
+            </div>
+
+            <h3 data-i18n="article9Title">
+              Immutable Backup چیست؟
+            </h3>
+
+            <p data-i18n="article9Text">
+              چرا Immutable Backup در برابر Ransomware
+              اهمیت دارد و چگونه از Backup محافظت می‌کند.
+            </p>
+
+            <div class="article-meta">
+              <span>Immutable</span>
+              <span>Ransomware</span>
+            </div>
+
+            <a
+              href="articles/immutable-backup.html"
+              class="article-link"
+            >
+              <span data-i18n="readArticle">
+                مطالعه مقاله
+              </span>
+              <span>←</span>
+            </a>
+
+          </article>
+
+
+          <!-- ARTICLE 10 -->
+
+          <article
+            class="card article-card"
+            data-category="voip"
+          >
+
+            <div class="article-icon">
+              ☎
+            </div>
+
+            <div class="article-category">
+              VOIP
+            </div>
+
+            <h3 data-i18n="article10Title">
+              SIP Registration چیست و چرا تلفن Register نمی‌شود؟
+            </h3>
+
+            <p data-i18n="article10Text">
+              بررسی مسیر SIP، UDP 5060، NAT، Firewall،
+              Tunnel و وضعیت Asterisk در یک سناریوی واقعی.
+            </p>
+
+            <div class="article-meta">
+              <span>SIP</span>
+              <span>5060</span>
+              <span>NAT</span>
+            </div>
+
+            <a
+              href="articles/sip-register.html"
+              class="article-link"
+            >
+              <span data-i18n="readArticle">
+                مطالعه مقاله
+              </span>
+              <span>←</span>
+            </a>
+
+          </article>
+
+
+          <!-- ARTICLE 11 -->
+
+          <article
+            class="card article-card"
+            data-category="systems"
+          >
+
+            <div class="article-icon">
+              ◫
+            </div>
+
+            <div class="article-category">
+              SYSTEMS
+            </div>
+
+            <h3 data-i18n="article11Title">
+              Active Directory چیست؟
+            </h3>
+
+            <p data-i18n="article11Text">
+              آشنایی با Active Directory، Domain Controller،
+              DNS، Group Policy و مدیریت متمرکز کاربران.
+            </p>
+
+            <div class="article-meta">
+              <span>AD</span>
+              <span>Domain</span>
+              <span>GPO</span>
+            </div>
+
+            <a
+              href="articles/active-directory.html"
+              class="article-link"
+            >
+              <span data-i18n="readArticle">
+                مطالعه مقاله
+              </span>
+              <span>←</span>
+            </a>
+
+          </article>
+
+
+          <!-- ARTICLE 12 -->
+
+          <article
+            class="card article-card"
+            data-category="networkplus"
+          >
+
+            <div class="article-icon">
+              ◎
+            </div>
+
+            <div class="article-category">
+              NETWORK+
+            </div>
+
+            <h3 data-i18n="article12Title">
+              مدل OSI چیست؟ راهنمای کامل ۷ لایه شبکه
+            </h3>
+
+            <p data-i18n="article12Text">
+              بررسی هفت لایه OSI، PDUها، Encapsulation
+              و روش عیب‌یابی شبکه بر اساس لایه‌ها.
+            </p>
+
+            <div class="article-meta">
+              <span>OSI</span>
+              <span>TCP/IP</span>
+            </div>
+
+            <a
+              href="articles/osi-model.html"
+              class="article-link"
+            >
+              <span data-i18n="readArticle">
+                مطالعه مقاله
+              </span>
+              <span>←</span>
+            </a>
+
+          </article>
+
+        </div>
+
+
+        <!-- ARTICLES CTA -->
+
+        <div class="cta" style="margin-top: 30px;">
+
+          <h2 data-i18n="articlesCtaTitle">
+            دانش فنی، تجربه واقعی
+          </h2>
+
+          <p data-i18n="articlesCtaText">
+            هدف این بخش فقط آموزش تئوری نیست؛
+            تجربه‌های واقعی زیرساخت را به زبان ساده و کاربردی منتقل می‌کنم.
+          </p>
+
+          <a
+            href="#articles"
+            class="btn btn-secondary"
+            data-i18n="articlesCtaButton"
+          >
+            مشاهده همه مقالات
+          </a>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =======================================================
+         TECHNOLOGIES
+    ======================================================== -->
+
+    <section
+      class="section"
+      id="technologies"
+    >
+
+      <div class="container">
+
+        <div class="section-heading">
+
+          <div class="section-eyebrow">
+            TECHNOLOGIES
+          </div>
+
+          <h2 data-i18n="technologiesTitle">
+            فناوری‌ها
+          </h2>
+
+          <p data-i18n="technologiesDescription">
+            برخی از تکنولوژی‌ها و ابزارهایی که در پروژه‌ها
+            و محیط‌های کاری با آن‌ها کار کرده‌ام.
+          </p>
+
+        </div>
+
+
+        <div class="technologies-grid">
+
+
+          <div class="technology-card">
+            <strong>Cisco</strong>
+            <span>Switching & Routing</span>
+          </div>
+
+          <div class="technology-card">
+            <strong>MikroTik</strong>
+            <span>Routing & Wireless</span>
+          </div>
+
+          <div class="technology-card">
+            <strong>VMware</strong>
+            <span>Virtualization</span>
+          </div>
+
+          <div class="technology-card">
+            <strong>Veeam</strong>
+            <span>Backup & Recovery</span>
+          </div>
+
+          <div class="technology-card">
+            <strong>Windows Server</strong>
+            <span>Enterprise Systems</span>
+          </div>
+
+          <div class="technology-card">
+            <strong>Active Directory</strong>
+            <span>Identity & Management</span>
+          </div>
+
+          <div class="technology-card">
+            <strong>PRTG</strong>
+            <span>Infrastructure Monitoring</span>
+          </div>
+
+          <div class="technology-card">
+            <strong>SolarWinds</strong>
+            <span>Network Monitoring</span>
+          </div>
+
+          <div class="technology-card">
+            <strong>UniFi</strong>
+            <span>Network Management</span>
+          </div>
+
+          <div class="technology-card">
+            <strong>VoIP</strong>
+            <span>SIP / Asterisk</span>
+          </div>
+
+          <div class="technology-card">
+            <strong>IP CCTV</strong>
+            <span>NVR / PoE</span>
+          </div>
+
+          <div class="technology-card">
+            <strong>Linux</strong>
+            <span>Systems & Services</span>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =======================================================
+         ABOUT
+    ======================================================== -->
+
+    <section
+      class="section"
+      id="about"
+    >
+
+      <div class="container">
+
+        <div class="section-heading">
+
+          <div class="section-eyebrow">
+            ABOUT
+          </div>
+
+          <h2 data-i18n="aboutTitle">
+            درباره من
+          </h2>
+
+        </div>
+
+
+        <div class="about-grid">
+
+
+          <!-- ABOUT TEXT -->
+
+          <article class="card about-card">
+
+            <h3>
+              AJORLOO•TECH
+            </h3>
+
+            <p data-i18n="aboutText1">
+              من مجید آجورلو هستم؛ متخصص زیرساخت IT،
+              شبکه و سیستم با بیش از ۱۰ سال تجربه در طراحی،
+              پیاده‌سازی، نگهداری و عیب‌یابی زیرساخت‌های سازمانی.
+            </p>
+
+            <p
+              data-i18n="aboutText2"
+              style="margin-top: 15px;"
+            >
+              تمرکز من روی حل مسئله، پایداری سرویس‌ها،
+              مانیتورینگ، Backup و طراحی زیرساخت‌هایی است
+              که در دنیای واقعی قابل اتکا باشند.
+            </p>
+
+            <ul class="about-list">
+
+              <li data-i18n="aboutHighlight1">
+                تمرکز من روی ساخت زیرساخت‌هایی است که فقط کار نکنند؛
+                بلکه پایدار، قابل مشاهده، امن و قابل توسعه باشند.
+              </li>
+
+              <li data-i18n="aboutHighlight2">
+                در پروژه‌ها ابتدا مسئله را از دید End-to-End بررسی می‌کنم
+                و سپس بر اساس شواهد، مسیر عیب‌یابی و راهکار را مشخص می‌کنم.
+              </li>
+
+              <li data-i18n="aboutHighlight3">
+                تجربه عملی در Network، Windows Server، Virtualization،
+                Backup، VoIP، CCTV و Monitoring دارم.
+              </li>
+
+            </ul>
+
+          </article>
+
+
+          <!-- PROFILE -->
+
+          <article class="card about-card">
+
+            <h3 data-i18n="profileName">
+              Majid Ajorloo
+            </h3>
+
+            <p
+              data-i18n="profileRole"
+              style="color: var(--accent);"
+            >
+              IT Infrastructure & Network Specialist
+            </p>
+
+
+            <ul class="about-list">
+
+              <li data-i18n="profileExperience">
+                10+ Years Experience
+              </li>
+
+              <li data-i18n="profileEducation">
+                B.Sc. Computer / Software
+              </li>
+
+              <li data-i18n="profileLanguages">
+                Persian • English • German • Arabic
+              </li>
+
+            </ul>
+
+          </article>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =======================================================
+         WHY
+    ======================================================== -->
+
+    <section class="section">
+
+      <div class="container">
+
+        <div class="section-heading">
+
+          <div class="section-eyebrow">
+            APPROACH
+          </div>
+
+          <h2 data-i18n="whyTitle">
+            چرا AJORLOO•TECH؟
+          </h2>
+
+          <p data-i18n="whyDescription">
+            هدف من ارائه راهکارهایی است که در دنیای واقعی
+            قابل اجرا باشند؛ نه فقط روی کاغذ.
+          </p>
+
+        </div>
+
+
+        <div class="why-grid">
+
+
+          <article class="card why-card">
+
+            <h3 data-i18n="why1Title">
+              Real-World Experience
+            </h3>
+
+            <p data-i18n="why1Text">
+              تمرکز بر تجربه واقعی محیط‌های سازمانی.
+            </p>
+
+          </article>
+
+
+          <article class="card why-card">
+
+            <h3 data-i18n="why2Title">
+              Problem Solving
+            </h3>
+
+            <p data-i18n="why2Text">
+              تحلیل مرحله‌به‌مرحله برای پیدا کردن Root Cause.
+            </p>
+
+          </article>
+
+
+          <article class="card why-card">
+
+            <h3 data-i18n="why3Title">
+              Reliable Infrastructure
+            </h3>
+
+            <p data-i18n="why3Text">
+              تمرکز روی پایداری، امنیت و قابلیت توسعه.
+            </p>
+
+          </article>
+
+
+          <article class="card why-card">
+
+            <h3 data-i18n="why4Title">
+              Continuous Learning
+            </h3>
+
+            <p data-i18n="why4Text">
+              یادگیری مداوم تکنولوژی‌ها و روش‌های جدید.
+            </p>
+
+          </article>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =======================================================
+         CONTACT
+    ======================================================== -->
+
+    <section
+      class="section"
+      id="contact"
+    >
+
+      <div class="container">
+
+        <div class="section-heading">
+
+          <div class="section-eyebrow">
+            CONTACT
+          </div>
+
+          <h2 data-i18n="contactTitle">
+            ارتباط با من
+          </h2>
+
+          <p data-i18n="contactDescription">
+            اگر برای طراحی شبکه، زیرساخت، سرور، Backup،
+            VoIP یا عیب‌یابی یک مشکل فنی نیاز به مشاوره دارید،
+            خوشحال می‌شوم در ارتباط باشیم.
+          </p>
+
+        </div>
+
+
+        <div class="contact-grid">
+
+
+          <!-- EMAIL -->
+
+          <article class="card contact-card">
+
+            <div class="contact-item">
+
+              <div class="contact-item-icon">
+                @
+              </div>
+
+              <div>
+
+                <span data-i18n="contactEmail">
+                  Email
+                </span>
+
+                <strong>
+                  <a href="mailto:majidajorloo1988@gmail.com">
+                    majidajorloo1988@gmail.com
+                  </a>
+                </strong>
+
+              </div>
+
+            </div>
+
+
+            <!-- LINKEDIN -->
+
+            <div class="contact-item">
+
+              <div class="contact-item-icon">
+                in
+              </div>
+
+              <div>
+
+                <span data-i18n="contactLinkedin">
+                  LinkedIn
+                </span>
+
+                <strong>
+                  <a
+                    href="https://ir.linkedin.com/in/majidajorloo"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Majid Ajorloo
+                  </a>
+                </strong>
+
+              </div>
+
+            </div>
+
+          </article>
+
+
+          <!-- CONTACT CTA -->
+
+          <article class="card contact-card">
+
+            <h3>
+              Engineering Digital Trust
+            </h3>
+
+            <p
+              style="margin-top: 12px;"
+              data-i18n="contactCtaText"
+            >
+              زیرساخت خوب فقط زمانی ارزشمند است که
+              پایدار، قابل مشاهده و قابل اعتماد باشد.
+            </p>
+
+            <div
+              class="hero-actions"
+              style="margin-top: 24px; margin-bottom: 0;"
+            >
+
+              <a
+                href="mailto:majidajorloo1988@gmail.com"
+                class="btn btn-primary"
+                data-i18n="contactCtaButton"
+              >
+                ارسال ایمیل
+              </a>
+
+            </div>
+
+          </article>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <!-- =========================================================
+       FOOTER
+  ========================================================== -->
+
+  <footer class="site-footer">
+
+    <div class="container footer-inner">
+
+      <div>
+
+        <div class="footer-brand">
+          AJORLOO•TECH
+        </div>
+
+        <div
+          data-i18n="footerTagline"
+          style="margin-top: 4px;"
+        >
+          Engineering Digital Trust
+        </div>
+
+      </div>
+
+
+      <div>
+
+        ©
+        <span id="currentYear">
+          2026
+        </span>
+
+        —
+
+        <span data-i18n="footerRights">
+          All rights reserved.
+        </span>
+
+      </div>
+
+    </div>
+
+  </footer>
+
+
+  <!-- =========================================================
+       BACK TO TOP
+  ========================================================== -->
+
+  <button
+    type="button"
+    class="back-to-top"
+    id="backToTop"
+    aria-label="بازگشت به بالا"
+  >
+    ↑
+  </button>
+
+
+  <!-- =========================================================
+       JAVASCRIPT
+  ========================================================== -->
+
+  <script src="app.js"></script>
+
+</body>
+
 </html>

@@ -1,0 +1,1087 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Static Routing چیست؟ آموزش Static Route در شبکه | AJORLOO•TECH</title>
+
+  <meta
+    name="description"
+    content="آموزش کامل Static Routing و Static Route، مفهوم Next Hop، Default Route، Floating Static Route و تنظیم Static Routing در Cisco."
+  />
+
+  <link rel="stylesheet" href="../styles.css" />
+
+  <style>
+    .article-page {
+      min-height: 100vh;
+      padding: 120px 20px 60px;
+      background:
+        radial-gradient(circle at 10% 10%, rgba(0, 170, 255, 0.08), transparent 30%),
+        radial-gradient(circle at 90% 20%, rgba(0, 255, 200, 0.06), transparent 30%);
+    }
+
+    .article-container {
+      width: min(1050px, 100%);
+      margin: 0 auto;
+    }
+
+    .article-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .article-category-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 8px 16px;
+      border: 1px solid rgba(0, 200, 255, 0.25);
+      border-radius: 999px;
+      background: rgba(0, 180, 255, 0.08);
+      color: #59d8ff;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      margin-bottom: 20px;
+    }
+
+    .article-header h1 {
+      font-size: clamp(2rem, 4vw, 3.4rem);
+      line-height: 1.35;
+      margin: 0 auto 18px;
+      max-width: 900px;
+    }
+
+    .article-header p {
+      max-width: 800px;
+      margin: 0 auto;
+      color: #9baabd;
+      font-size: 1.05rem;
+      line-height: 2;
+    }
+
+    .article-meta-bar {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 28px;
+    }
+
+    .article-meta-item {
+      padding: 8px 14px;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: #b9c6d6;
+      font-size: 0.85rem;
+    }
+
+    .article-content {
+      background: rgba(10, 20, 35, 0.72);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 24px;
+      padding: clamp(22px, 5vw, 52px);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.18);
+    }
+
+    .article-content h2 {
+      font-size: 1.65rem;
+      margin: 42px 0 18px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .article-content h2:first-child {
+      margin-top: 0;
+    }
+
+    .article-content h3 {
+      font-size: 1.2rem;
+      margin: 30px 0 12px;
+    }
+
+    .article-content p {
+      color: #b8c5d5;
+      line-height: 2.05;
+      margin: 12px 0;
+    }
+
+    .article-content ul,
+    .article-content ol {
+      padding-right: 24px;
+      color: #b8c5d5;
+      line-height: 2.1;
+    }
+
+    .article-content li {
+      margin-bottom: 7px;
+    }
+
+    .highlight-box,
+    .warning-box,
+    .success-box {
+      margin: 24px 0;
+      padding: 20px 22px;
+      border-radius: 16px;
+      line-height: 2;
+    }
+
+    .highlight-box {
+      background: rgba(0, 170, 255, 0.08);
+      border-right: 4px solid #31c7ff;
+    }
+
+    .warning-box {
+      background: rgba(255, 170, 0, 0.08);
+      border-right: 4px solid #ffb52e;
+    }
+
+    .success-box {
+      background: rgba(0, 220, 160, 0.08);
+      border-right: 4px solid #27d9a2;
+    }
+
+    .highlight-box strong,
+    .warning-box strong,
+    .success-box strong {
+      color: #ffffff;
+    }
+
+    .comparison-table-wrapper {
+      width: 100%;
+      overflow-x: auto;
+      margin: 25px 0;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .comparison-table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 650px;
+    }
+
+    .comparison-table th,
+    .comparison-table td {
+      padding: 14px 16px;
+      text-align: right;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+
+    .comparison-table th {
+      background: rgba(0, 170, 255, 0.08);
+      color: #e8f5ff;
+      font-weight: 700;
+    }
+
+    .comparison-table td {
+      color: #b8c5d5;
+    }
+
+    .comparison-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .code-block {
+      direction: ltr;
+      text-align: left;
+      overflow-x: auto;
+      background: #07101d;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 14px;
+      padding: 18px;
+      margin: 20px 0;
+      color: #c8e9ff;
+      font-family: Consolas, Monaco, monospace;
+      font-size: 0.9rem;
+      line-height: 1.8;
+      white-space: pre;
+    }
+
+    .scenario-card {
+      margin: 24px 0;
+      padding: 24px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.035);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .scenario-card h3 {
+      margin-top: 0;
+      color: #ffffff;
+    }
+
+    .flow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 28px 0;
+    }
+
+    .flow-item {
+      padding: 12px 18px;
+      border-radius: 12px;
+      background: rgba(0, 170, 255, 0.08);
+      border: 1px solid rgba(0, 200, 255, 0.18);
+      color: #d9f4ff;
+      font-weight: 600;
+    }
+
+    .flow-arrow {
+      color: #51d8ff;
+      font-size: 1.3rem;
+    }
+
+    .article-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-top: 30px;
+      padding-top: 25px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #54d8ff;
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    .back-link:hover {
+      opacity: 0.8;
+    }
+
+    .article-brand {
+      color: #738399;
+      font-size: 0.85rem;
+    }
+
+    .route-box {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+      margin: 25px 0;
+    }
+
+    .route-item {
+      padding: 20px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.035);
+      border: 1px solid rgba(255,255,255,0.07);
+      text-align: center;
+    }
+
+    .route-item strong {
+      display: block;
+      color: #ffffff;
+      margin-bottom: 8px;
+    }
+
+    .route-item span {
+      color: #91a3b8;
+      font-size: 0.85rem;
+    }
+
+    @media (max-width: 700px) {
+      .article-page {
+        padding: 95px 14px 40px;
+      }
+
+      .article-content {
+        padding: 22px 17px;
+        border-radius: 18px;
+      }
+
+      .article-header h1 {
+        font-size: 1.9rem;
+      }
+
+      .article-content h2 {
+        font-size: 1.4rem;
+      }
+
+      .flow {
+        flex-direction: column;
+      }
+
+      .flow-arrow {
+        transform: rotate(90deg);
+      }
+
+      .route-box {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="article-page">
+
+    <div class="article-container">
+
+      <header class="article-header">
+
+        <div class="article-category-badge">
+          ROUTING / NETWORK+
+        </div>
+
+        <h1>
+          Static Routing چیست؟ آموزش کامل Static Route در شبکه
+        </h1>
+
+        <p>
+          آشنایی با Static Route، مفهوم Next-Hop، Default Route،
+          Floating Static Route و پیاده‌سازی مسیریابی ایستا در تجهیزات Cisco.
+        </p>
+
+        <div class="article-meta-bar">
+          <span class="article-meta-item">Intermediate</span>
+          <span class="article-meta-item">حدود 13 دقیقه مطالعه</span>
+          <span class="article-meta-item">AJORLOO•TECH</span>
+        </div>
+
+      </header>
+
+
+      <article class="article-content">
+
+        <h2>Static Routing چیست؟</h2>
+
+        <p>
+          Static Routing روشی برای مسیریابی است که در آن مسیر رسیدن به
+          یک شبکه مقصد به‌صورت دستی روی Router یا Layer 3 Device تعریف می‌شود.
+        </p>
+
+        <p>
+          برخلاف Dynamic Routing Protocolها، در Static Routing دستگاه
+          خودش مسیر جدیدی را از طریق پروتکل‌هایی مثل OSPF یا EIGRP یاد
+          نمی‌گیرد؛ مسیر توسط Administrator مشخص می‌شود.
+        </p>
+
+        <div class="highlight-box">
+          <strong>تعریف ساده:</strong>
+          <br />
+          در Static Routing به Router می‌گوییم:
+          «اگر Packet مقصدش این Network بود، آن را از این مسیر یا
+          Next-Hop ارسال کن.»
+        </div>
+
+
+        <h2>Routing Table چیست؟</h2>
+
+        <p>
+          Router برای تصمیم‌گیری درباره Forward کردن Packet از Routing Table
+          استفاده می‌کند.
+        </p>
+
+        <p>
+          Routing Table شامل اطلاعاتی درباره Networkهای مقصد و مسیر رسیدن
+          به آن‌ها است. Static Route یکی از منابعی است که می‌تواند یک
+          Entry در Routing Table ایجاد کند.
+        </p>
+
+        <div class="flow">
+
+          <div class="flow-item">
+            Source
+          </div>
+
+          <div class="flow-arrow">
+            →
+          </div>
+
+          <div class="flow-item">
+            Router
+          </div>
+
+          <div class="flow-arrow">
+            →
+          </div>
+
+          <div class="flow-item">
+            Routing Table
+          </div>
+
+          <div class="flow-arrow">
+            →
+          </div>
+
+          <div class="flow-item">
+            Next-Hop
+          </div>
+
+          <div class="flow-arrow">
+            →
+          </div>
+
+          <div class="flow-item">
+            Destination
+          </div>
+
+        </div>
+
+
+        <h2>یک سناریوی ساده</h2>
+
+        <p>
+          فرض کنید دو Router داریم.
+        </p>
+
+        <div class="scenario-card">
+
+          <h3>Router R1</h3>
+
+          <div class="code-block">LAN: 192.168.10.0/24
+WAN: 10.0.0.1/30</div>
+
+          <h3>Router R2</h3>
+
+          <div class="code-block">WAN: 10.0.0.2/30
+LAN: 192.168.20.0/24</div>
+
+        </div>
+
+        <p>
+          R1 شبکه 192.168.20.0/24 را به‌صورت مستقیم نمی‌شناسد.
+          بنابراین باید به R1 بگوییم برای رسیدن به این شبکه،
+          Packet را به R2 ارسال کند.
+        </p>
+
+        <div class="code-block">R1(config)# ip route 192.168.20.0 255.255.255.0 10.0.0.2</div>
+
+        <p>
+          اکنون R1 می‌داند که برای رسیدن به
+          <strong>192.168.20.0/24</strong>
+          باید Next-Hop برابر با
+          <strong>10.0.0.2</strong>
+          باشد.
+        </p>
+
+
+        <h2>ساختار دستور ip route در Cisco</h2>
+
+        <p>
+          در Cisco IOS، ساختار پایه Static Route به شکل زیر است:
+        </p>
+
+        <div class="code-block">ip route destination-network subnet-mask next-hop</div>
+
+        <p>
+          بنابراین:
+        </p>
+
+        <div class="code-block">ip route 192.168.20.0 255.255.255.0 10.0.0.2</div>
+
+        <div class="comparison-table-wrapper">
+
+          <table class="comparison-table">
+
+            <thead>
+              <tr>
+                <th>قسمت</th>
+                <th>مقدار</th>
+                <th>معنی</th>
+              </tr>
+            </thead>
+
+            <tbody>
+
+              <tr>
+                <td>Destination</td>
+                <td>192.168.20.0</td>
+                <td>شبکه مقصد</td>
+              </tr>
+
+              <tr>
+                <td>Mask</td>
+                <td>255.255.255.0</td>
+                <td>Subnet Mask مقصد</td>
+              </tr>
+
+              <tr>
+                <td>Next-Hop</td>
+                <td>10.0.0.2</td>
+                <td>Router بعدی</td>
+              </tr>
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+
+        <h2>Next-Hop چیست؟</h2>
+
+        <p>
+          Next-Hop آدرس IP دستگاهی است که Router فعلی باید Packet را
+          برای ادامه مسیر به آن تحویل دهد.
+        </p>
+
+        <p>
+          در سناریوی بالا:
+        </p>
+
+        <div class="route-box">
+
+          <div class="route-item">
+            <strong>R1</strong>
+            <span>10.0.0.1</span>
+          </div>
+
+          <div class="route-item">
+            <strong>Next-Hop</strong>
+            <span>10.0.0.2</span>
+          </div>
+
+          <div class="route-item">
+            <strong>Destination</strong>
+            <span>192.168.20.0/24</span>
+          </div>
+
+        </div>
+
+        <p>
+          بنابراین Packet ابتدا از R1 به R2 منتقل می‌شود و سپس R2 آن را
+          به سمت شبکه مقصد Forward می‌کند.
+        </p>
+
+
+        <h2>Static Route با Interface</h2>
+
+        <p>
+          Static Route را می‌توان با Interface خروجی نیز تعریف کرد.
+          Syntax دقیق بسته به نوع Interface و پلتفرم متفاوت است، بنابراین
+          در شبکه‌های Ethernet معمولاً استفاده از Next-Hop صریح انتخاب
+          قابل‌فهم‌تری است.
+        </p>
+
+        <div class="code-block">ip route 192.168.20.0 255.255.255.0 GigabitEthernet0/0</div>
+
+        <div class="warning-box">
+          <strong>نکته:</strong>
+          <br />
+          قبل از استفاده از Exit Interface باید رفتار Forwarding و نوع
+          Interface را در پلتفرم موردنظر بررسی کرد. برای طراحی‌های Ethernet
+          معمولاً مشخص کردن Next-Hop می‌تواند ابهام کمتری داشته باشد.
+        </div>
+
+
+        <h2>Default Route چیست؟</h2>
+
+        <p>
+          Default Route زمانی استفاده می‌شود که Router برای مقصد موردنظر
+          Route دقیق‌تری در Routing Table نداشته باشد.
+        </p>
+
+        <p>
+          رایج‌ترین Default Route در IPv4:
+        </p>
+
+        <div class="code-block">ip route 0.0.0.0 0.0.0.0 10.0.0.2</div>
+
+        <p>
+          این Route به زبان ساده یعنی:
+        </p>
+
+        <div class="highlight-box">
+          <strong>
+            اگر برای مقصد Packet مسیر مشخص‌تری نداری، آن را به 10.0.0.2 بفرست.
+          </strong>
+        </div>
+
+        <p>
+          Default Route در شبکه‌هایی که یک مسیر اصلی به Internet یا
+          Upstream Router دارند بسیار رایج است.
+        </p>
+
+
+        <h2>Static Route در برابر Dynamic Routing</h2>
+
+        <div class="comparison-table-wrapper">
+
+          <table class="comparison-table">
+
+            <thead>
+              <tr>
+                <th>ویژگی</th>
+                <th>Static Routing</th>
+                <th>Dynamic Routing</th>
+              </tr>
+            </thead>
+
+            <tbody>
+
+              <tr>
+                <td>تنظیم</td>
+                <td>دستی</td>
+                <td>خودکار با Protocol</td>
+              </tr>
+
+              <tr>
+                <td>مصرف منابع</td>
+                <td>کم</td>
+                <td>بیشتر</td>
+              </tr>
+
+              <tr>
+                <td>مناسب شبکه کوچک</td>
+                <td>بسیار مناسب</td>
+                <td>ممکن است بیش از نیاز باشد</td>
+              </tr>
+
+              <tr>
+                <td>تغییرات Topology</td>
+                <td>نیازمند تغییر دستی</td>
+                <td>قابل تطبیق خودکار</td>
+              </tr>
+
+              <tr>
+                <td>پیچیدگی</td>
+                <td>کمتر</td>
+                <td>بیشتر</td>
+              </tr>
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+        <p>
+          Cisco نیز Static Route را مسیر ثابتی می‌داند که به‌صورت دستی
+          تعریف می‌شود و در صورت تغییر Topology، Administrator باید
+          مسیر را به‌روزرسانی کند. :contentReference[oaicite:1]{index=1}
+        </p>
+
+
+        <h2>چه زمانی Static Routing انتخاب خوبی است؟</h2>
+
+        <ul>
+
+          <li>شبکه‌های کوچک و ساده</li>
+
+          <li>Branchهای کوچک</li>
+
+          <li>شبکه‌هایی با یک مسیر مشخص به Upstream</li>
+
+          <li>Default Route به سمت Internet</li>
+
+          <li>شبکه‌های آزمایشگاهی و Lab</li>
+
+          <li>مسیرهای خاص و محدود</li>
+
+          <li>برخی سناریوهای Backup و Failover</li>
+
+          <li>Routeهای مدیریتی یا خاص که نمی‌خواهیم توسط پروتکل Dynamic منتشر شوند</li>
+
+        </ul>
+
+
+        <h2>Floating Static Route چیست؟</h2>
+
+        <p>
+          Floating Static Route نوعی Static Route پشتیبان است که با
+          Administrative Distance بالاتر تنظیم می‌شود تا Route اصلی
+          در شرایط عادی ترجیح داده شود.
+        </p>
+
+        <p>
+          مثلاً فرض کنید یک مسیر اصلی و یک مسیر Backup داریم.
+        </p>
+
+        <div class="code-block">! Primary Route
+ip route 192.168.50.0 255.255.255.0 10.0.0.2
+
+! Backup Route
+ip route 192.168.50.0 255.255.255.0 20.0.0.2 200</div>
+
+        <p>
+          در این مثال Route دوم Administrative Distance بالاتری دارد،
+          بنابراین در شرایط عادی Route اصلی ترجیح داده می‌شود.
+        </p>
+
+        <div class="success-box">
+          <strong>کاربرد واقعی:</strong>
+          <br />
+          می‌توان از این تکنیک برای ایجاد یک مسیر Backup در کنار لینک
+          اصلی استفاده کرد؛ البته برای Failover واقعی باید وضعیت لینک،
+          Reachability و مکانیزم‌های Tracking نیز درست طراحی شوند.
+        </div>
+
+
+        <h2>Administrative Distance چیست؟</h2>
+
+        <p>
+          وقتی Router چند مسیر برای رسیدن به یک مقصد داشته باشد،
+          Administrative Distance یکی از معیارهایی است که برای انتخاب
+          منبع Route استفاده می‌شود.
+        </p>
+
+        <p>
+          در Cisco، مقدار کمتر معمولاً ترجیح داده می‌شود.
+        </p>
+
+        <div class="comparison-table-wrapper">
+
+          <table class="comparison-table">
+
+            <thead>
+              <tr>
+                <th>Route Source</th>
+                <th>نمونه AD</th>
+              </tr>
+            </thead>
+
+            <tbody>
+
+              <tr>
+                <td>Connected</td>
+                <td>0</td>
+              </tr>
+
+              <tr>
+                <td>Static</td>
+                <td>1</td>
+              </tr>
+
+              <tr>
+                <td>OSPF</td>
+                <td>110</td>
+              </tr>
+
+              <tr>
+                <td>RIP</td>
+                <td>120</td>
+              </tr>
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+        <p>
+          مقادیر بالا نمونه‌های رایج Cisco IOS هستند و می‌توانند بسته
+          به Platform یا تنظیمات تغییر کنند. برای Floating Static Route
+          معمولاً AD را بالاتر از مسیر اصلی قرار می‌دهیم.
+        </p>
+
+
+        <h2>Static Routing بین دو شعبه</h2>
+
+        <p>
+          یکی از سناریوهای جالب در شبکه‌های سازمانی، ارتباط دو Branch
+          با یک لینک WAN است.
+        </p>
+
+        <div class="scenario-card">
+
+          <h3>Branch A</h3>
+
+          <div class="code-block">LAN
+192.168.10.0/24
+
+WAN
+10.10.10.1/30</div>
+
+          <h3>Branch B</h3>
+
+          <div class="code-block">LAN
+192.168.20.0/24
+
+WAN
+10.10.10.2/30</div>
+
+        </div>
+
+        <p>
+          روی Branch A:
+        </p>
+
+        <div class="code-block">ip route 192.168.20.0 255.255.255.0 10.10.10.2</div>
+
+        <p>
+          و روی Branch B:
+        </p>
+
+        <div class="code-block">ip route 192.168.10.0 255.255.255.0 10.10.10.1</div>
+
+        <p>
+          حالا هر دو Router مسیر شبکه LAN طرف مقابل را می‌شناسند.
+        </p>
+
+
+        <h2>نکته بسیار مهم: Route برگشت</h2>
+
+        <p>
+          یکی از اشتباهات رایج هنگام تنظیم Static Route این است که فقط
+          مسیر رفت را ایجاد کنیم.
+        </p>
+
+        <p>
+          برای ارتباط دوطرفه، باید مسیر برگشت نیز وجود داشته باشد.
+        </p>
+
+        <div class="flow">
+
+          <div class="flow-item">
+            Branch A
+          </div>
+
+          <div class="flow-arrow">
+            →
+          </div>
+
+          <div class="flow-item">
+            WAN
+          </div>
+
+          <div class="flow-arrow">
+            →
+          </div>
+
+          <div class="flow-item">
+            Branch B
+          </div>
+
+          <div class="flow-arrow">
+            ↩
+          </div>
+
+          <div class="flow-item">
+            Return Route
+          </div>
+
+        </div>
+
+        <div class="warning-box">
+
+          <strong>
+            Packet به مقصد رسید اما جواب برنمی‌گردد؟
+          </strong>
+
+          <br />
+
+          اولین چیزهایی که باید بررسی کنید:
+          <br />
+
+          Routing Table،
+          Default Gateway،
+          Return Route،
+          Firewall و ACL.
+
+        </div>
+
+
+        <h2>بررسی Static Route در Cisco</h2>
+
+        <p>
+          بعد از تنظیم Route، یکی از مهم‌ترین دستورها برای بررسی Routing
+          Table این است:
+        </p>
+
+        <div class="code-block">show ip route</div>
+
+        <p>
+          Static Routeها در خروجی Routing Table با حرف
+          <strong>S</strong>
+          نمایش داده می‌شوند. :contentReference[oaicite:2]{index=2}
+        </p>
+
+        <p>
+          برای بررسی دقیق‌تر یک مقصد نیز می‌توان از:
+        </p>
+
+        <div class="code-block">show ip route 192.168.20.0</div>
+
+        <p>
+          استفاده کرد.
+        </p>
+
+
+        <h2>بررسی Interfaceها</h2>
+
+        <p>
+          قبل از اینکه سراغ Routing برویم، بهتر است مطمئن شویم Interfaceها
+          Up هستند و IP صحیح دارند.
+        </p>
+
+        <div class="code-block">show ip interface brief</div>
+
+        <p>
+          همچنین:
+        </p>
+
+        <div class="code-block">show running-config interface GigabitEthernet0/0</div>
+
+
+        <h2>تست ارتباط</h2>
+
+        <p>
+          بعد از تنظیم Route می‌توانیم با Ping ارتباط را بررسی کنیم:
+        </p>
+
+        <div class="code-block">ping 192.168.20.1</div>
+
+        <p>
+          و برای بررسی مسیر:
+        </p>
+
+        <div class="code-block">traceroute 192.168.20.1</div>
+
+        <p>
+          اگر Ping موفق نبود، نباید فوراً نتیجه بگیریم که Static Route
+          اشتباه است. باید کل مسیر را بررسی کنیم.
+        </p>
+
+
+        <h2>چک‌لیست Troubleshooting</h2>
+
+        <ol>
+
+          <li>
+            IP Address و Subnet Mask را بررسی کنید.
+          </li>
+
+          <li>
+            Interfaceهای مربوطه را بررسی کنید.
+          </li>
+
+          <li>
+            Next-Hop را Ping کنید.
+          </li>
+
+          <li>
+            Routing Table را بررسی کنید.
+          </li>
+
+          <li>
+            وجود Route مقصد را بررسی کنید.
+          </li>
+
+          <li>
+            Return Route را بررسی کنید.
+          </li>
+
+          <li>
+            Default Gateway را بررسی کنید.
+          </li>
+
+          <li>
+            ACL و Firewall را بررسی کنید.
+          </li>
+
+          <li>
+            در صورت وجود NAT، Translation را بررسی کنید.
+          </li>
+
+          <li>
+            با Traceroute محل توقف Packet را پیدا کنید.
+          </li>
+
+        </ol>
+
+
+        <h2>حذف Static Route</h2>
+
+        <p>
+          برای حذف یک Static Route در Cisco معمولاً همان دستور را با
+          <strong>no</strong>
+          اجرا می‌کنیم.
+        </p>
+
+        <div class="code-block">no ip route 192.168.20.0 255.255.255.0 10.0.0.2</div>
+
+
+        <h2>ذخیره Configuration</h2>
+
+        <p>
+          بعد از انجام تغییرات، بسته به پلتفرم Cisco و روش مدیریت دستگاه،
+          Configuration را در Startup Configuration ذخیره کنید تا بعد از
+          Reload از بین نرود.
+        </p>
+
+        <div class="code-block">copy running-config startup-config</div>
+
+
+        <h2>Static Routing در شبکه واقعی</h2>
+
+        <p>
+          Static Routing هنوز هم در شبکه‌های حرفه‌ای جایگاه خودش را دارد.
+          قرار نیست همیشه برای Routing از یک پروتکل Dynamic استفاده کنیم.
+        </p>
+
+        <p>
+          در یک شبکه واقعی ممکن است هم‌زمان داشته باشیم:
+        </p>
+
+        <ul>
+
+          <li>Connected Routes</li>
+
+          <li>Static Routes</li>
+
+          <li>Default Route</li>
+
+          <li>OSPF یا سایر Dynamic Routing Protocolها</li>
+
+          <li>Routeهای Backup</li>
+
+        </ul>
+
+        <p>
+          انتخاب روش مناسب به اندازه شبکه، تعداد مسیرها، نیاز به Failover،
+          پیچیدگی Topology و نیازهای عملیاتی سازمان بستگی دارد.
+        </p>
+
+
+        <div class="success-box">
+
+          <strong>جمع‌بندی حرفه‌ای:</strong>
+
+          <br />
+
+          Static Routing ساده به نظر می‌رسد، اما در Troubleshooting شبکه
+          یکی از مفاهیم بسیار مهم است. اگر بدانیم Router چگونه مقصد را
+          از Routing Table پیدا می‌کند و Next-Hop چگونه انتخاب می‌شود،
+          بسیاری از مشکلات ارتباط بین Subnetها و Branchها سریع‌تر قابل
+          تشخیص خواهند بود.
+
+        </div>
+
+
+        <footer class="article-footer">
+
+          <a
+            href="../index.html#articles"
+            class="back-link"
+          >
+            ← بازگشت به مقالات
+          </a>
+
+          <span class="article-brand">
+            AJORLOO•TECH — Engineering Digital Trust
+          </span>
+
+        </footer>
+
+      </article>
+
+    </div>
+
+  </main>
+
+</body>
+</html>

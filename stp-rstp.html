@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>STP و RSTP چیست؟ | AJORLOO•TECH</title>
+
+  <meta
+    name="description"
+    content="راهنمای کامل STP و RSTP در شبکه، جلوگیری از Loop، Root Bridge، BPDU، PortFast، BPDU Guard و دستورات کاربردی Cisco."
+  />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Vazirmatn:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  />
+
+  <link rel="stylesheet" href="../styles.css" />
+
+  <style>
+    .article-page {
+      min-height: 100vh;
+      padding: 140px 20px 80px;
+      background:
+        radial-gradient(circle at 15% 10%, rgba(0, 190, 255, 0.08), transparent 30%),
+        radial-gradient(circle at 85% 20%, rgba(30, 90, 255, 0.08), transparent 30%);
+    }
+
+    .article-container {
+      width: min(1050px, 100%);
+      margin: 0 auto;
+    }
+
+    .article-header {
+      text-align: center;
+      margin-bottom: 55px;
+    }
+
+    .article-category-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 15px;
+      border: 1px solid rgba(0, 200, 255, 0.25);
+      border-radius: 999px;
+      background: rgba(0, 180, 255, 0.07);
+      color: #19cfff;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      margin-bottom: 20px;
+    }
+
+    .article-header h1 {
+      margin: 0 auto 20px;
+      max-width: 900px;
+      font-size: clamp(32px, 5vw, 58px);
+      line-height: 1.25;
+      font-weight: 800;
+    }
+
+    .article-header p {
+      max-width: 800px;
+      margin: 0 auto;
+      color: rgba(255,255,255,0.68);
+      line-height: 2;
+      font-size: 16px;
+    }
+
+    .article-meta-bar {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 25px;
+    }
+
+    .article-meta-item {
+      padding: 7px 13px;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: rgba(255,255,255,0.65);
+      font-size: 13px;
+    }
+
+    .article-content {
+      background: rgba(255,255,255,0.025);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 24px;
+      padding: clamp(25px, 5vw, 55px);
+      backdrop-filter: blur(14px);
+      box-shadow: 0 30px 80px rgba(0,0,0,0.18);
+    }
+
+    .article-content h2 {
+      margin: 50px 0 18px;
+      font-size: clamp(23px, 3vw, 32px);
+      line-height: 1.5;
+    }
+
+    .article-content h2:first-child {
+      margin-top: 0;
+    }
+
+    .article-content h3 {
+      margin: 32px 0 15px;
+      font-size: 21px;
+    }
+
+    .article-content p {
+      color: rgba(255,255,255,0.72);
+      line-height: 2.15;
+      font-size: 16px;
+      margin: 0 0 18px;
+    }
+
+    .article-content ul,
+    .article-content ol {
+      padding-right: 25px;
+      margin: 20px 0;
+    }
+
+    .article-content li {
+      color: rgba(255,255,255,0.72);
+      line-height: 2;
+      margin-bottom: 8px;
+    }
+
+    .highlight-box {
+      margin: 30px 0;
+      padding: 22px 24px;
+      border-radius: 16px;
+      background: rgba(0, 180, 255, 0.06);
+      border: 1px solid rgba(0, 200, 255, 0.18);
+    }
+
+    .highlight-box strong {
+      color: #20d4ff;
+    }
+
+    .warning-box {
+      margin: 30px 0;
+      padding: 22px 24px;
+      border-radius: 16px;
+      background: rgba(255, 170, 0, 0.05);
+      border: 1px solid rgba(255, 180, 0, 0.18);
+    }
+
+    .warning-box strong {
+      color: #ffc44d;
+    }
+
+    .comparison-table-wrapper {
+      overflow-x: auto;
+      margin: 30px 0;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .comparison-table {
+      width: 100%;
+      min-width: 650px;
+      border-collapse: collapse;
+    }
+
+    .comparison-table th,
+    .comparison-table td {
+      padding: 16px 18px;
+      text-align: right;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+
+    .comparison-table th {
+      background: rgba(255,255,255,0.05);
+      color: #fff;
+      font-weight: 700;
+    }
+
+    .comparison-table td {
+      color: rgba(255,255,255,0.68);
+    }
+
+    .comparison-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .code-block {
+      direction: ltr;
+      text-align: left;
+      margin: 25px 0;
+      padding: 22px;
+      border-radius: 14px;
+      background: #07111f;
+      border: 1px solid rgba(255,255,255,0.08);
+      overflow-x: auto;
+      font-family: "DM Sans", monospace;
+      font-size: 14px;
+      line-height: 1.8;
+      color: #dcecff;
+      white-space: pre;
+    }
+
+    .scenario-card {
+      margin: 28px 0;
+      padding: 25px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.035);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .scenario-card h3 {
+      margin-top: 0;
+    }
+
+    .flow {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin: 30px 0;
+    }
+
+    .flow-item {
+      padding: 14px 18px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .flow-arrow {
+      color: #1bd4ff;
+      font-size: 22px;
+    }
+
+    .article-footer {
+      margin-top: 50px;
+      padding-top: 30px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #1bd4ff;
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    .article-brand {
+      color: rgba(255,255,255,0.45);
+      font-size: 13px;
+    }
+
+    @media (max-width: 700px) {
+      .article-page {
+        padding-top: 110px;
+      }
+
+      .article-content {
+        border-radius: 18px;
+      }
+
+      .article-content p,
+      .article-content li {
+        font-size: 15px;
+      }
+
+      .article-footer {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="article-page">
+    <div class="article-container">
+
+      <!-- Article Header -->
+      <header class="article-header">
+
+        <div class="article-category-badge">
+          SWITCHING
+        </div>
+
+        <h1>
+          STP و RSTP چیست؟
+          راهنمای جلوگیری از Loop در شبکه
+        </h1>
+
+        <p>
+          Spanning Tree Protocol یکی از مهم‌ترین مکانیزم‌های شبکه‌های
+          Ethernet برای جلوگیری از ایجاد Loop در لایه دوم است. در این مقاله
+          با STP، RSTP، Root Bridge، BPDU، Port Stateها، PortFast و
+          BPDU Guard آشنا می‌شویم.
+        </p>
+
+        <div class="article-meta-bar">
+          <span class="article-meta-item">Switching</span>
+          <span class="article-meta-item">Intermediate</span>
+          <span class="article-meta-item">12 دقیقه مطالعه</span>
+        </div>
+
+      </header>
+
+
+      <!-- Article Content -->
+      <article class="article-content">
+
+        <h2>STP چیست؟</h2>
+
+        <p>
+          STP مخفف
+          <strong>Spanning Tree Protocol</strong>
+          است. این پروتکل برای جلوگیری از Loop در شبکه‌های لایه دوم
+          Ethernet طراحی شده است.
+        </p>
+
+        <p>
+          در شبکه‌های سازمانی معمولاً برای افزایش Redundancy بین سوئیچ‌ها
+          چند مسیر فیزیکی ایجاد می‌شود. این کار برای High Availability
+          مفید است، اما اگر کنترل نشود می‌تواند باعث ایجاد Loop شود.
+        </p>
+
+        <div class="highlight-box">
+          <strong>هدف اصلی STP:</strong>
+          جلوگیری از Loop در Layer 2 در حالی که مسیرهای Redundant در شبکه
+          حفظ می‌شوند.
+        </div>
+
+
+        <h2>چرا Loop در شبکه خطرناک است؟</h2>
+
+        <p>
+          برخلاف برخی پروتکل‌های لایه سوم، فریم‌های Ethernet مکانیزم
+          TTL مشابه IP ندارند. بنابراین در صورت ایجاد Loop، یک فریم ممکن
+          است بارها در شبکه گردش کند.
+        </p>
+
+        <p>
+          این اتفاق می‌تواند باعث افزایش شدید ترافیک و ایجاد
+          <strong>Broadcast Storm</strong>
+          شود.
+        </p>
+
+        <div class="scenario-card">
+
+          <h3>یک مثال ساده</h3>
+
+          <div class="flow">
+
+            <div class="flow-item">
+              Switch A
+            </div>
+
+            <div class="flow-arrow">
+              ↔
+            </div>
+
+            <div class="flow-item">
+              Switch B
+            </div>
+
+            <div class="flow-arrow">
+              ↔
+            </div>
+
+            <div class="flow-item">
+              Switch C
+            </div>
+
+            <div class="flow-arrow">
+              ↔
+            </div>
+
+            <div class="flow-item">
+              Switch A
+            </div>
+
+          </div>
+
+          <p>
+            این ساختار یک مسیر حلقه‌ای ایجاد کرده است. STP با قرار دادن
+            برخی لینک‌ها در وضعیت Blocking/Discarding، مسیر Loop را
+            می‌شکند.
+          </p>
+
+        </div>
+
+
+        <h2>Broadcast Storm چیست؟</h2>
+
+        <p>
+          Broadcast زمانی اتفاق می‌افتد که یک فریم برای تمام دستگاه‌های
+          موجود در Broadcast Domain ارسال شود.
+        </p>
+
+        <p>
+          اگر این فریم وارد یک Loop لایه دوم شود، می‌تواند بارها در شبکه
+          تکرار شود. نتیجه می‌تواند مصرف شدید پهنای باند، افزایش CPU
+          سوئیچ‌ها، Packet Loss و حتی از دسترس خارج شدن شبکه باشد.
+        </p>
+
+        <div class="warning-box">
+          <strong>نکته مهم:</strong>
+          یک Loop ساده بین دو یا چند سوئیچ می‌تواند در مدت کوتاهی عملکرد
+          کل شبکه را مختل کند.
+        </div>
+
+
+        <h2>STP چگونه Loop را از بین می‌برد؟</h2>
+
+        <p>
+          STP توپولوژی شبکه را بررسی می‌کند و از بین مسیرهای موجود،
+          یک ساختار منطقی بدون Loop ایجاد می‌کند.
+        </p>
+
+        <p>
+          برای این کار یکی از سوئیچ‌ها به عنوان
+          <strong>Root Bridge</strong>
+          انتخاب می‌شود و سپس بهترین مسیرها نسبت به Root تعیین می‌شوند.
+        </p>
+
+
+        <h2>Root Bridge چیست؟</h2>
+
+        <p>
+          Root Bridge نقطه مرجع محاسبات STP است. سایر سوئیچ‌ها بهترین مسیر
+          خود را نسبت به Root Bridge محاسبه می‌کنند.
+        </p>
+
+        <p>
+          انتخاب Root Bridge بر اساس Bridge ID انجام می‌شود. Bridge ID
+          شامل Priority و MAC Address است.
+        </p>
+
+        <div class="highlight-box">
+          <strong>قاعده مهم:</strong>
+          در فرآیند انتخاب Root Bridge، Bridge ID پایین‌تر برنده می‌شود.
+        </div>
+
+
+        <h2>Root Port چیست؟</h2>
+
+        <p>
+          در هر Non-Root Switch، پورتی که بهترین مسیر به سمت Root Bridge
+          را فراهم می‌کند، Root Port نام دارد.
+        </p>
+
+        <p>
+          هر سوئیچ Non-Root معمولاً یک Root Port دارد.
+        </p>
+
+
+        <h2>Designated Port چیست؟</h2>
+
+        <p>
+          Designated Port پورتی است که برای یک Segment به عنوان مسیر
+          Forwarding انتخاب می‌شود.
+        </p>
+
+        <p>
+          در یک طراحی STP، ترکیب Root Port و Designated Port باعث می‌شود
+          توپولوژی نهایی بدون Loop باقی بماند.
+        </p>
+
+
+        <h2>BPDU چیست؟</h2>
+
+        <p>
+          BPDU مخفف
+          <strong>Bridge Protocol Data Unit</strong>
+          است.
+        </p>
+
+        <p>
+          سوئیچ‌های دارای STP از BPDU برای تبادل اطلاعات مربوط به
+          Spanning Tree و محاسبه توپولوژی استفاده می‌کنند.
+        </p>
+
+        <div class="highlight-box">
+          <strong>به زبان ساده:</strong>
+          سوئیچ‌ها با استفاده از BPDU درباره ساختار STP با یکدیگر
+          اطلاعات ردوبدل می‌کنند.
+        </div>
+
+
+        <h2>STP Port Stateها</h2>
+
+        <p>
+          در STP کلاسیک، پورت‌ها می‌توانند مراحل مختلفی را طی کنند تا
+          وضعیت نهایی آن‌ها مشخص شود.
+        </p>
+
+        <div class="comparison-table-wrapper">
+
+          <table class="comparison-table">
+
+            <thead>
+              <tr>
+                <th>State</th>
+                <th>کاربرد</th>
+              </tr>
+            </thead>
+
+            <tbody>
+
+              <tr>
+                <td>Blocking</td>
+                <td>جلوگیری از Forward کردن فریم‌ها برای جلوگیری از Loop</td>
+              </tr>
+
+              <tr>
+                <td>Listening</td>
+                <td>بررسی توپولوژی و BPDUها</td>
+              </tr>
+
+              <tr>
+                <td>Learning</td>
+                <td>یادگیری MAC Addressها بدون Forward معمول ترافیک</td>
+              </tr>
+
+              <tr>
+                <td>Forwarding</td>
+                <td>ارسال و دریافت عادی فریم‌ها</td>
+              </tr>
+
+              <tr>
+                <td>Disabled</td>
+                <td>پورت در فرآیند STP فعال نیست</td>
+              </tr>
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+
+        <h2>RSTP چیست؟</h2>
+
+        <p>
+          RSTP مخفف
+          <strong>Rapid Spanning Tree Protocol</strong>
+          است و نسخه سریع‌تر و بهینه‌تر STP محسوب می‌شود.
+        </p>
+
+        <p>
+          هدف اصلی RSTP کاهش زمان Convergence در هنگام تغییرات توپولوژی
+          است.
+        </p>
+
+        <div class="comparison-table-wrapper">
+
+          <table class="comparison-table">
+
+            <thead>
+              <tr>
+                <th>ویژگی</th>
+                <th>STP</th>
+                <th>RSTP</th>
+              </tr>
+            </thead>
+
+            <tbody>
+
+              <tr>
+                <td>استاندارد</td>
+                <td>802.1D</td>
+                <td>802.1w</td>
+              </tr>
+
+              <tr>
+                <td>Convergence</td>
+                <td>کندتر</td>
+                <td>سریع‌تر</td>
+              </tr>
+
+              <tr>
+                <td>Port Roles</td>
+                <td>Root / Designated</td>
+                <td>Root / Designated / Alternate / Backup</td>
+              </tr>
+
+              <tr>
+                <td>کاربرد</td>
+                <td>شبکه‌های قدیمی‌تر</td>
+                <td>شبکه‌های مدرن</td>
+              </tr>
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+
+        <h2>Convergence چیست؟</h2>
+
+        <p>
+          زمانی که توپولوژی شبکه تغییر می‌کند، مثلاً یک لینک قطع می‌شود،
+          سوئیچ‌ها باید دوباره وضعیت مناسب مسیرها را محاسبه کنند.
+        </p>
+
+        <p>
+          مدت زمانی که شبکه برای رسیدن به وضعیت پایدار جدید نیاز دارد،
+          Convergence Time نامیده می‌شود.
+        </p>
+
+        <p>
+          RSTP با مکانیزم‌های سریع‌تر می‌تواند این فرآیند را نسبت به STP
+          کلاسیک سریع‌تر انجام دهد.
+        </p>
+
+
+        <h2>PortFast چیست؟</h2>
+
+        <p>
+          PortFast قابلیتی است که معمولاً روی پورت‌های متصل به End Device
+          فعال می‌شود تا پورت سریع‌تر وارد وضعیت Forwarding شود.
+        </p>
+
+        <p>
+          برای مثال اگر یک کامپیوتر به Switch متصل باشد، منطقی نیست که
+          پورت برای مدت طولانی منتظر فرآیندهای معمول STP بماند.
+        </p>
+
+        <div class="code-block">interface GigabitEthernet0/10
+ spanning-tree portfast</div>
+
+        <div class="warning-box">
+          <strong>هشدار:</strong>
+          PortFast نباید به‌صورت بی‌دلیل روی لینک‌های بین سوئیچ‌ها فعال شود.
+          این قابلیت برای Edge/End Device Portها طراحی شده است.
+        </div>
+
+
+        <h2>BPDU Guard چیست؟</h2>
+
+        <p>
+          BPDU Guard یک مکانیزم حفاظتی است که معمولاً همراه PortFast در
+          پورت‌های Edge استفاده می‌شود.
+        </p>
+
+        <p>
+          اگر پورتی که برای End Device در نظر گرفته شده BPDU دریافت کند،
+          BPDU Guard می‌تواند پورت را برای جلوگیری از ایجاد مشکل در STP
+          وارد وضعیت خطا کند.
+        </p>
+
+        <div class="code-block">interface GigabitEthernet0/10
+ spanning-tree portfast
+ spanning-tree bpduguard enable</div>
+
+
+        <h2>تنظیم Root Bridge در Cisco</h2>
+
+        <p>
+          در یک شبکه واقعی بهتر است Root Bridge را آگاهانه انتخاب کنیم و
+          اجازه ندهیم انتخاب Root صرفاً بر اساس وضعیت تصادفی یا MAC Address
+          انجام شود.
+        </p>
+
+        <p>
+          در برخی تجهیزات Cisco می‌توان از دستور زیر استفاده کرد:
+        </p>
+
+        <div class="code-block">spanning-tree vlan 10 root primary</div>
+
+        <p>
+          این دستور برای VLAN مشخص، سوئیچ را برای نقش Root Primary
+          تنظیم می‌کند.
+        </p>
+
+
+        <h2>بررسی وضعیت STP در Cisco</h2>
+
+        <p>
+          یکی از مهم‌ترین دستورات برای Troubleshooting:
+        </p>
+
+        <div class="code-block">show spanning-tree</div>
+
+        <p>
+          برای مشاهده وضعیت STP یک VLAN مشخص:
+        </p>
+
+        <div class="code-block">show spanning-tree vlan 10</div>
+
+        <p>
+          همچنین برای بررسی جزئیات وضعیت یک Interface می‌توان از:
+        </p>
+
+        <div class="code-block">show spanning-tree interface GigabitEthernet0/10 detail</div>
+
+
+        <h2>یک سناریوی واقعی</h2>
+
+        <div class="scenario-card">
+
+          <h3>شبکه سه سوئیچی</h3>
+
+          <p>
+            فرض کنید در یک شرکت سه سوئیچ داریم:
+          </p>
+
+          <ul>
+            <li>Core Switch</li>
+            <li>Distribution Switch</li>
+            <li>Access Switch</li>
+          </ul>
+
+          <p>
+            برای افزایش Redundancy، بین سوئیچ‌ها چند لینک ایجاد شده است.
+            در صورت نبود STP، احتمال ایجاد Loop وجود دارد.
+          </p>
+
+          <div class="flow">
+
+            <div class="flow-item">
+              Core
+            </div>
+
+            <div class="flow-arrow">
+              ↔
+            </div>
+
+            <div class="flow-item">
+              Distribution
+            </div>
+
+            <div class="flow-arrow">
+              ↔
+            </div>
+
+            <div class="flow-item">
+              Access
+            </div>
+
+          </div>
+
+          <p>
+            STP می‌تواند یکی از مسیرهای Redundant را در وضعیت غیرForwarding
+            نگه دارد. اگر مسیر اصلی قطع شود، مسیر جایگزین می‌تواند وارد
+            مدار شود.
+          </p>
+
+        </div>
+
+
+        <h2>STP و Redundancy</h2>
+
+        <p>
+          نکته مهم این است که STP برای حذف کامل Redundancy طراحی نشده است.
+          هدف آن جلوگیری از Loop در حالی است که مسیرهای جایگزین در
+          توپولوژی وجود داشته باشند.
+        </p>
+
+        <p>
+          بنابراین اگر یک لینک فعال قطع شود، STP/RSTP می‌تواند مسیر
+          جایگزین را فعال کند.
+        </p>
+
+
+        <h2>اشتباهات رایج در STP</h2>
+
+        <h3>۱. انتخاب نکردن Root Bridge</h3>
+
+        <p>
+          در شبکه‌های سازمانی بهتر است Root Bridge بر اساس طراحی شبکه
+          مشخص شود، نه اینکه انتخاب آن کاملاً به صورت تصادفی انجام شود.
+        </p>
+
+
+        <h3>۲. فعال کردن PortFast روی لینک بین Switchها</h3>
+
+        <p>
+          این کار می‌تواند در شرایط نامناسب باعث ایجاد مشکلات جدی در
+          توپولوژی Layer 2 شود.
+        </p>
+
+
+        <h3>۳. استفاده نکردن از BPDU Guard روی Edge Portها</h3>
+
+        <p>
+          در شبکه‌های سازمانی، ترکیب PortFast و BPDU Guard می‌تواند
+          یک لایه حفاظتی مهم برای پورت‌های End Device فراهم کند.
+        </p>
+
+
+        <h3>۴. نادیده گرفتن تغییرات STP</h3>
+
+        <p>
+          تغییر Root، قطع لینک یا تغییر وضعیت پورت‌ها باید در زمان
+          Troubleshooting بررسی شود.
+        </p>
+
+
+        <h2>STP یا RSTP؟</h2>
+
+        <p>
+          در شبکه‌های مدرن معمولاً RSTP انتخاب مناسب‌تری نسبت به STP
+          کلاسیک است، زیرا Convergence سریع‌تری ارائه می‌دهد.
+        </p>
+
+        <div class="highlight-box">
+          <strong>قاعده ساده:</strong>
+          <br>
+          STP = جلوگیری از Loop
+          <br>
+          RSTP = جلوگیری از Loop + Convergence سریع‌تر
+        </div>
+
+
+        <h2>چک‌لیست سریع Troubleshooting</h2>
+
+        <ol>
+
+          <li>
+            بررسی کنید Root Bridge کدام Switch است.
+          </li>
+
+          <li>
+            وضعیت Root Portها و Designated Portها را بررسی کنید.
+          </li>
+
+          <li>
+            Trunkها و VLANهای مجاز را بررسی کنید.
+          </li>
+
+          <li>
+            وضعیت PortFast و BPDU Guard را بررسی کنید.
+          </li>
+
+          <li>
+            تغییرات اخیر توپولوژی را بررسی کنید.
+          </li>
+
+          <li>
+            لاگ‌های Switch را برای تغییرات STP بررسی کنید.
+          </li>
+
+        </ol>
+
+
+        <h2>جمع‌بندی</h2>
+
+        <p>
+          STP یکی از پایه‌های مهم طراحی شبکه‌های Ethernet است. وقتی چند
+          سوئیچ برای Redundancy به یکدیگر متصل می‌شوند، احتمال ایجاد
+          Layer 2 Loop وجود دارد و STP وظیفه جلوگیری از این Loop را بر
+          عهده دارد.
+        </p>
+
+        <p>
+          RSTP نسخه سریع‌تر و مدرن‌تر این مکانیزم است و در زمان تغییر
+          توپولوژی می‌تواند سریع‌تر به وضعیت پایدار برسد.
+        </p>
+
+        <p>
+          در کنار STP/RSTP، قابلیت‌هایی مانند PortFast و BPDU Guard نیز
+          برای محافظت بهتر از Edge Portها اهمیت زیادی دارند.
+        </p>
+
+        <div class="highlight-box">
+          <strong>آنچه باید به خاطر بسپارید:</strong>
+          <br><br>
+          Root Bridge = نقطه مرجع STP
+          <br>
+          Root Port = بهترین مسیر به Root
+          <br>
+          Designated Port = مسیر Forwarding برای Segment
+          <br>
+          BPDU = پیام‌های کنترلی STP
+          <br>
+          RSTP = نسخه سریع‌تر STP
+          <br>
+          PortFast = ورود سریع Edge Port به Forwarding
+          <br>
+          BPDU Guard = محافظت از Edge Port در برابر BPDU
+        </div>
+
+
+        <!-- Article Footer -->
+        <div class="article-footer">
+
+          <a
+            href="../index.html#articles"
+            class="back-link"
+          >
+            ← بازگشت به مقالات
+          </a>
+
+          <span class="article-brand">
+            AJORLOO•TECH — Engineering Digital Trust
+          </span>
+
+        </div>
+
+      </article>
+
+    </div>
+  </main>
+
+</body>
+</html>
